@@ -1,0 +1,64 @@
+---
+id: docs
+title: jarle
+hide_table_of_contents: true
+slug: /
+---
+
+You can write content using [GitHub-flavored Markdown syntax](https://github.github.com/gfm/).
+
+Render JSX live in the browser
+
+```js live
+<h3>Hello World!</h3>
+```
+
+Jarle only looks at the last thing you return, so write whatever you need in front
+of it.
+
+```js live
+const DEFAULT = 'World';
+
+function Greet({ subject = DEFAULT }) {
+  return <div>Hello {subject}</div>;
+}
+
+class ClassyGreet extends React.Component {
+  render() {
+    const { subject } = this.props;
+    return <em>Hello {subject}</em>;
+  }
+}
+
+<>
+  <Greet />
+  <Greet subject="Planet" />
+  <ClassyGreet subject="Universe" />
+</>;
+```
+
+For punchy terse demostrations of component render logic, use `renderAsComponent`
+to have JARLE use your code as the body of a React function component.
+
+```jsx live renderAsComponent
+const [seconds, setSeconds] = useState(0);
+
+useEffect(() => {
+  let interval = setInterval(() => {
+    setSeconds((prev) => prev + 1);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, []);
+
+return <div>Seconds past: {seconds}</div>;
+```
+
+If you do need more control over what get's rendered, or need to render asynchronously, a
+`render` function is always in scope:
+
+```js live
+setInterval(() => {
+  render(<div>I'm late!</div>);
+}, 500);
+```

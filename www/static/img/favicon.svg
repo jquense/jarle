@@ -1,0 +1,24 @@
+<svg
+  height="16px"
+  width="16px"
+  fill="#000000"
+  xmlns="http://www.w3.org/2000/svg"
+  data-name="Layer 1"
+  viewBox="0 0 100 100"
+  x="0px"
+  y="0px"
+>
+  <polygon
+    points="67.9 30.8 86.1 50 67.9 69.2 73.7 74.7 97.1 50 73.7 25.3 67.9 30.8"
+  ></polygon>
+  <polygon
+    points="32.1 69.2 13.9 50 32.1 30.8 26.3 25.3 2.9 50 26.3 74.7 32.1 69.2"
+  ></polygon>
+  <rect
+    x="12.6"
+    y="46"
+    width="74.9"
+    height="8"
+    transform="translate(-10.4 86.7) rotate(-76.3)"
+  ></rect>
+</svg>
