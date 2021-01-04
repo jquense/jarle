@@ -22,7 +22,6 @@ function addErrorHighlight(
 
 export const mapTokens = ({
   tokens,
-  hasTheme: _,
   getLineProps,
   getTokenProps,
   errorLocation,
@@ -37,11 +36,6 @@ export const mapTokens = ({
           errorLocation
         )}
       >
-        {/* {lineNumbers && (
-          <span className="line-number" style={hasTheme ? lineNumberStyle : {}}>
-            {i + 1}
-          </span>
-        )} */}
         {line.map((token, ii) => (
           // eslint-disable-next-line react/no-array-index-key
           <span key={ii} {...getTokenProps({ token, key: String(ii) })} />

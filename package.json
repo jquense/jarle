@@ -1,12 +1,11 @@
 {
-  "name": "@docpocalypse/code-live",
-  "version": "0.4.18",
+  "name": "jarle",
+  "version": "0.0.0",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jquense/docpocalypse.git",
-    "directory": "packages/code-live"
+    "url": "https://github.com/jquense/jarle.git"
   },
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "license": "MIT",

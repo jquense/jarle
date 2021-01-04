@@ -288,9 +288,9 @@ export default function Provider<TScope extends {} = {}>({
   const handleChange = useEventCallback((nextCode: string) => {
     try {
       const { ast, imports } = parseImports(nextCode, false);
-      const sources = [
-        ...new Set([...ogImports, ...imports].map((i) => i.source)),
-      ];
+      const sources = Array.from(
+        new Set([...ogImports, ...imports].map((i) => i.source))
+      );
 
       Promise.resolve(resolveImports(sources))
         .then((results) =>
@@ -313,7 +313,6 @@ export default function Provider<TScope extends {} = {}>({
           setError(null);
         }, setError);
     } catch (err) {
-      console.log(err, nextCode);
       setError(err);
     }
   });

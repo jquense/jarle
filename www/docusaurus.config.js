@@ -1,8 +1,8 @@
 module.exports = {
   title: 'JARLE',
   tagline: 'Just Another React Live Editor',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://jquense.github.io.',
+  baseUrl: '/jarle/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.svg',

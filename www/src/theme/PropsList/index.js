@@ -9,7 +9,7 @@ const H3 = Heading('h3');
 
 function PropsTable({ metadata }) {
   const { name } = metadata;
-  console.log(metadata);
+
   const props = renderProps(metadata.props || []);
 
   return (
