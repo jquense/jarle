@@ -4,13 +4,18 @@ export default (): Plugin => ({
   visitor: {
     Program: {
       leave(node) {
-        if (node.body.find(n => n.type === 'ReturnStatement')) {
+        if (node.body.find((n) => n.type === 'ReturnStatement')) {
           return;
         }
         const lastExpr = node.body
           .concat()
           .reverse()
-          .find((n: Node) => n.type === 'ExpressionStatement');
+          .find(
+            (n: Node) =>
+              n.type === 'ExpressionStatement' ||
+              n.type === 'ClassDeclaration' ||
+              n.type === 'FunctionDeclaration'
+          );
 
         if (!lastExpr) {
           return;

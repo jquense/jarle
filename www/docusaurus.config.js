@@ -9,6 +9,9 @@ module.exports = {
   organizationName: 'jquense', // Usually your GitHub org/user name.
   projectName: 'jarle', // Usually your repo name.
   themeConfig: {
+    colorMode: {
+      disableSwitch: true,
+    },
     navbar: {
       title: 'JARLE',
       logo: {
@@ -39,5 +42,13 @@ module.exports = {
       },
     ],
   ],
-  plugins: [require.resolve('./plugins/resolve-react')],
+  plugins: [
+    [
+      require.resolve('./plugins/docgen'),
+      {
+        src: ['../src/**/*.tsx'],
+      },
+    ],
+    require.resolve('./plugins/resolve-react'),
+  ],
 };

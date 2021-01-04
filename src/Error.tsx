@@ -3,12 +3,8 @@ import React from 'react';
 import { useError } from './Provider';
 
 /**
- * An Error _component_ for *building*
+ * Displays an sytax or runtime error that occured when rendering the code
  *
- * ```ts
- * import f from './Provider'
- *
- * ```
  */
 export default function Error(props: React.HTMLProps<HTMLPreElement>) {
   const error = useError();

@@ -1,6 +1,6 @@
-import MagicString from 'magic-string';
+import type MagicString from 'magic-string';
 
-import { Node, Plugin } from './types';
+import type { Node, Plugin } from './types';
 
 export type Wrapper = (ctx: MagicString, node: Node) => void;
 

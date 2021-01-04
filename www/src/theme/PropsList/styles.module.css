@@ -1,0 +1,7 @@
+.required {
+  margin-left: 10px;
+  font-size: 60%;
+  background-color: var(--ifm-color-info-lightest);
+  border-radius: var(--ifm-code-border-radius);
+  padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
+}

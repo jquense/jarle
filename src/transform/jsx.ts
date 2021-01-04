@@ -1,4 +1,4 @@
-import { Plugin } from './types';
+import type { Plugin } from './types';
 
 const hasDashes = (val: string) => /-/.test(val);
 const formatKey = (key: string) => (hasDashes(key) ? `'${key}'` : key);
@@ -46,7 +46,7 @@ export default function jsxPlugin(options: any = {}): Plugin {
 
       'JSXElement|JSXFragment': {
         leave(node) {
-          const children = node.children.filter(child => {
+          const children = node.children.filter((child) => {
             if (child.type !== 'JSXText') return true;
 
             // remove whitespace-only literals, unless on a single line
@@ -78,7 +78,7 @@ export default function jsxPlugin(options: any = {}): Plugin {
               c = child.end;
             });
           }
-        }
+        },
       },
       JSXOpeningElement: {
         leave(node) {
@@ -161,12 +161,12 @@ export default function jsxPlugin(options: any = {}): Plugin {
           } else {
             this.remove(c, node.end);
           }
-        }
+        },
       },
       JSXClosingElement: {
         leave(node) {
           this.overwrite(node.start, node.end, ')');
-        }
+        },
       },
       JSXAttribute(node) {
         const { start, name } = node.name;
@@ -191,7 +191,7 @@ export default function jsxPlugin(options: any = {}): Plugin {
       JSXSpreadAttribute(node) {
         this.remove(node.start, node.argument.start);
         this.remove(node.argument.end, node.end);
-      }
-    }
+      },
+    },
   };
 }

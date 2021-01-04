@@ -1,29 +1,30 @@
-import cn from 'classnames'
-import Highlight, { Language, Prism, PrismTheme } from 'prism-react-renderer'
-import React from 'react'
-import { LineOutputProps } from './prism'
+import cn from 'classnames';
+import Highlight, { Language, Prism, PrismTheme } from 'prism-react-renderer';
+import React from 'react';
+import { LineOutputProps } from './prism';
 
 type MapTokens = Omit<LineOutputProps, 'props'> & {
-  lineNumbers?: boolean
-  errorLocation?: { line: number; col: number }
-}
+  hasTheme?: boolean;
+  lineNumbers?: boolean;
+  errorLocation?: { line: number; col: number };
+};
 
 function addErrorHighlight(
   props: LineOutputProps,
   index: number,
-  errorLocation?: MapTokens['errorLocation'],
+  errorLocation?: MapTokens['errorLocation']
 ) {
   if (errorLocation && index === errorLocation.line) {
-    props.className = cn(props.className, 'token-line-error')
+    props.className = cn(props.className, 'token-line-error');
   }
-  return props
+  return props;
 }
 
 export const mapTokens = ({
   tokens,
+  hasTheme: _,
   getLineProps,
   getTokenProps,
-  lineNumbers,
   errorLocation,
 }: MapTokens) => (
   <>
@@ -33,10 +34,14 @@ export const mapTokens = ({
         {...addErrorHighlight(
           getLineProps({ line, key: String(i) }),
           i,
-          errorLocation,
+          errorLocation
         )}
       >
-        {lineNumbers && <span className="token-line-number">{i + 1}</span>}
+        {/* {lineNumbers && (
+          <span className="line-number" style={hasTheme ? lineNumberStyle : {}}>
+            {i + 1}
+          </span>
+        )} */}
         {line.map((token, ii) => (
           // eslint-disable-next-line react/no-array-index-key
           <span key={ii} {...getTokenProps({ token, key: String(ii) })} />
@@ -44,19 +49,19 @@ export const mapTokens = ({
       </div>
     ))}
   </>
-)
+);
 
 interface Props {
-  className?: string
-  style?: any
-  theme?: PrismTheme
-  code: string
-  language: Language
-  lineNumbers?: boolean
+  className?: string;
+  style?: any;
+  theme?: PrismTheme;
+  code: string;
+  language: Language;
+  lineNumbers?: boolean;
 }
 
 function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
-  const style = typeof theme?.plain === 'object' ? theme.plain : {}
+  const style = typeof theme?.plain === 'object' ? theme.plain : {};
 
   return (
     <Highlight
@@ -70,11 +75,11 @@ function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
           className={cn(props.className, hl.className)}
           style={{ ...props.style, ...style, ...hl.style }}
         >
-          <code>{mapTokens({ ...hl, lineNumbers })}</code>
+          <code>{mapTokens({ ...hl, lineNumbers, hasTheme: !!theme })}</code>
         </pre>
       )}
     </Highlight>
-  )
+  );
 }
 
-export default CodeBlock
+export default CodeBlock;

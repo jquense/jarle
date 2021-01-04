@@ -1,22 +1,27 @@
 ---
 id: docs
-title: jarle
-hide_table_of_contents: true
+title: JARLE
 slug: /
 ---
 
-You can write content using [GitHub-flavored Markdown syntax](https://github.github.com/gfm/).
+import providerMeta from '@metadata/Provider';
+import editor from '@metadata/Editor';
+import error from '@metadata/Error';
+import preview from '@metadata/Preview';
+import PropsList from '@theme/PropsList';
 
-Render JSX live in the browser
+Write code and see the result as you type.
 
-```js live
+## Overview
+
+```jsx live
 <h3>Hello World!</h3>
 ```
 
-Jarle only looks at the last thing you return, so write whatever you need in front
+JARLE only looks at the last thing you return, so write whatever you need in front
 of it.
 
-```js live
+```jsx live
 const DEFAULT = 'World';
 
 function Greet({ subject = DEFAULT }) {
@@ -57,8 +62,209 @@ return <div>Seconds past: {seconds}</div>;
 If you do need more control over what get's rendered, or need to render asynchronously, a
 `render` function is always in scope:
 
-```js live
-setInterval(() => {
+```jsx live
+setTimeout(() => {
   render(<div>I'm late!</div>);
-}, 500);
+}, 1000);
 ```
+
+## Scope
+
+You can control which values, clases, components, etc are provided automatically
+to the example code when it's run by adjusting the `scope`. The `scope` is an object
+map of identifiers and their values. The `React` namespace is provided as well as
+all of the built-in hooks (useState, useRef, etc) automatically along with a `render()`
+function for finely tuning the returned element.
+
+You can also add our own values:
+
+```jsx
+import lodash from 'lodash';
+
+<Provider scope={{ _: lodash }} />;
+```
+
+## Importing modules in examples
+
+Import statements are also supported code blocks
+(as long as the supports [dynamic imports](https://caniuse.com/es6-module-dynamic-import)).
+
+```jsx live
+import confetti from 'https://cdn.skypack.dev/canvas-confetti';
+
+<button onClick={() => confetti()}>Confetti</button>;
+```
+
+Import statements are extracted from the example code and the requests
+are passed to a function responsible for resolving them into modules.
+
+The default behavior uses `import()`, relying on the browsers module support.
+You can however, customize the importer to suit your needs. The resolver
+may return an object map of possible requests to their module, useful
+when you only want to expose a few local values to examples (see also `scope`).
+
+```jsx
+<Provider
+  resolveImports={() => ({
+    lodash: lodash,
+    'my-component': { default: () => <strong>Hey</strong> },
+  })}
+/>
+```
+
+For dynamic resolution the resolve is also passed a list of requests to be mapped
+to their modules. Here is the default implementation
+
+```jsx
+<Provider
+  resolveImports={(requests) =>
+    promise.all(requests.map((request) => import(request)))
+  }
+/>
+```
+
+You can also mix together some of your own static analysis and tooling to
+build really neat integrations where imports are resolved a head of time, using webpack
+or other bundlers.
+
+## Usage
+
+A full example of how to use JARLE via another JARLE editor!
+
+```jsx live inline=false
+import theme from 'https://cdn.skypack.dev/prism-react-renderer/themes/oceanicNext';
+
+const { Provider, Editor, Error, Preview } = Jarle;
+
+const code = `
+  <strong>Here's an editor inside an editor</strong>
+`;
+
+<div>
+  <h4 align="center">Yo Dawg I heard you liked editors</h4>
+
+  <Provider code={code} theme={theme} language="jsx">
+    <Editor style={{ padding: 20 }} infoSrOnly />
+    <Preview style={{ padding: 20, textAlign: 'center' }} />
+    <Error />
+  </Provider>
+</div>;
+```
+
+### Render into an iframe
+
+Previews are all rendered into the same document as the editor so they share stuff
+like global CSS. If want to sandbox the result from the parent document, render
+your preview into an `<iframe>` useing a "portal".
+
+```jsx live inline=false showImports= false
+import theme from 'https://cdn.skypack.dev/prism-react-renderer/themes/oceanicNext';
+
+const { Provider, Editor, Error, Preview } = Jarle;
+
+function IFrameEditor(props) {
+  const [contentRef, setContentRef] = useState(null);
+  const mountNode = contentRef && contentRef.contentWindow.document.body;
+
+  return (
+    <Provider {...props}>
+      <Editor style={{ padding: 20 }} infoSrOnly />
+
+      <iframe ref={setContentRef} style={{ width: '100%' }} />
+
+      {mountNode &&
+        ReactDOM.createPortal(
+          <Preview style={{ padding: 20, textAlign: 'center' }} />,
+          mountNode
+        )}
+      <Error />
+    </Provider>
+  );
+}
+
+const code = `
+  <strong>Here's an editor inside an editor inside an iframe</strong>
+`;
+
+<IFrameEditor code={code} theme={theme} language="jsx" />;
+```
+
+### Syntax Highlighting
+
+Like React Live, JARLE uses Prism via [`prism-react-renderer`](https://github.com/FormidableLabs/prism-react-renderer)
+for syntax highlighting. To get up and running quickly JARLE also reexports
+all the packages themes from prism-react-renderer, under `jarle/themes` so you
+don't have to explicitly add `prism-react-renderer` to your `package.json`.
+
+To use a theme import and pass it to the `Provider`:
+
+```jsx
+import theme from 'jarle/themes/oceanicNext';
+
+<Provider
+  theme={theme}
+  ...
+/>
+```
+
+You can also use normal Prism themes by leaving off the `theme` prop and adding the
+appropriate class and global CSS.
+
+### Line Numbers
+
+Add the `lineNumbers` prop to the `Editor` to show line numbers. They can
+be styled with CSS targeting the `line-number` class or add a `lineNumber` key to your
+prism theme.
+
+```jsx live lineNumbers
+const DEFAULT = 'World';
+
+function Greet({ subject = DEFAULT }) {
+  return <div>Hello {subject}</div>;
+}
+
+<Greet />;
+```
+
+## Accessiblity
+
+Rich text editors like JARLE tend to break an important aspect of keyboard navigation
+on the web. Namely they break <kbd>tab</kbd> behavior by indenting instead of
+moving focus to the next item on the page. This really helpful for text editing
+but can trap keyboard users in the editor.
+
+To address this JARLE doesn't automatically trap focus when the user tabs into the editor.
+Pressing <kbd>enter</kbd> or typing printable characters activates the tap trap,
+so the hitting <kbd>tab</kbd> indents instead of moving focus. Hitting <kbd>esc</kbd>
+disables tab trapping allowing a user to tab away from the editor.
+
+This behavior is communicated to users via `Info` text (which should also be
+read out to a Screen Reader). The visual message is enabled by default
+because not all keyboard users are screen reader users. If you want to make the
+messages "screen ready only", pass `infoSrOnly` to the `Editor`.
+
+## API
+
+### `<Provider>`
+
+<p>{React.createElement(providerMeta.description)}</p>
+
+<PropsList metadata={providerMeta} />
+
+### `<Editor>`
+
+<p>{React.createElement(editor.description)}</p>
+
+<PropsList metadata={editor} />
+
+### `<Preview>`
+
+<p>{React.createElement(preview.description)}</p>
+
+<PropsList metadata={preview} />
+
+### `<Error>`
+
+<p>{React.createElement(error.description)}</p>
+
+<PropsList metadata={error} />

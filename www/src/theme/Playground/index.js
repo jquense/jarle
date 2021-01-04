@@ -12,7 +12,14 @@ const Info = (props) => (
   />
 );
 
-function Playground({ children, theme, className, ...props }) {
+function Playground({
+  children,
+  theme,
+  className,
+  lineNumbers,
+  inline,
+  ...props
+}) {
   const ref = React.useRef(null);
   const previewRef = React.useRef(null);
   // const resolveImports = React.useContext(Context)
@@ -20,7 +27,7 @@ function Playground({ children, theme, className, ...props }) {
   React.useEffect(() => {
     let observer = new ResizeObserver(([entry]) => {
       const box = entry.contentRect;
-      const hasSpace = box.width > 700;
+      const hasSpace = inline == null ? box.width > 700 : !inline;
 
       ref.current.classList.toggle(styles.inline, hasSpace);
     });
@@ -40,9 +47,12 @@ function Playground({ children, theme, className, ...props }) {
         theme={theme}
         {...props}
       >
-        <div className={styles.playgroundEditor} style={theme?.plain}>
-          <Editor infoComponent={Info} />
-        </div>
+        <Editor
+          infoComponent={Info}
+          lineNumbers={lineNumbers}
+          className={styles.playgroundEditor}
+          style={theme?.plain}
+        />
 
         <div className={styles.playgroundPreview}>
           <Preview />

@@ -13,7 +13,19 @@ if (typeof window !== 'undefined') {
   }
 }
 
-const Preview = ({ className, holderTheme, ...props }: any) => {
+/**
+ * The component that renders the user's code.
+ */
+const Preview = ({
+  className,
+  holderTheme,
+  ...props
+}: {
+  className?: string;
+
+  /** An optional holder.js theme */
+  holderTheme?: any;
+}) => {
   const [example, attachRef] = useCallbackRef<HTMLDivElement>();
   const hasTheme = !!holderTheme && holderjs;
   const element = useElement();

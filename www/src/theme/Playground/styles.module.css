@@ -60,7 +60,7 @@
 
 .infoMessage {
   font-size: 70%;
-  margin-top: -1.5rem;
+  padding: 0.4rem;
 }
 
 .error {
@@ -72,7 +72,7 @@
 
 .inline {
   display: grid;
-  grid-template-columns: 2fr 1.5fr;
+  grid-template-columns: 2fr 1.2fr;
 }
 
 .inline > * {

@@ -1,12 +1,13 @@
-import { Position, Node as AcornNode } from 'acorn';
-import MagicString from 'magic-string';
+import type { Position, Node as AcornNode } from 'acorn';
+import type MagicString from 'magic-string';
 
 export type Node = AcornNode & { [other: string]: any };
 
 export type VisitorFn = <TNode extends Node = any>(
   this: MagicString,
   node: TNode,
-  parent: Node
+  parent: Node,
+  key: string
 ) => void;
 
 export type NormalVisitor = { enter?: VisitorFn; leave?: VisitorFn };

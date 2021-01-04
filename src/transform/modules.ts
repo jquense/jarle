@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { Plugin } from './types';
+import type { Plugin } from './types';
 
 export type Import = {
   code: string;
@@ -18,35 +18,32 @@ export interface Options {
 export default ({
   remove,
   fn = 'require',
-  imports = []
+  imports = [],
 }: Options = {}): Plugin => {
   let num = 0;
   const getIdentifier = (src: string) =>
-    `${src
-      .split('/')
-      .pop()!
-      .replace(/\W/g, '_')}$${num++}`;
+    `${src.split('/').pop()!.replace(/\W/g, '_')}$${num++}`;
 
   return {
     visitor: {
       Program: {
         leave() {
           if (imports.length && remove) this.trimLines();
-        }
+        },
       },
-      ImportDeclaration(node) {
+      ImportDeclaration(node, parent, key) {
         if (!node.source) return;
 
         const {
           source: { value },
           start,
-          end
+          end,
         } = node;
         const details: Import = {
           base: null,
           source: value,
           keys: [],
-          code: ''
+          code: '',
         };
 
         const named = [] as string[];
@@ -79,12 +76,13 @@ export default ({
         imports.push(details);
 
         if (remove) {
+          parent[key].splice(parent[key].indexOf(node), 1);
           this.remove(start, end);
           return;
         }
 
         this.overwrite(start, end, details.code);
-      }
-    }
+      },
+    },
   };
 };

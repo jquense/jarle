@@ -11,34 +11,45 @@ type NormalVisitorMap = Record<string, NormalVisitor[]>;
 
 const isNode = (n: any): n is Node => n !== null && typeof n.type === 'string';
 
+const nodeExists = (n, parent, key) => {
+  if (!parent) return true;
+  if (!(key in parent)) return false;
+  let value = parent[key];
+  return Array.isArray(value) ? value.includes(n) : value === n;
+};
+
 function walk(
   ctx: MagicString,
   visitors: NormalVisitorMap,
   node?: Node,
   parent?: Node,
+  key?: string
 ) {
   if (!node) return;
 
   const visitor = visitors[node.type];
 
-  visitor?.forEach(v => v.enter?.call(ctx, node, parent));
+  visitor?.forEach((v) => v.enter?.call(ctx, node, parent, key));
+  if (!nodeExists(node, parent, key)) {
+    return;
+  }
 
   // eslint-disable-next-line guard-for-in
   for (const key in node) {
     const value = node[key];
     if (isNode(value)) {
-      walk(ctx, visitors, value, node);
+      walk(ctx, visitors, value, node, key);
     }
     if (Array.isArray(value)) {
       for (const item of value) {
         if (isNode(item)) {
-          walk(ctx, visitors, item, node);
+          walk(ctx, visitors, item, node, key);
         }
       }
     }
   }
 
-  visitor?.forEach(v => v.leave?.call(ctx, node, parent));
+  visitor?.forEach((v) => v.leave?.call(ctx, node, parent, key));
 }
 
 const mergeVisitors = (visitors: VisitorMap[]) => {
@@ -66,23 +77,42 @@ export interface Options {
   includeContent?: boolean;
 }
 
-export function transform(source: string, options: Options = { plugins: [] }) {
+export interface Root extends acorn.Node {
+  magicString: MagicString;
+}
+
+export function transform(
+  source: string | Root,
+  options: Options = { plugins: [] }
+) {
   const { plugins } = options;
-  const code = new MagicString(source);
+  let code: MagicString;
+  let ast: Root;
 
-  const ast = parser.parse(source, {
-    ecmaVersion: 10,
-    preserveParens: true,
-    sourceType: 'module',
-    allowAwaitOutsideFunction: true,
-    allowReturnOutsideFunction: true,
-    allowHashBang: true,
-    onComment: (...args) => {
-      plugins.forEach(p => p.onComment?.(...args));
-    },
-  });
+  if (typeof source === 'string') {
+    code = new MagicString(source);
+    ast = parser.parse(source, {
+      ecmaVersion: 10,
+      preserveParens: true,
+      sourceType: 'module',
+      allowAwaitOutsideFunction: true,
+      allowReturnOutsideFunction: true,
+      allowHashBang: true,
+      onComment: (...args) => {
+        plugins.forEach((p) => p.onComment?.(...args));
+      },
+    }) as Root;
+    ast.magicString = code;
+  } else {
+    code = source.magicString;
+    ast = source;
+  }
 
-  walk(code, mergeVisitors(plugins.map(p => p.visitor!).filter(Boolean)), ast);
+  walk(
+    code,
+    mergeVisitors(plugins.map((p) => p.visitor!).filter(Boolean)),
+    ast
+  );
 
   return {
     ast,

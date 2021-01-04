@@ -8,9 +8,11 @@ import React, {
   useState,
 } from 'react';
 import { decode } from 'sourcemap-codec';
+import { Root } from './transform';
+import { Import } from './transform/modules';
 
 import { Wrapper } from './transform/wrapContent';
-import transpile, { removeImports } from './transpile';
+import transpile, { parseImports } from './transpile';
 
 const prettierComment = /(\{\s*\/\*\s+prettier-ignore\s+\*\/\s*\})|(\/\/\s+prettier-ignore)/gim;
 
@@ -82,21 +84,33 @@ function handleError(
   return err;
 }
 
+interface CodeToComponentOptions<S extends {}> {
+  scope?: S;
+  ast?: Root;
+  renderAsComponent?: boolean;
+  preample?: string;
+}
+
 function codeToComponent<TScope extends {}>(
   code: string,
-  scope?: TScope,
-  renderAsComponent = false
+  {
+    ast,
+    scope,
+    preample,
+    renderAsComponent = false,
+  }: CodeToComponentOptions<TScope>
 ): Promise<React.ReactElement> {
   return new Promise((resolve, reject) => {
     const isInline = !code.match(/render\S*\(\S*</);
 
     if (renderAsComponent && !isInline) {
       throw new Error(
-        'Code using `render()` cannot use top level hooks. Either provide your own stateful component, or return a jsx element directly.'
+        'Code using `render()` cannot use top level hooks. ' +
+          'Either provide your own stateful component, or return a jsx element directly.'
       );
     }
 
-    const result = transpile(code, {
+    const result = transpile(ast || code, {
       inline: isInline,
       wrapper: renderAsComponent ? wrapAsComponent : undefined,
     });
@@ -117,7 +131,8 @@ function codeToComponent<TScope extends {}>(
     const args = ['React', 'render'].concat(Object.keys(finalScope));
     const values = [React, render].concat(Object.values(finalScope));
 
-    const body = result.code;
+    let body = result.code;
+    if (preample) body = `${preample}\n\n${body}`;
 
     // eslint-disable-next-line no-new-func
     const fn = new Function(...args, body);
@@ -141,16 +156,29 @@ function codeToComponent<TScope extends {}>(
   });
 }
 
-export type ImportResolver = () => Promise<Record<string, any>>;
+export type ImportResolver = (
+  requests: string[]
+) => Promise<Record<string, any> | any[]>;
 
 export interface Props<TScope> {
+  /**
+   * A string of code to render
+   */
   code: string;
+
+  /** A context object of values automatically available for use in editor code */
   scope?: TScope;
+
+  /** Render subcomponents */
   children?: ReactNode;
+
+  /** A Prism language string for selecting a grammar for syntax highlighting */
   language?: string;
 
+  /** A Prism theme object, leave empty to not use a theme or use a traditional CSS theme. */
   theme?: PrismTheme;
 
+  /** Whether the import statements in the initial `code` text are shown to the user or not. */
   showImports?: boolean;
 
   /**
@@ -167,17 +195,23 @@ export interface Props<TScope> {
    * ```
    */
   renderAsComponent?: boolean;
+
   /**
-   * A function that resolves to a hash of import requests to the result
+   * A function that maps an array of import requests to modules, may return a promise.
    *
    * ```ts
-   * const resolverImports = () => ({
+   * const resolveImports = (requests) =>
+   *   Promise.all(requests.map(req => import(req)))
+   * ```
+   *
+   * Or an object hash of import requests to the result
+   *
+   * ```ts
+   * const resolveImports = () => ({
    *   './foo': Foo
    * })
    * ```
    *
-   * @default undefined
-   * @type {geyt} getfffy
    */
   resolveImports?: ImportResolver;
 }
@@ -198,71 +232,107 @@ interface State {
   element: React.ReactElement | null;
 }
 
+export const objectZip = <T extends PropertyKey, U>(
+  arr: T[],
+  arr2: U[]
+): Record<string, U> => Object.fromEntries(arr.map((v, i) => [v, arr2[i]]));
+
+function defaultResolveImports(sources) {
+  return Promise.all(sources.map((s) => import(/* webpackIgnore: true */ s)));
+}
+
+function useNormalizedCode(code: string, showImports: boolean, setError: any) {
+  return useMemo(() => {
+    const nextCode = code.replace(prettierComment, '').trim();
+    if (showImports) return [nextCode, [], ''] as [string, Import[], string];
+    try {
+      const result = parseImports(nextCode, true);
+      return [
+        result.code,
+        result.imports,
+        result.imports
+          .map((i) => i.code)
+          .join('\n')
+          .trimStart(),
+      ] as const;
+    } catch (err) {
+      setError(err);
+      return [code, [], ''] as [string, Import[], string];
+    }
+  }, [code, showImports]);
+}
+
+/**
+ * The Provider supplies the context to the other components as well as handling
+ * jsx transpilation and import resolution.
+ */
 export default function Provider<TScope extends {} = {}>({
   scope,
   children,
-  code: codeText,
+  code: rawCode,
   language,
   theme,
-  showImports = false,
+  showImports = true,
   renderAsComponent = false,
-  resolveImports = () => Promise.resolve({}),
+  resolveImports = defaultResolveImports,
 }: Props<TScope>) {
   const [error, setError] = useState<LiveError | null>(null);
   const [{ element }, setState] = useState<State>({ element: null });
 
-  const [code, importBlock] = useMemo<[string, string]>(() => {
-    // Remove the prettier comments.
-    const nextCode = codeText.replace(prettierComment, '').trim();
-
-    if (showImports) return [nextCode, ''];
-    const r = removeImports(nextCode);
-    return [
-      r.code,
-      r.imports
-        .map((i) => i.code)
-        .join('\n')
-        .trimStart(),
-    ];
-  }, [codeText, showImports]);
+  const [cleanCode, ogImports, ogImportBlock] = useNormalizedCode(
+    rawCode,
+    showImports,
+    setError
+  );
 
   const handleChange = useEventCallback((nextCode: string) => {
-    resolveImports()
-      .then((importHash) =>
-        codeToComponent(
-          `${importBlock}\n\n${nextCode}`.trimStart(),
-          {
-            ...scope,
-            require: getRequire(importHash),
-          },
-          renderAsComponent
+    try {
+      const { ast, imports } = parseImports(nextCode, false);
+      const sources = [
+        ...new Set([...ogImports, ...imports].map((i) => i.source)),
+      ];
+
+      Promise.resolve(resolveImports(sources))
+        .then((results) =>
+          Array.isArray(results) ? objectZip(sources, results) : results
         )
-      )
-      .then((element) => {
-        setState({ element });
-        setError(null);
-      }, setError);
+        .then((fetchedImports) =>
+          codeToComponent(nextCode, {
+            ast,
+            renderAsComponent,
+            // also include the orginal imports if they were removed
+            preample: ogImportBlock,
+            scope: {
+              ...scope,
+              require: getRequire(fetchedImports),
+            },
+          })
+        )
+        .then((element) => {
+          setState({ element });
+          setError(null);
+        }, setError);
+    } catch (err) {
+      console.log(err, nextCode);
+      setError(err);
+    }
   });
 
   useEffect(() => {
-    handleChange(code);
-  }, [code, importBlock, scope, handleChange]);
-
-  useEffect(() => {
-    handleChange(code);
-  }, [code, scope, handleChange]);
+    handleChange(cleanCode);
+  }, [cleanCode, scope, handleChange]);
 
   const context = useMemo(
     () => ({
-      code,
+      theme,
       error,
       element,
       language,
-      theme,
+      code: cleanCode,
       onError: setError,
       onChange: handleChange,
     }),
-    [code, element, error, handleChange, language, theme]
+    [cleanCode, element, error, handleChange, language, theme]
   );
 
   return <Context.Provider value={context}>{children}</Context.Provider>;
