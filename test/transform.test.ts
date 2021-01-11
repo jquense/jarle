@@ -49,7 +49,7 @@ describe('wrap last expression', () => {
     ],
   ])('compiles %s', (_, input, expected) => {
     expect(transform(input, { plugins: [wrapLastExpression()] }).code).toEqual(
-      expected,
+      expected
     );
   });
 
@@ -57,7 +57,7 @@ describe('wrap last expression', () => {
     expect(
       transform('var foo = 3;\n<div/>', {
         plugins: [jsx(), wrapLastExpression()],
-      }).code,
+      }).code
     ).toEqual("var foo = 3;\n;\nreturn (React.createElement('div', null));");
   });
 });
@@ -69,19 +69,19 @@ describe('import rewriting', () => {
     [
       'default import',
       'import Foo from "./foo";',
-      "const foo$0 = require('./foo');\nconst Foo = foo$0.default || foo$0;",
+      "var foo$0 = require('./foo');\nvar Foo = foo$0.default || foo$0;",
     ],
     [
       'named imports',
       'import { Bar, Baz } from "./foo";',
-      "const { Bar, Baz } = require('./foo');",
+      "var { Bar, Baz } = require('./foo');",
     ],
     [
       'mixed',
       'import Foo, { Bar, Baz } from "./foo";',
-      "const foo$0 = require('./foo');\n" +
-        'const Foo = foo$0.default || foo$0;\n' +
-        'const { Bar, Baz } = foo$0;',
+      "var foo$0 = require('./foo');\n" +
+        'var Foo = foo$0.default || foo$0;\n' +
+        'var { Bar, Baz } = foo$0;',
     ],
   ])('compiles %s', (_, input, expected) => {
     expect(transform(input, { plugins: [modules()] }).code).toEqual(expected);
@@ -91,7 +91,7 @@ describe('import rewriting', () => {
     expect(
       transform(`import Foo from './foo';\n\n<div/>`, {
         plugins: [modules({ remove: true })],
-      }).code,
+      }).code
     ).toEqual('<div/>');
   });
 
@@ -106,7 +106,7 @@ describe('import rewriting', () => {
     `,
       {
         plugins: [modules({ imports })],
-      },
+      }
     );
 
     expect(imports).toEqual([
@@ -444,10 +444,10 @@ describe('jsx', () => {
     },
   ];
 
-  testCases.forEach(test => {
+  testCases.forEach((test) => {
     it(test.description, () => {
       expect(
-        transform(test.input, { plugins: [jsx(test.options)] }).code,
+        transform(test.input, { plugins: [jsx(test.options)] }).code
       ).toEqual(test.output);
     });
   });

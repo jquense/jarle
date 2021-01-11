@@ -61,12 +61,12 @@ export default ({
             );
           } else {
             details.base = local.name;
-            details.code += `const ${tmp} = ${req}\nconst ${local.name} = ${tmp}.default || ${tmp};\n`;
+            details.code += `var ${tmp} = ${req}\nvar ${local.name} = ${tmp}.default || ${tmp};\n`;
           }
         });
 
         if (named.length) {
-          details.code += `const { ${named.join(', ')} } = ${
+          details.code += `var { ${named.join(', ')} } = ${
             details.code ? `${tmp};` : req
           }`;
         }
