@@ -89,9 +89,12 @@ describe('import rewriting', () => {
 
   it('remvoves imports', () => {
     expect(
-      transform(`import Foo from './foo';\n\n<div/>`, {
-        plugins: [modules({ remove: true })],
-      }).code
+      transform(
+        `import Foo from './foo';\nimport Bar from './bar';\n\n<div/>`,
+        {
+          plugins: [modules({ remove: true })],
+        }
+      ).code
     ).toEqual('<div/>');
   });
 

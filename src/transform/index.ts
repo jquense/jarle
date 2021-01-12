@@ -31,7 +31,7 @@ function walk(
 
   visitor?.forEach((v) => v.enter?.call(ctx, node, parent, key));
   if (!nodeExists(node, parent, key)) {
-    return;
+    return false;
   }
 
   // eslint-disable-next-line guard-for-in
@@ -39,11 +39,13 @@ function walk(
     const value = node[key];
     if (isNode(value)) {
       walk(ctx, visitors, value, node, key);
-    }
-    if (Array.isArray(value)) {
-      for (const item of value) {
-        if (isNode(item)) {
-          walk(ctx, visitors, item, node, key);
+    } //
+    else if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i += 1) {
+        if (isNode(value[i])) {
+          if (walk(ctx, visitors, value[i], node, key) === false) {
+            i--;
+          }
         }
       }
     }
