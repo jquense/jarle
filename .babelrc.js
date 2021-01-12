@@ -14,6 +14,5 @@ module.exports = (api) => ({
   plugins: [
     api.env() !== 'esm' && '@babel/plugin-transform-modules-commonjs',
     '@babel/plugin-syntax-dynamic-import',
-    'babel-plugin-macros',
   ].filter(Boolean),
-})
+});
