@@ -4,7 +4,8 @@
 </p>
 
 Jarle is a as light weight and feature rich React component editor with live
-preview.
+preview. 
+
 
 ## Usage
 
@@ -21,6 +22,8 @@ function LiveEditor() {
   );
 }
 ```
+
+See **https://jquense.github.io/jarle/** for docs.
 
 ### Rendering Code
 
