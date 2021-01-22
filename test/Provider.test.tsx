@@ -35,6 +35,32 @@ describe('Provider', () => {
     expect(wrapper.find('div.test')).toHaveLength(1);
   });
 
+  it('should render function component', async () => {
+    const wrapper = await mountProvider({
+      code: `
+        function Example() {
+          return <div className="test" />
+        }
+      `,
+    });
+
+    expect(wrapper.find('div.test')).toHaveLength(1);
+  });
+
+  it('should render class component', async () => {
+    const wrapper = await mountProvider({
+      code: `
+        class Example extends React.Component {
+          render() {
+            return <div className="test" />
+          }
+        }
+      `,
+    });
+
+    expect(wrapper.find('div.test')).toHaveLength(1);
+  });
+
   it('should renderAsComponent', async () => {
     const wrapper = await mountProvider({
       renderAsComponent: true,

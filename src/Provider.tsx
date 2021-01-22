@@ -6,7 +6,10 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  isValidElement,
+  createElement,
 } from 'react';
+import { isValidElementType } from 'react-is';
 import { decode } from 'sourcemap-codec';
 import { Root } from './transform';
 import { Import } from './transform/modules';
@@ -151,7 +154,17 @@ function codeToComponent<TScope extends {}>(
       reject(new SyntaxError('The code did not return a JSX element'));
       return;
     }
-
+    if (!isValidElement(element)) {
+      if (isValidElementType(element)) {
+        element = createElement(element);
+      } else {
+        reject(
+          new SyntaxError(
+            'The code did not return a valid React element or element type'
+          )
+        );
+      }
+    }
     resolve(element);
   });
 }

@@ -47,6 +47,36 @@ describe('wrap last expression', () => {
       ));
     `,
     ],
+    [
+      'replaces export default',
+      `export default <div />`,
+      `;\nreturn (<div />);`,
+    ],
+    [
+      'prefers export default',
+      `export default <div />;\n<span/>`,
+      `;\nreturn (<div />);;\n<span/>`,
+    ],
+    [
+      'return class',
+      `const bar = true;\nclass foo {}`,
+      `const bar = true;\n;\nreturn (class foo {});`,
+    ],
+    [
+      'export class',
+      `export default class foo {}`,
+      `;\nreturn (class foo {});`,
+    ],
+    [
+      'return function',
+      `const bar = true;\nfunction foo() {}`,
+      `const bar = true;\n;\nreturn (function foo() {});`,
+    ],
+    [
+      'export function',
+      `export default function foo() {}`,
+      `;\nreturn (function foo() {});`,
+    ],
   ])('compiles %s', (_, input, expected) => {
     expect(transform(input, { plugins: [wrapLastExpression()] }).code).toEqual(
       expected
@@ -87,7 +117,7 @@ describe('import rewriting', () => {
     expect(transform(input, { plugins: [modules()] }).code).toEqual(expected);
   });
 
-  it('remvoves imports', () => {
+  it('removes imports', () => {
     expect(
       transform(
         `import Foo from './foo';\nimport Bar from './bar';\n\n<div/>`,

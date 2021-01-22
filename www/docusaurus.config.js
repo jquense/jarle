@@ -19,7 +19,14 @@ module.exports = {
         src: 'img/logo.svg',
         srcDark: 'img/logo_dark.svg',
       },
-      items: [],
+      items: [
+        {
+          href: 'https://github.com/jquense/jarle',
+          position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
+        },
+      ],
     },
     footer: {
       style: 'dark',
