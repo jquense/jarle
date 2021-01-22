@@ -1,3 +1,14 @@
+# [1.1.0](https://github.com/jquense/jarle/compare/v1.0.3...v1.1.0) (2021-01-22)
+
+
+### Features
+
+* allow component returns and export default ([1000f48](https://github.com/jquense/jarle/commit/1000f48271f0a9424c9e00b27323b5a89e99de42))
+
+
+
+
+
 ## [1.0.3](https://github.com/jquense/jarle/compare/v1.0.2...v1.0.3) (2021-01-12)
 
 
