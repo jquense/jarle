@@ -53,10 +53,10 @@ const Preview = ({
   const previewProps = {
     role: "region",
     "aria-label": "Code Example",
+    ...props,
     ref: attachRef,
     className: className,
-    onClick: handleClick,
-    ...props
+    onClick: handleClick
   }
 
   return error ? null : (
