@@ -50,16 +50,15 @@ const Preview = ({
     if (e.target.tagName === 'A' || e.target.closest('a')) e.preventDefault();
   };
 
+  const previewProps = {
+    role: "region",
+    "aria-label": "Code Example",
+    ...props,
+  }
+
   return error ? null : (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
-    <div
-      {...props}
-      role="region"
-      aria-label="Code Example"
-      ref={attachRef}
-      className={className}
-      onClick={handleClick}
-    >
+    <div ref={attachRef} className={className} onClick={handleClick} {...previewProps}>
       <ErrorBoundary element={element} />
     </div>
   );
