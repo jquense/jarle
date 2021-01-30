@@ -54,14 +54,11 @@ const Preview = ({
     role: "region",
     "aria-label": "Code Example",
     ...props,
-    ref: attachRef,
-    className: className,
-    onClick: handleClick
   }
 
   return error ? null : (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
-    <div {...previewProps}>
+    <div ref={attachRef} className={className} onClick={handleClick} {...previewProps}>
       <ErrorBoundary element={element} />
     </div>
   );
