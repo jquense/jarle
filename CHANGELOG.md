@@ -1,3 +1,15 @@
+## [1.1.1](https://github.com/jquense/jarle/compare/v1.1.0...v1.1.1) (2021-02-01)
+
+
+### Bug Fixes
+
+* @4c/tsconfig to dev dependencies ([#8](https://github.com/jquense/jarle/issues/8)) ([55582c8](https://github.com/jquense/jarle/commit/55582c842a8a77c9caa9c5526ff9345f87181916))
+* **Preview:** allow props to override defaults ([#5](https://github.com/jquense/jarle/issues/5)) ([3e3e3a7](https://github.com/jquense/jarle/commit/3e3e3a77b6611d0b7c759199833bc9a26c939f51)), closes [#4](https://github.com/jquense/jarle/issues/4)
+
+
+
+
+
 # [1.1.0](https://github.com/jquense/jarle/compare/v1.0.3...v1.1.0) (2021-01-22)
 
 
