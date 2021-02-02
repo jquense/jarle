@@ -251,7 +251,8 @@ export const objectZip = <T extends PropertyKey, U>(
 ): Record<string, U> => Object.fromEntries(arr.map((v, i) => [v, arr2[i]]));
 
 function defaultResolveImports(sources) {
-  return Promise.all(sources.map((s) => import(/* webpackIgnore: true */ s)));
+  // @ts-ignore
+  return Promise.all(sources.map(__IMPORT__));
 }
 
 function useNormalizedCode(code: string, showImports: boolean, setError: any) {

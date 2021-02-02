@@ -10,7 +10,8 @@
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "4c build src && node ./build-themes.js",
+    "add-import": "sed -i '' 's/__IMPORT__/(s) => import(\\/\\* webpackIgnore: true \\*\\/ s)/' ./{lib,esm}/Provider.js",
+    "build": "4c build src && yarn add-import && node ./build-themes.js",
     "prepublishOnly": "yarn run build",
     "tdd": "jest --watch",
     "test": "jest"
