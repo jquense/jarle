@@ -1,5 +1,5 @@
 import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 // @ts-ignore
 window.__IMPORT__ = (s) => import(/* webpackIgnore: true */ s);
