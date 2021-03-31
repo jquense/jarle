@@ -1,3 +1,14 @@
+# [1.2.0](https://github.com/jquense/jarle/compare/v1.1.2...v1.2.0) (2021-03-31)
+
+
+### Features
+
+* bump deps ([98c525c](https://github.com/jquense/jarle/commit/98c525cb91744547a9956e086988c70d386a8915))
+
+
+
+
+
 ## [1.1.2](https://github.com/jquense/jarle/compare/v1.1.0...v1.1.2) (2021-02-02)
 
 
