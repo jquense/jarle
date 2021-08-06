@@ -76,7 +76,7 @@
     "sourcemap-codec": "^1.4.8"
   },
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": ">=16.8.6",
+    "react-dom": ">=16.8.6"
   }
 }
