@@ -1,4 +1,5 @@
 import useEventCallback from '@restart/hooks/useEventCallback';
+import useMounted from '@restart/hooks/useMounted';
 import { PrismTheme } from 'prism-react-renderer';
 import React, {
   ReactNode,
@@ -290,6 +291,7 @@ export default function Provider<TScope extends {} = {}>({
   renderAsComponent = false,
   resolveImports = defaultResolveImports,
 }: Props<TScope>) {
+  const isMounted = useMounted();
   const [error, setError] = useState<LiveError | null>(null);
   const [{ element }, setState] = useState<State>({ element: null });
 
@@ -322,10 +324,18 @@ export default function Provider<TScope extends {} = {}>({
             },
           })
         )
-        .then((element) => {
-          setState({ element });
-          setError(null);
-        }, setError);
+        .then(
+          (element) => {
+            if (!isMounted()) return;
+
+            setState({ element });
+            setError(null);
+          },
+          (err) => {
+            if (!isMounted()) return;
+            setError(err);
+          }
+        );
     } catch (err) {
       setError(err);
     }
