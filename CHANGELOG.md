@@ -1,3 +1,14 @@
+## [1.2.2](https://github.com/jquense/jarle/compare/v1.2.1...v1.2.2) (2021-08-06)
+
+
+### Bug Fixes
+
+* setState after unmount ([9063cf5](https://github.com/jquense/jarle/commit/9063cf5959ab40c8ccb0af3351f4a087cf48e6aa))
+
+
+
+
+
 ## [1.2.1](https://github.com/jquense/jarle/compare/v1.2.0...v1.2.1) (2021-08-06)
 
 
