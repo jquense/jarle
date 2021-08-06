@@ -1,3 +1,14 @@
+## [1.2.1](https://github.com/jquense/jarle/compare/v1.2.0...v1.2.1) (2021-08-06)
+
+
+### Bug Fixes
+
+* peer dep ([474e084](https://github.com/jquense/jarle/commit/474e0842a8b67cf028bcedcb74956c116a9d28ec))
+
+
+
+
+
 # [1.2.0](https://github.com/jquense/jarle/compare/v1.1.2...v1.2.0) (2021-03-31)
 
 
