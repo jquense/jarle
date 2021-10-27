@@ -1,3 +1,14 @@
+# [1.3.0](https://github.com/jquense/jarle/compare/v1.2.2...v1.3.0) (2021-10-27)
+
+
+### Features
+
+* use latest for acorn ecma target ([562f36e](https://github.com/jquense/jarle/commit/562f36e053accbcfa354217e6f9be7b12bb922b8))
+
+
+
+
+
 ## [1.2.2](https://github.com/jquense/jarle/compare/v1.2.1...v1.2.2) (2021-08-06)
 
 
