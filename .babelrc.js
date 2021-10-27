@@ -12,7 +12,7 @@ module.exports = (api) => {
         },
       ],
       '@babel/preset-react',
-      '@babel/preset-typescript',
+      ['@babel/preset-typescript', { allowDeclareFields: true }],
     ],
     plugins: ['@babel/plugin-syntax-dynamic-import'].filter(Boolean),
   };

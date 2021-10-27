@@ -94,7 +94,7 @@ export function transform(
   if (typeof source === 'string') {
     code = new MagicString(source);
     ast = parser.parse(source, {
-      ecmaVersion: 10,
+      ecmaVersion: 'latest',
       preserveParens: true,
       sourceType: 'module',
       allowAwaitOutsideFunction: true,

@@ -168,6 +168,20 @@ describe('import rewriting', () => {
   });
 });
 
+describe('general parsing smoketest', () => {
+  it('parses', () => {
+    const imports = [] as Import[];
+
+    const { code } = transform(
+      `
+        const obj = { a: { b: 1, c: true }} 
+
+        let f = obj?.a?.b?.()
+      `
+    );
+  });
+});
+
 describe('jsx', () => {
   const testCases = [
     {

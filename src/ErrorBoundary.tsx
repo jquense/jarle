@@ -9,7 +9,7 @@ class CodeLiveErrorBoundary extends React.Component<
   Props,
   { hasError?: boolean }
 > {
-  context!: React.ContextType<typeof Context>;
+  declare context: React.ContextType<typeof Context>;
 
   componentDidCatch(error: Error) {
     this.context.onError(error);

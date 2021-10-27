@@ -336,7 +336,7 @@ export default function Provider<TScope extends {} = {}>({
             setError(err);
           }
         );
-    } catch (err) {
+    } catch (err: any) {
       setError(err);
     }
   });
