@@ -12,13 +12,12 @@ import React, {
 } from 'react';
 import { isValidElementType } from 'react-is';
 import { decode } from 'sourcemap-codec';
-import { Root } from './transform';
-import { Import } from './transform/modules';
+import { Import } from './transform';
 
-import { Wrapper } from './transform/wrapContent';
 import transpile, { parseImports } from './transpile';
 
-const prettierComment = /(\{\s*\/\*\s+prettier-ignore\s+\*\/\s*\})|(\/\/\s+prettier-ignore)/gim;
+const prettierComment =
+  /(\{\s*\/\*\s+prettier-ignore\s+\*\/\s*\})|(\/\/\s+prettier-ignore)/gim;
 
 const hooks = {};
 Object.entries(React).forEach(([key, value]) => {
@@ -49,14 +48,13 @@ const getRequire = (imports?: Record<string, any>) =>
     return imports[request];
   };
 
-const wrapAsComponent: Wrapper = (ctx) => {
-  ctx.prepend('return React.createElement(function StateContainer() {\n');
-  ctx.append('\n})');
+const wrapAsComponent = (ctx: string) => {
+  return `return React.createElement(function StateContainer() {\n${ctx}\n})`;
 };
 
 function handleError(
   err: any,
-  result: ReturnType<typeof transpile>,
+  _result: ReturnType<typeof transpile>,
   fn: Function
 ): LiveError {
   const fnStr = fn.toString();
@@ -76,33 +74,29 @@ function handleError(
   }
   if (!pos) return err;
 
-  const decoded = decode(result.map?.mappings);
+  // if (result.map) {
+  //   const decoded = decode(result.map.mappings);
 
-  const line = pos.line - offset;
-  const mapping = decoded[line]?.find(([col]) => col === pos.column);
+  //   const line = pos.line - offset;
+  //   const mapping = decoded[line]?.find(([col]) => col === pos.column);
 
-  if (mapping) {
-    err.location = { line: mapping[2], column: mapping[3] };
-  }
+  //   if (mapping) {
+  //     err.location = { line: mapping[2], column: mapping[3] };
+  //   }
+  // }
 
   return err;
 }
 
 interface CodeToComponentOptions<S extends {}> {
   scope?: S;
-  ast?: Root;
   renderAsComponent?: boolean;
   preample?: string;
 }
 
 function codeToComponent<TScope extends {}>(
   code: string,
-  {
-    ast,
-    scope,
-    preample,
-    renderAsComponent = false,
-  }: CodeToComponentOptions<TScope>
+  { scope, preample, renderAsComponent = false }: CodeToComponentOptions<TScope>
 ): Promise<React.ReactElement> {
   return new Promise((resolve, reject) => {
     const isInline = !code.match(/render\S*\(\S*</);
@@ -114,7 +108,7 @@ function codeToComponent<TScope extends {}>(
       );
     }
 
-    const result = transpile(ast || code, {
+    const result = transpile(code, {
       inline: isInline,
       wrapper: renderAsComponent ? wrapAsComponent : undefined,
     });
@@ -256,10 +250,14 @@ function defaultResolveImports(sources) {
   return Promise.all(sources.map(__IMPORT__));
 }
 
-function useNormalizedCode(code: string, showImports: boolean, setError: any) {
+function useNormalizedCode(
+  code: string,
+  showImports: boolean,
+  setError: any
+): [compiledCode: string, imports: Import[], importBlock: string] {
   return useMemo(() => {
     const nextCode = code.replace(prettierComment, '').trim();
-    if (showImports) return [nextCode, [], ''] as [string, Import[], string];
+    if (showImports) return [nextCode, [], ''];
     try {
       const result = parseImports(nextCode, true);
       return [
@@ -269,10 +267,10 @@ function useNormalizedCode(code: string, showImports: boolean, setError: any) {
           .map((i) => i.code)
           .join('\n')
           .trimStart(),
-      ] as const;
+      ];
     } catch (err) {
       setError(err);
-      return [code, [], ''] as [string, Import[], string];
+      return [code, [], ''];
     }
   }, [code, showImports]);
 }
@@ -303,7 +301,7 @@ export default function Provider<TScope extends {} = {}>({
 
   const handleChange = useEventCallback((nextCode: string) => {
     try {
-      const { ast, imports } = parseImports(nextCode, false);
+      const { code: compiledCode, imports } = parseImports(nextCode, false);
       const sources = Array.from(
         new Set([...ogImports, ...imports].map((i) => i.source))
       );
@@ -313,8 +311,7 @@ export default function Provider<TScope extends {} = {}>({
           Array.isArray(results) ? objectZip(sources, results) : results
         )
         .then((fetchedImports) =>
-          codeToComponent(nextCode, {
-            ast,
+          codeToComponent(compiledCode, {
             renderAsComponent,
             // also include the orginal imports if they were removed
             preample: ogImportBlock,

@@ -1,128 +1,197 @@
-/* eslint-disable no-restricted-syntax */
-import { Parser } from 'acorn';
-import acornJsx from 'acorn-jsx';
-import MagicString from 'magic-string';
+import { Transform } from 'sucrase/dist/Options';
+import {
+  TokenProcessor,
+  parse,
+  tt,
+  HelperManager,
+  NameManager,
+  CJSImportProcessor,
+  transform as sucraseTransform,
+} from './parser';
 
-import { Node, NormalVisitor, Plugin, VisitorMap } from './types';
-
-const parser = Parser.extend(acornJsx());
-
-type NormalVisitorMap = Record<string, NormalVisitor[]>;
-
-const isNode = (n: any): n is Node => n !== null && typeof n.type === 'string';
-
-const nodeExists = (n, parent, key) => {
-  if (!parent) return true;
-  if (!(key in parent)) return false;
-  let value = parent[key];
-  return Array.isArray(value) ? value.includes(n) : value === n;
+export type Import = {
+  code: string;
+  source: string;
+  base: null | string;
+  keys: Array<{ local: string; imported: string }>;
 };
 
-function walk(
-  ctx: MagicString,
-  visitors: NormalVisitorMap,
-  node?: Node,
-  parent?: Node,
-  key?: string
+let FN = 'require';
+let num = 0;
+const getIdentifier = (src: string) =>
+  `${src.split('/').pop()!.replace(/\W/g, '_')}$${num++}`;
+
+function buildImport(path: string, imports: CJSImportProcessor) {
+  const { defaultNames, wildcardNames, namedImports } =
+    // @ts-ignore
+    imports.importInfoByPath.get(path);
+
+  const req = `${FN}('${path}');`;
+  const tmp = getIdentifier(path);
+
+  const named = [] as string[];
+  const details: Import = {
+    base: null,
+    source: path,
+    keys: [],
+    code: '',
+  };
+
+  namedImports.forEach((s) => {
+    named.push(
+      s.localName === s.importedName
+        ? s.localName
+        : `${s.importedName}: ${s.localName}`
+    );
+    details.keys.push({ local: s.localName, imported: s.importedName });
+  });
+
+  if (defaultNames.length || wildcardNames.length) {
+    details.base = defaultNames[0] || wildcardNames[0];
+    details.code += `var ${tmp} = ${req}\nvar ${details.base} = ${tmp}.default || ${tmp};\n`;
+  }
+
+  if (named.length) {
+    details.code += `var { ${named.join(', ')} } = ${
+      details.code ? `${tmp};` : req
+    }`;
+  }
+
+  details.code = details.code.trim() || req;
+  return details;
+}
+
+function processImports(
+  tokens: TokenProcessor,
+  importProcessor: CJSImportProcessor,
+  remove = false,
+  imports: Import[] = []
 ) {
-  if (!node) return;
+  if (!tokens.matches1(tt._import)) return false;
 
-  const visitor = visitors[node.type];
+  // dynamic import
+  if (tokens.matches2(tt._import, tt.parenL)) {
+    return true;
+  }
 
-  visitor?.forEach((v) => v.enter?.call(ctx, node, parent, key));
-  if (!nodeExists(node, parent, key)) {
+  tokens.removeInitialToken();
+  while (!tokens.matches1(tt.string)) {
+    tokens.removeToken();
+  }
+
+  const path = tokens.stringValue();
+  const detail = buildImport(path, importProcessor);
+  imports.push(detail);
+
+  tokens.replaceTokenTrimmingLeftWhitespace(remove ? '' : detail.code);
+  if (tokens.matches1(tt.semi)) {
+    tokens.removeToken();
+  }
+  return true;
+}
+
+function wrapLastExpression(
+  tokens: TokenProcessor,
+  lastExprIdx: number | null
+) {
+  if (tokens.currentIndex() !== lastExprIdx) {
     return false;
   }
 
-  // eslint-disable-next-line guard-for-in
-  for (const key in node) {
-    const value = node[key];
-    if (isNode(value)) {
-      walk(ctx, visitors, value, node, key);
-    } //
-    else if (Array.isArray(value)) {
-      for (let i = 0; i < value.length; i += 1) {
-        if (isNode(value[i])) {
-          if (walk(ctx, visitors, value[i], node, key) === false) {
-            i--;
-          }
-        }
-      }
+  if (tokens.matches2(tt._export, tt._default)) {
+    tokens.removeInitialToken();
+    tokens.replaceTokenTrimmingLeftWhitespace(';\nreturn');
+  } else {
+    let code = `\nreturn ${tokens.currentTokenCode()}`;
+    let prev = tokens.currentIndex() - 1;
+    if (prev >= 0 && !tokens.matches1AtIndex(prev, tt.semi)) {
+      code = `;${code}`;
     }
+    tokens.replaceTokenTrimmingLeftWhitespace(code);
   }
-
-  visitor?.forEach((v) => v.leave?.call(ctx, node, parent, key));
+  return true;
 }
-
-const mergeVisitors = (visitors: VisitorMap[]) => {
-  const rootVisitor: Record<string, NormalVisitor[]> = {};
-  for (const visitor of visitors) {
-    for (const key of Object.keys(visitor)) {
-      const value = visitor[key];
-
-      for (const type of key.split('|')) {
-        const normalized =
-          typeof value === 'function' ? { enter: value } : value;
-
-        rootVisitor[type] = rootVisitor[type] || [];
-        rootVisitor[type].push(normalized);
-      }
-    }
-  }
-  return rootVisitor;
-};
 
 export interface Options {
-  plugins: Plugin[];
-  file?: string;
-  source?: string;
-  includeContent?: boolean;
+  removeImports?: boolean;
+  wrapLastExpression?: boolean;
+  transforms?: Transform[];
+  isCompiled?: boolean;
 }
-
-export interface Root extends acorn.Node {
-  magicString: MagicString;
-}
-
-export function transform(
-  source: string | Root,
-  options: Options = { plugins: [] }
-) {
-  const { plugins } = options;
-  let code: MagicString;
-  let ast: Root;
-
-  if (typeof source === 'string') {
-    code = new MagicString(source);
-    ast = parser.parse(source, {
-      ecmaVersion: 'latest',
-      preserveParens: true,
-      sourceType: 'module',
-      allowAwaitOutsideFunction: true,
-      allowReturnOutsideFunction: true,
-      allowHashBang: true,
-      onComment: (...args) => {
-        plugins.forEach((p) => p.onComment?.(...args));
-      },
-    }) as Root;
-    ast.magicString = code;
-  } else {
-    code = source.magicString;
-    ast = source;
+export function transform(code: string, options: Options = {}) {
+  if (options.transforms) {
+    code = sucraseTransform(code, { transforms: options.transforms }).code;
   }
 
-  walk(
+  const { tokens, scopes } = parse(code, true, true, false);
+  const nameManager = new NameManager(code, tokens);
+  const helperManager = new HelperManager(nameManager);
+
+  const tokenProcessor = new TokenProcessor(
     code,
-    mergeVisitors(plugins.map((p) => p.visitor!).filter(Boolean)),
-    ast
+    tokens,
+    false,
+    true,
+    helperManager
   );
 
-  return {
-    ast,
-    code: code.toString(),
-    map: code.generateMap({
-      file: options.file,
-      source: options.source,
-      includeContent: options.includeContent !== false,
-    }),
-  };
+  const importProcessor = new CJSImportProcessor(
+    nameManager,
+    tokenProcessor,
+    false,
+    { transforms: ['typescript', 'jsx'] },
+    true, //
+    helperManager
+  );
+  const imports: Import[] = [];
+
+  const lastExprIdx = options.wrapLastExpression
+    ? findLastExpression(tokenProcessor)
+    : null;
+  importProcessor.preprocessTokens();
+  num = 0;
+
+  while (!tokenProcessor.isAtEnd()) {
+    let wasProcessed = processImports(
+      tokenProcessor,
+      importProcessor,
+      options.removeImports,
+      imports
+    );
+
+    if (!wasProcessed && lastExprIdx !== null) {
+      // console.log('HERE', lastExprIdx);
+      wasProcessed = wrapLastExpression(tokenProcessor, lastExprIdx);
+    }
+    if (!wasProcessed) {
+      tokenProcessor.copyToken();
+    }
+  }
+
+  const result = tokenProcessor.finish();
+
+  return { code: result, imports };
+}
+
+function findLastExpression(tokens: TokenProcessor) {
+  let lastExprIdx: number | null = null;
+  // console.log(tokens.tokens);
+  for (let i = 0; i < tokens.tokens.length; i++) {
+    if (tokens.matches2AtIndex(i, tt._export, tt._default)) {
+      lastExprIdx = i;
+      break;
+    }
+
+    if (tokens.tokens[i].isTopLevel) {
+      if (tokens.matches1AtIndex(i, tt._return)) {
+        // console.log('TOPPPP');
+        lastExprIdx = null;
+        break;
+      }
+
+      lastExprIdx = i;
+    }
+  }
+
+  return lastExprIdx;
 }

@@ -1,45 +1,26 @@
-import { Root, transform } from './transform';
-import jsx from './transform/jsx';
-import modules, { Import } from './transform/modules';
-import wrapContent, { Wrapper } from './transform/wrapContent';
-import wrapLastExpression from './transform/wrapLastExpression';
+import { Import, transform } from './transform';
 
-const truthy = <T>(
-  value: T
-): value is T extends false | '' | 0 | null | undefined ? never : T => !!value;
-
-export function parseImports(input: string | Root, remove: boolean) {
-  const imports: Import[] = [];
-  const { code, map, ast } = transform(input, {
-    file: 'compiled.js',
-    source: 'example.js',
-    plugins: [modules({ remove, imports })],
+export function parseImports(input: string, remove: boolean) {
+  const { code, imports } = transform(input, {
+    removeImports: remove,
+    transforms: ['typescript', 'jsx'],
   });
 
-  return { code, ast, imports, map };
+  return { code, imports };
 }
 
 export type Options = {
   inline?: boolean;
-  wrapper?: Wrapper;
+  wrapper?: (string) => string;
 };
 
-export default (
-  input: string | Root,
-  { inline = false, wrapper }: Options = {}
-) => {
-  const imports: Import[] = [];
-
-  const { code, ast, map } = transform(input, {
-    file: 'compiled.js',
-    source: 'example.js',
-    plugins: [
-      jsx(),
-      modules(),
-      inline && wrapLastExpression(),
-      wrapper && wrapContent({ wrapper }),
-    ].filter(truthy),
+export default (input: string, { inline = false, wrapper }: Options = {}) => {
+  let { code, imports } = transform(input, {
+    wrapLastExpression: inline,
+    // transforms: ['jsx'],
   });
 
-  return { code, ast, imports, map };
+  if (wrapper) code = wrapper(code);
+
+  return { code, imports };
 };
