@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import Highlight, { Language, Prism, PrismTheme } from 'prism-react-renderer';
 import React from 'react';
 import LineNumber from './LineNumber';
@@ -15,7 +14,7 @@ function addErrorHighlight(
   errorLocation?: MapTokens['errorLocation']
 ) {
   if (index + 1 === errorLocation?.line) {
-    props.className = cn(props.className, 'token-line-error');
+    props.className = `${props.className || ''} token-line-error`;
   }
   return props;
 }
@@ -71,7 +70,7 @@ function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
     >
       {(hl) => (
         <pre
-          className={cn(props.className, hl.className)}
+          className={`${props.className || ''} ${hl.className}`}
           style={{ ...props.style, ...style, ...hl.style }}
         >
           <code>{mapTokens({ ...hl, getLineNumbers })}</code>
