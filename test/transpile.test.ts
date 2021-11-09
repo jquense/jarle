@@ -13,10 +13,7 @@ describe('parseImports', () => {
     );
 
     expect(result.code).toMatchInlineSnapshot(`
-      "
-              
-
-              <Foo />
+      "        <Foo />
             "
     `);
 
@@ -24,8 +21,7 @@ describe('parseImports', () => {
       Array [
         Object {
           "base": "Foo",
-          "code": "var foo_js$0 = require('./foo.js');
-      var Foo = foo_js$0.default || foo_js$0;",
+          "code": "let foo_js$0 = require('./foo.js'); let Foo = foo_js$0.default;",
           "keys": Array [],
           "source": "./foo.js",
         },
@@ -45,10 +41,7 @@ describe('parseImports', () => {
     );
 
     expect(result.code).toMatchInlineSnapshot(`
-      "
-              
-
-              <Foo<Bar> />
+      "        <Foo<Bar> />
             "
     `);
 
@@ -56,8 +49,7 @@ describe('parseImports', () => {
       Array [
         Object {
           "base": "Foo",
-          "code": "var foo_js$0 = require('./foo.js');
-      var Foo = foo_js$0.default || foo_js$0;",
+          "code": "let foo_js$0 = require('./foo.js'); let Foo = foo_js$0.default;",
           "keys": Array [],
           "source": "./foo.js",
         },
