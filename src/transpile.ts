@@ -1,45 +1,52 @@
-import { Root, transform } from './transform';
-import jsx from './transform/jsx';
-import modules, { Import } from './transform/modules';
-import wrapContent, { Wrapper } from './transform/wrapContent';
-import wrapLastExpression from './transform/wrapLastExpression';
+import { Import, transform } from './transform';
 
-const truthy = <T>(
-  value: T
-): value is T extends false | '' | 0 | null | undefined ? never : T => !!value;
-
-export function parseImports(input: string | Root, remove: boolean) {
-  const imports: Import[] = [];
-  const { code, map, ast } = transform(input, {
-    file: 'compiled.js',
-    source: 'example.js',
-    plugins: [modules({ remove, imports })],
+function extractLeadingWhitespace(code: string): [string, string] {
+  let leadingWhitespace = '';
+  let lines = code.split(/\n/);
+  for (const [idx, line] of lines.entries()) {
+    if (!line.trim().length) {
+      leadingWhitespace += '\n';
+    } else {
+      return [leadingWhitespace, lines.slice(idx).join('\n')];
+    }
+  }
+  return [leadingWhitespace, code];
+}
+export function parseImports(
+  input: string,
+  remove: boolean,
+  isTypeScript: boolean
+) {
+  const { code, imports, map } = transform(input, {
+    removeImports: remove,
+    syntax: isTypeScript ? 'typescript' : 'js',
+    compiledFilename: 'compiled.js',
+    filename: 'example.js',
   });
 
-  return { code, ast, imports, map };
+  const [leadingWhitespace, trailing] = extractLeadingWhitespace(code);
+
+  return { code: trailing, imports, map, leadingWhitespace };
 }
 
 export type Options = {
   inline?: boolean;
-  wrapper?: Wrapper;
+  isTypeScript?: boolean;
+  wrapper?: (code: string) => string;
 };
 
 export default (
-  input: string | Root,
-  { inline = false, wrapper }: Options = {}
+  input: string,
+  { inline = false, wrapper, isTypeScript }: Options = {}
 ) => {
-  const imports: Import[] = [];
-
-  const { code, ast, map } = transform(input, {
-    file: 'compiled.js',
-    source: 'example.js',
-    plugins: [
-      jsx(),
-      modules(),
-      inline && wrapLastExpression(),
-      wrapper && wrapContent({ wrapper }),
-    ].filter(truthy),
+  let { code, imports, map } = transform(input, {
+    wrapLastExpression: inline,
+    transforms: isTypeScript ? ['typescript', 'jsx'] : ['jsx'],
+    compiledFilename: 'compiled.js',
+    filename: 'example.js',
   });
 
-  return { code, ast, imports, map };
+  if (wrapper) code = wrapper(code);
+
+  return { code, imports, map };
 };

@@ -96,6 +96,24 @@ setTimeout(() => {
 }, 1000);
 ```
 
+### TypeScript
+
+JARLE supports compiling TypeScript if you specify the language as such.
+
+```tsx live
+import type { Names } from './types';
+
+interface Props {
+  name: string;
+}
+
+function Greeting({ name }: Props) {
+  return <strong>Hello {name}</strong>;
+}
+
+<Greeting name="Fellow Traveler" />;
+```
+
 ## Scope
 
 You can control which values, clases, components, etc are provided automatically
@@ -154,14 +172,16 @@ You can also mix together some of your own static analysis and tooling to
 build really neat integrations where imports are resolved a head of time, using webpack
 or other bundlers.
 
+> Note: Typescript type only imports are not passed to the import resolver, since they
+> are compile-time only fixtures.
+
 ## Usage
 
 A full example of how to use JARLE via another JARLE editor!
 
 ```jsx live inline=false
-import theme from 'https://cdn.skypack.dev/prism-react-renderer/themes/oceanicNext';
-
-const { Provider, Editor, Error, Preview } = Jarle;
+import theme from 'jarle/themes/oceanicNext';
+import { Provider, Editor, Error, Preview } from 'jarle';
 
 const code = `
   <strong>Here's an editor inside an editor</strong>
@@ -185,9 +205,8 @@ like global CSS. If want to sandbox the result from the parent document, render
 your preview into an `<iframe>` useing a "portal".
 
 ```jsx live inline=false showImports= false
-import theme from 'https://cdn.skypack.dev/jarle/themes/oceanicNext';
-
-const { Provider, Editor, Error, Preview } = Jarle;
+import theme from 'jarle/themes/oceanicNext';
+import { Provider, Editor, Error, Preview } from 'jarle';
 
 function IFrameEditor(props) {
   const [contentRef, setContentRef] = useState(null);
@@ -257,11 +276,11 @@ function Greet({ subject = DEFAULT }) {
 
 Rich text editors like JARLE tend to break an important aspect of keyboard navigation
 on the web. Namely they break <kbd>tab</kbd> behavior by indenting instead of
-moving focus to the next item on the page. This really helpful for text editing
+moving focus to the next item on the page. This is helpful for text editing,
 but can trap keyboard users in the editor.
 
 To address this JARLE doesn't automatically trap focus when the user tabs into the editor.
-Pressing <kbd>enter</kbd> or typing printable characters activates the tap trap,
+Pressing <kbd>enter</kbd> or typing printable characters activates the tab trap,
 so the hitting <kbd>tab</kbd> indents instead of moving focus. Hitting <kbd>esc</kbd>
 disables tab trapping allowing a user to tab away from the editor.
 

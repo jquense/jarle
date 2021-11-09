@@ -3,9 +3,9 @@
   <strong>Just Another React Live Editor</strong>
 </p>
 
-Jarle is a as light weight and feature rich React component editor with live
-preview. 
-
+JARLE is a as lightweight but feature-rich React component editor with live
+preview. JARLE uses [sucrase](https://github.com/alangpierce/sucrase) for fast, minimal
+compilation of JSX and/or Typescript.
 
 ## Usage
 
@@ -74,10 +74,3 @@ state and other hooks.
   `}
 />
 ```
-
-## Differences from React Live
-
-- No extra compiling. Jarle only packages a JSX transformer, making it lighter
-  than alternatives.
-
-- Smart rendering
