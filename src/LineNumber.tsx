@@ -7,15 +7,23 @@ const lineNumberStyle = {
   paddingRight: 12,
 } as const;
 
-function LineNumber({ children, theme = true }: any) {
+function LineNumber({ children, className, theme = true, style }: any) {
   return (
-    <div
+    <span
       aria-hidden
-      className="line-number"
-      style={theme ? { ...lineNumberStyle, ...theme.lineNumber } : undefined}
+      className={`${className || ''} line-number`}
+      style={
+        theme
+          ? {
+              ...style,
+              ...lineNumberStyle,
+              ...theme.lineNumber,
+            }
+          : undefined
+      }
     >
       {children}
-    </div>
+    </span>
   );
 }
 

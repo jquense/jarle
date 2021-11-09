@@ -26,6 +26,13 @@ Object.entries(React).forEach(([key, value]) => {
 
 export type LiveError = Error & {
   location?: { line: number; col: number };
+  loc?: { line: number; col: number };
+};
+
+export const isTypeScriptEnabled = (language?: string) => {
+  if (!language) return false;
+  const lower = language.toLowerCase();
+  return lower === 'typescript' || lower === 'tsx' || lower === 'ts';
 };
 
 export interface LiveContext {
@@ -45,7 +52,10 @@ const getRequire = (imports?: Record<string, any>) =>
   function require(request: string) {
     if (!imports) throw new Error('no imports');
     if (!(request in imports)) throw new Error(`Module not found: ${request}`);
-    return imports[request];
+    const obj = imports[request];
+    return obj && (obj.__esModule || obj[Symbol.toStringTag] === 'Module')
+      ? obj
+      : { default: obj };
   };
 
 const wrapAsComponent = (ctx: string) => {
@@ -54,7 +64,7 @@ const wrapAsComponent = (ctx: string) => {
 
 function handleError(
   err: any,
-  _result: ReturnType<typeof transpile>,
+  result: ReturnType<typeof transpile>,
   fn: Function
 ): LiveError {
   const fnStr = fn.toString();
@@ -74,16 +84,16 @@ function handleError(
   }
   if (!pos) return err;
 
-  // if (result.map) {
-  //   const decoded = decode(result.map.mappings);
+  if (result.map) {
+    const decoded = decode(result.map.mappings);
 
-  //   const line = pos.line - offset;
-  //   const mapping = decoded[line]?.find(([col]) => col === pos.column);
+    const line = pos.line - offset;
+    const mapping = decoded[line]?.find(([col]) => col === pos.column);
 
-  //   if (mapping) {
-  //     err.location = { line: mapping[2], column: mapping[3] };
-  //   }
-  // }
+    if (mapping) {
+      err.location = { line: mapping[2], column: mapping[3] };
+    }
+  }
 
   return err;
 }
@@ -92,11 +102,17 @@ interface CodeToComponentOptions<S extends {}> {
   scope?: S;
   renderAsComponent?: boolean;
   preample?: string;
+  isTypeScript?: boolean;
 }
 
 function codeToComponent<TScope extends {}>(
   code: string,
-  { scope, preample, renderAsComponent = false }: CodeToComponentOptions<TScope>
+  {
+    scope,
+    preample,
+    isTypeScript,
+    renderAsComponent = false,
+  }: CodeToComponentOptions<TScope>
 ): Promise<React.ReactElement> {
   return new Promise((resolve, reject) => {
     const isInline = !code.match(/render\S*\(\S*</);
@@ -110,6 +126,7 @@ function codeToComponent<TScope extends {}>(
 
     const result = transpile(code, {
       inline: isInline,
+      isTypeScript,
       wrapper: renderAsComponent ? wrapAsComponent : undefined,
     });
 
@@ -219,7 +236,7 @@ export interface Props<TScope> {
    *   './foo': Foo
    * })
    * ```
-   *
+   * @default (requests) => Promise.all(requests.map(req => import(req)))
    */
   resolveImports?: ImportResolver;
 }
@@ -253,13 +270,14 @@ function defaultResolveImports(sources) {
 function useNormalizedCode(
   code: string,
   showImports: boolean,
+  isTypeScript: boolean,
   setError: any
 ): [compiledCode: string, imports: Import[], importBlock: string] {
   return useMemo(() => {
     const nextCode = code.replace(prettierComment, '').trim();
     if (showImports) return [nextCode, [], ''];
     try {
-      const result = parseImports(nextCode, true);
+      const result = parseImports(nextCode, true, isTypeScript);
       return [
         result.code,
         result.imports,
@@ -292,16 +310,21 @@ export default function Provider<TScope extends {} = {}>({
   const isMounted = useMounted();
   const [error, setError] = useState<LiveError | null>(null);
   const [{ element }, setState] = useState<State>({ element: null });
-
+  const isTypeScript = isTypeScriptEnabled(language);
   const [cleanCode, ogImports, ogImportBlock] = useNormalizedCode(
     rawCode,
     showImports,
+    isTypeScript,
     setError
   );
 
   const handleChange = useEventCallback((nextCode: string) => {
     try {
-      const { code: compiledCode, imports } = parseImports(nextCode, false);
+      const { code: compiledCode, imports } = parseImports(
+        nextCode,
+        false,
+        isTypeScript
+      );
       const sources = Array.from(
         new Set([...ogImports, ...imports].map((i) => i.source))
       );
@@ -313,6 +336,7 @@ export default function Provider<TScope extends {} = {}>({
         .then((fetchedImports) =>
           codeToComponent(compiledCode, {
             renderAsComponent,
+            isTypeScript,
             // also include the orginal imports if they were removed
             preample: ogImportBlock,
             scope: {

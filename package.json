@@ -11,7 +11,8 @@
   "license": "MIT",
   "scripts": {
     "add-import": "sed -i '' 's/__IMPORT__/(s) => import(\\/\\* webpackIgnore: true \\*\\/ \\/\\* @vite-ignore \\*\\/ s)/' ./{lib,esm}/Provider.js",
-    "build": "4c build src && yarn add-import && node ./build-themes.js",
+    "build:parser": "yarn patch-package && yarn rollup -c rollup.config.js",
+    "build": "yarn build:parser && 4c build src && yarn add-import && node ./build-themes.js",
     "prepublishOnly": "yarn run build",
     "tdd": "jest --watch",
     "test": "jest"
@@ -70,10 +71,7 @@
     "@types/react": "^17.0.33",
     "@types/react-dom": "^17.0.10",
     "@types/react-is": "^17.0.3",
-    "acorn": "^8.5.0",
-    "acorn-jsx": "^5.3.2",
     "classnames": "^2.3.1",
-    "magic-string": "^0.25.6",
     "prism-react-renderer": "^1.2.1",
     "prop-types": "^15.7.2",
     "react-is": "^17.0.2",

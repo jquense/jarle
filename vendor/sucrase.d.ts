@@ -5,6 +5,8 @@ import { TokenType as tt } from 'sucrase/dist/parser/tokenizer/types';
 import { HelperManager } from 'sucrase/dist/HelperManager';
 import NameManager from 'sucrase/dist/NameManager';
 import CJSImportProcessor from 'sucrase/dist/CJSImportProcessor';
+import computeSourceMap from 'sucrase/dist/computeSourceMap';
+import { getNonTypeIdentifiers } from 'sucrase/dist/util/getNonTypeIdentifiers';
 
 export {
   TokenProcessor,
@@ -14,4 +16,6 @@ export {
   NameManager,
   CJSImportProcessor,
   transform,
+  computeSourceMap,
+  getNonTypeIdentifiers,
 };

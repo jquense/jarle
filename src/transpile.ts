@@ -1,26 +1,52 @@
 import { Import, transform } from './transform';
 
-export function parseImports(input: string, remove: boolean) {
-  const { code, imports } = transform(input, {
+function extractLeadingWhitespace(code: string): [string, string] {
+  let leadingWhitespace = '';
+  let lines = code.split(/\n/);
+  for (const [idx, line] of lines.entries()) {
+    if (!line.trim().length) {
+      leadingWhitespace += '\n';
+    } else {
+      return [leadingWhitespace, lines.slice(idx).join('\n')];
+    }
+  }
+  return [leadingWhitespace, code];
+}
+export function parseImports(
+  input: string,
+  remove: boolean,
+  isTypeScript: boolean
+) {
+  const { code, imports, map } = transform(input, {
     removeImports: remove,
-    transforms: ['typescript', 'jsx'],
+    syntax: isTypeScript ? 'typescript' : 'js',
+    compiledFilename: 'compiled.js',
+    filename: 'example.js',
   });
 
-  return { code, imports };
+  const [leadingWhitespace, trailing] = extractLeadingWhitespace(code);
+
+  return { code: trailing, imports, map, leadingWhitespace };
 }
 
 export type Options = {
   inline?: boolean;
-  wrapper?: (string) => string;
+  isTypeScript?: boolean;
+  wrapper?: (code: string) => string;
 };
 
-export default (input: string, { inline = false, wrapper }: Options = {}) => {
-  let { code, imports } = transform(input, {
+export default (
+  input: string,
+  { inline = false, wrapper, isTypeScript }: Options = {}
+) => {
+  let { code, imports, map } = transform(input, {
     wrapLastExpression: inline,
-    // transforms: ['jsx'],
+    transforms: isTypeScript ? ['typescript', 'jsx'] : ['jsx'],
+    compiledFilename: 'compiled.js',
+    filename: 'example.js',
   });
 
   if (wrapper) code = wrapper(code);
 
-  return { code, imports };
+  return { code, imports, map };
 };

@@ -3,6 +3,7 @@ import useMergeState from '@restart/hooks/useMergeState';
 import useStableMemo from '@restart/hooks/useStableMemo';
 import React, {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -32,6 +33,30 @@ function useStateFromProp<TProp>(prop: TProp) {
   return state;
 }
 
+function useInlineStyle() {
+  useEffect(() => {
+    if (document.getElementById('__jarle-style-tag')) {
+      return;
+    }
+
+    const style = document.createElement('style');
+    document.head.append(style);
+    style.setAttribute('id', '__jarle-style-tag');
+    style.sheet!.insertRule(`
+      .__jarle {
+        display: grid;
+        position: relative;
+        grid-template-columns: auto 1fr;
+      }
+    `);
+    style.sheet!.insertRule(`
+      .__jarle pre,
+      .__jarle textarea {
+        overflow: visible;
+      }
+    `);
+  }, []);
+}
 export interface Props {
   className?: string;
 
@@ -77,6 +102,8 @@ const Editor = React.forwardRef(
     const [code, setCode] = useStateFromProp(contextCode);
 
     const mouseDown = useRef(false);
+
+    useInlineStyle();
 
     useLayoutEffect(() => {
       onChange(code || '');
@@ -125,6 +152,7 @@ const Editor = React.forwardRef(
       });
     };
 
+    const errorLocation = error?.location || error?.loc;
     const highlight = useCallback(
       (value: string) => (
         <Highlight
@@ -136,13 +164,27 @@ const Editor = React.forwardRef(
           {(hl) =>
             mapTokens({
               ...hl,
-              hasTheme: !!userTheme,
-              errorLocation: error?.location,
+              lineNumbers,
+              theme: userTheme,
+              errorLocation,
+              getLineNumbers: (line: number) =>
+                lineNumbers ? (
+                  <LineNumber
+                    style={{
+                      position: 'absolute',
+                      transform: 'translateX(-100%)',
+                      left: 0,
+                    }}
+                    theme={userTheme}
+                  >
+                    {line}
+                  </LineNumber>
+                ) : null,
             })
           }
         </Highlight>
       ),
-      [userTheme, language, error]
+      [userTheme, lineNumbers, language, errorLocation]
     );
 
     const baseTheme = {
@@ -155,21 +197,27 @@ const Editor = React.forwardRef(
     return (
       <div
         ref={ref}
-        className={className}
-        style={{
-          ...baseTheme,
-          display: 'grid',
-          position: 'relative',
-          gridTemplateColumns: 'auto 100%',
-        }}
+        className={`${className || ''} __jarle`}
+        style={{ ...baseTheme }}
       >
         <div className="line-numbers">
+          {/* 
+          These line numbers are visually hidden in order to dynamically create enough space for the numbers. 
+          The visible numbers are added to the actual lines, and absolutely positioned to the left into the same space.
+          this allows for soft wrapping lines as well as not changing the dimensions of the `pre` tag to keep 
+          the syntax highlighting synced with the textarea.
+          */}
           {lineNumbers &&
-            (code || '')
-              .split(/\n/g)
-              .map((_, i) => (
-                <LineNumber theme={userTheme}>{i + 1}</LineNumber>
-              ))}
+            (code || '').split(/\n/g).map((_, i) => (
+              <LineNumber
+                key={i}
+                theme={userTheme}
+                className={i + 1 === errorLocation?.line && 'token-line-error'}
+                style={{ display: 'block' }}
+              >
+                <span style={{ visibility: 'hidden' }}>{i + 1}</span>
+              </LineNumber>
+            ))}
         </div>
         <SimpleCodeEditor
           value={code || ''}
@@ -182,6 +230,7 @@ const Editor = React.forwardRef(
           ignoreTabKey={ignoreTab}
           aria-describedby={id}
           aria-label="Example code editor"
+          style={{ overflow: 'visible' }}
         />
         {visible && (keyboardFocused || !ignoreTab) && (
           <Info id={id} aria-live="polite" srOnly={infoSrOnly}>

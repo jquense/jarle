@@ -13129,4 +13129,4 @@ function getSucraseContext(code, options) {
   return {tokenProcessor, scopes, nameManager, importProcessor, helperManager};
 }
 
-export { CJSImportProcessor, HelperManager, NameManager, TokenProcessor, parse, transform, TokenType as tt };
+export { CJSImportProcessor, HelperManager, NameManager, TokenProcessor, computeSourceMap, getNonTypeIdentifiers, parse, transform, TokenType as tt };

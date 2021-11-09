@@ -7,7 +7,16 @@ import {
   NameManager,
   CJSImportProcessor,
   transform as sucraseTransform,
+  getNonTypeIdentifiers,
+  computeSourceMap,
 } from './parser';
+
+interface Context {
+  tokenProcessor: TokenProcessor;
+  importProcessor: CJSImportProcessor;
+  imports: Import[];
+  isTypeName: (name: string) => boolean;
+}
 
 export type Import = {
   code: string;
@@ -21,10 +30,15 @@ let num = 0;
 const getIdentifier = (src: string) =>
   `${src.split('/').pop()!.replace(/\W/g, '_')}$${num++}`;
 
-function buildImport(path: string, imports: CJSImportProcessor) {
-  const { defaultNames, wildcardNames, namedImports } =
+function buildImport(path: string, { importProcessor, isTypeName }: Context) {
+  // @ts-ignore
+  if (!importProcessor.importInfoByPath.has(path)) {
+    return null;
+  }
+
+  const { defaultNames, wildcardNames, namedImports, hasBareImport } =
     // @ts-ignore
-    imports.importInfoByPath.get(path);
+    importProcessor.importInfoByPath.get(path);
 
   const req = `${FN}('${path}');`;
   const tmp = getIdentifier(path);
@@ -38,6 +52,10 @@ function buildImport(path: string, imports: CJSImportProcessor) {
   };
 
   namedImports.forEach((s) => {
+    if (isTypeName(s.localName)) {
+      return;
+    }
+
     named.push(
       s.localName === s.importedName
         ? s.localName
@@ -47,25 +65,36 @@ function buildImport(path: string, imports: CJSImportProcessor) {
   });
 
   if (defaultNames.length || wildcardNames.length) {
-    details.base = defaultNames[0] || wildcardNames[0];
-    details.code += `var ${tmp} = ${req}\nvar ${details.base} = ${tmp}.default || ${tmp};\n`;
+    const name = defaultNames[0] || wildcardNames[0];
+
+    if (!isTypeName(name)) {
+      details.base = name;
+      if (wildcardNames.length) {
+        details.code = `let ${name} = ${req}`;
+      } else {
+        details.code = `let ${tmp} = ${req} let ${name} = ${tmp}.default;`;
+      }
+    }
   }
 
   if (named.length) {
-    details.code += `var { ${named.join(', ')} } = ${
+    details.code += ` let { ${named.join(', ')} } = ${
       details.code ? `${tmp};` : req
     }`;
   }
 
-  details.code = details.code.trim() || req;
+  if (hasBareImport) {
+    details.code = req;
+  }
+
+  details.code = details.code.trim();
   return details;
 }
 
 function processImports(
   tokens: TokenProcessor,
-  importProcessor: CJSImportProcessor,
-  remove = false,
-  imports: Import[] = []
+  ctx: Context,
+  { removeImports }: Options
 ) {
   if (!tokens.matches1(tt._import)) return false;
 
@@ -80,13 +109,21 @@ function processImports(
   }
 
   const path = tokens.stringValue();
-  const detail = buildImport(path, importProcessor);
-  imports.push(detail);
 
-  tokens.replaceTokenTrimmingLeftWhitespace(remove ? '' : detail.code);
+  const detail = buildImport(path, ctx);
+
+  if (detail?.code) {
+    ctx.imports.push(detail);
+
+    tokens.replaceTokenTrimmingLeftWhitespace(removeImports ? '' : detail.code);
+  } else {
+    tokens.removeToken();
+  }
+
   if (tokens.matches1(tt.semi)) {
     tokens.removeToken();
   }
+
   return true;
 }
 
@@ -98,13 +135,16 @@ function wrapLastExpression(
     return false;
   }
 
+  let prev = tokens.currentIndex() - 1;
+  let lastWasSemi = prev >= 0 && !tokens.matches1AtIndex(prev, tt.semi);
   if (tokens.matches2(tt._export, tt._default)) {
     tokens.removeInitialToken();
-    tokens.replaceTokenTrimmingLeftWhitespace(';\nreturn');
+    tokens.replaceTokenTrimmingLeftWhitespace(
+      lastWasSemi ? 'return' : '; return'
+    );
   } else {
-    let code = `\nreturn ${tokens.currentTokenCode()}`;
-    let prev = tokens.currentIndex() - 1;
-    if (prev >= 0 && !tokens.matches1AtIndex(prev, tt.semi)) {
+    let code = `return ${tokens.currentTokenCode()}`;
+    if (lastWasSemi) {
       code = `;${code}`;
     }
     tokens.replaceTokenTrimmingLeftWhitespace(code);
@@ -115,15 +155,18 @@ function wrapLastExpression(
 export interface Options {
   removeImports?: boolean;
   wrapLastExpression?: boolean;
+  syntax?: 'js' | 'typescript';
   transforms?: Transform[];
-  isCompiled?: boolean;
+  filename?: string;
+  compiledFilename?: string;
 }
-export function transform(code: string, options: Options = {}) {
-  if (options.transforms) {
-    code = sucraseTransform(code, { transforms: options.transforms }).code;
-  }
 
-  const { tokens, scopes } = parse(code, true, true, false);
+function getContext(
+  code: string,
+  transforms: Transform[],
+  isTypescriptEnabled: boolean
+) {
+  const { tokens } = parse(code, true, isTypescriptEnabled, false);
   const nameManager = new NameManager(code, tokens);
   const helperManager = new HelperManager(nameManager);
 
@@ -135,47 +178,71 @@ export function transform(code: string, options: Options = {}) {
     helperManager
   );
 
+  const nonTypeIdents = isTypescriptEnabled
+    ? getNonTypeIdentifiers(tokenProcessor, { transforms: [] })
+    : null;
+
   const importProcessor = new CJSImportProcessor(
     nameManager,
     tokenProcessor,
     false,
-    { transforms: ['typescript', 'jsx'] },
-    true, //
+    { transforms },
+    isTypescriptEnabled, //
     helperManager
   );
   const imports: Import[] = [];
 
+  return {
+    tokenProcessor,
+    importProcessor,
+    imports,
+    isTypeName: (name: string) =>
+      isTypescriptEnabled && !nonTypeIdents!.has(name),
+  };
+}
+
+export function transform(code: string, options: Options = {}) {
+  const transforms = options.transforms || [];
+  const isTypescriptEnabled =
+    options.syntax == null
+      ? transforms.includes('typescript')
+      : options.syntax === 'typescript';
+
+  if (options.transforms) {
+    code = sucraseTransform(code, { transforms }).code;
+  }
+
+  const ctx = getContext(code, transforms, isTypescriptEnabled);
   const lastExprIdx = options.wrapLastExpression
-    ? findLastExpression(tokenProcessor)
+    ? findLastExpression(ctx.tokenProcessor)
     : null;
-  importProcessor.preprocessTokens();
+
+  ctx.importProcessor.preprocessTokens();
   num = 0;
 
-  while (!tokenProcessor.isAtEnd()) {
-    let wasProcessed = processImports(
-      tokenProcessor,
-      importProcessor,
-      options.removeImports,
-      imports
-    );
+  while (!ctx.tokenProcessor.isAtEnd()) {
+    let wasProcessed = processImports(ctx.tokenProcessor, ctx, options);
 
     if (!wasProcessed && lastExprIdx !== null) {
       // console.log('HERE', lastExprIdx);
-      wasProcessed = wrapLastExpression(tokenProcessor, lastExprIdx);
+      wasProcessed = wrapLastExpression(ctx.tokenProcessor, lastExprIdx);
     }
     if (!wasProcessed) {
-      tokenProcessor.copyToken();
+      ctx.tokenProcessor.copyToken();
     }
   }
 
-  const result = tokenProcessor.finish();
+  const result = ctx.tokenProcessor.finish();
+  const map = computeSourceMap(result, options.filename!, {
+    compiledFilename: options.compiledFilename!,
+  });
 
-  return { code: result, imports };
+  return { code: result, imports: ctx.imports, map };
 }
 
 function findLastExpression(tokens: TokenProcessor) {
   let lastExprIdx: number | null = null;
-  // console.log(tokens.tokens);
+
   for (let i = 0; i < tokens.tokens.length; i++) {
     if (tokens.matches2AtIndex(i, tt._export, tt._default)) {
       lastExprIdx = i;
@@ -184,7 +251,6 @@ function findLastExpression(tokens: TokenProcessor) {
 
     if (tokens.tokens[i].isTopLevel) {
       if (tokens.matches1AtIndex(i, tt._return)) {
-        // console.log('TOPPPP');
         lastExprIdx = null;
         break;
       }

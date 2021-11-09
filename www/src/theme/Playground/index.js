@@ -1,9 +1,15 @@
 import * as React from 'react';
 import { Editor, Error, Preview, Provider, InfoMessage } from '../../../../src';
+
+import * as Jarle from '../../../../src';
+
 import clsx from 'clsx';
 
 import styles from './styles.module.css';
-// import { Context } from '../ImportContext'
+
+// needed for importing and demostrating JARLE in itself
+// this is because we are using `src` directly
+window.__IMPORT__ = (s) => import(/* webpackIgnore: true */ s);
 
 const Info = (props) => (
   <InfoMessage
@@ -11,6 +17,25 @@ const Info = (props) => (
     className={clsx(props.className, styles.infoMessage)}
   />
 );
+
+function resolveImports(sources) {
+  return Promise.all(
+    sources.map((s) => {
+      if (s === 'jarle') {
+        return Jarle;
+      }
+      if (s.startsWith('jarle/themes')) {
+        return import(
+          /* webpackIgnore: true */ s.replace(
+            'jarle',
+            'https://cdn.skypack.dev/prism-react-renderer'
+          )
+        );
+      }
+      return import(/* webpackIgnore: true */ s);
+    })
+  );
+}
 
 function Playground({
   children,
@@ -42,7 +67,7 @@ function Playground({
   return (
     <div ref={ref}>
       <Provider
-        // resolveImports={resolveImports}
+        resolveImports={resolveImports}
         code={children.replace(/\n$/, '')}
         theme={theme}
         {...props}

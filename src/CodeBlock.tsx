@@ -1,11 +1,11 @@
 import cn from 'classnames';
 import Highlight, { Language, Prism, PrismTheme } from 'prism-react-renderer';
 import React from 'react';
+import LineNumber from './LineNumber';
 import { LineOutputProps } from './prism';
 
 type MapTokens = Omit<LineOutputProps, 'props'> & {
-  hasTheme?: boolean;
-  lineNumbers?: boolean;
+  getLineNumbers?: (line: number) => React.ReactNode;
   errorLocation?: { line: number; col: number };
 };
 
@@ -14,7 +14,7 @@ function addErrorHighlight(
   index: number,
   errorLocation?: MapTokens['errorLocation']
 ) {
-  if (errorLocation && index === errorLocation.line) {
+  if (index + 1 === errorLocation?.line) {
     props.className = cn(props.className, 'token-line-error');
   }
   return props;
@@ -25,6 +25,7 @@ export const mapTokens = ({
   getLineProps,
   getTokenProps,
   errorLocation,
+  getLineNumbers,
 }: MapTokens) => (
   <>
     {tokens.map((line, i) => (
@@ -36,6 +37,7 @@ export const mapTokens = ({
           errorLocation
         )}
       >
+        {getLineNumbers?.(i + 1)}
         {line.map((token, ii) => (
           // eslint-disable-next-line react/no-array-index-key
           <span key={ii} {...getTokenProps({ token, key: String(ii) })} />
@@ -57,6 +59,9 @@ interface Props {
 function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
   const style = typeof theme?.plain === 'object' ? theme.plain : {};
 
+  const getLineNumbers = lineNumbers
+    ? (num: number) => <LineNumber theme={theme}>{num}</LineNumber>
+    : undefined;
   return (
     <Highlight
       theme={theme}
@@ -69,7 +74,7 @@ function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
           className={cn(props.className, hl.className)}
           style={{ ...props.style, ...style, ...hl.style }}
         >
-          <code>{mapTokens({ ...hl, lineNumbers, hasTheme: !!theme })}</code>
+          <code>{mapTokens({ ...hl, getLineNumbers })}</code>
         </pre>
       )}
     </Highlight>
