@@ -69,16 +69,18 @@ function buildImport(path: string, { importProcessor, isTypeName }: Context) {
 
     if (!isTypeName(name)) {
       details.base = name;
+      // intentionally use `var` so that conflcits with Jarle provider scope get resolved naturally
+      // with the import overriding the scoped identifier
       if (wildcardNames.length) {
-        details.code = `let ${name} = ${req}`;
+        details.code = `var ${name} = ${req}`;
       } else {
-        details.code = `let ${tmp} = ${req} let ${name} = ${tmp}.default;`;
+        details.code = `var ${tmp} = ${req} var ${name} = ${tmp}.default;`;
       }
     }
   }
 
   if (named.length) {
-    details.code += ` let { ${named.join(', ')} } = ${
+    details.code += ` var { ${named.join(', ')} } = ${
       details.code ? `${tmp};` : req
     }`;
   }

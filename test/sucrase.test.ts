@@ -20,26 +20,26 @@ describe('import rewriting', () => {
     [
       'default import',
       'import Foo from "./foo";',
-      "let foo$0 = require('./foo'); let Foo = foo$0.default;",
+      "var foo$0 = require('./foo'); var Foo = foo$0.default;",
       undefined,
     ],
     [
       'named imports',
       'import { Bar, Baz } from "./foo";',
-      "let { Bar, Baz } = require('./foo');",
+      "var { Bar, Baz } = require('./foo');",
       undefined,
     ],
     [
       'namespace',
       'import * as Foo from "./foo";',
-      "let Foo = require('./foo');",
+      "var Foo = require('./foo');",
       undefined,
     ],
     ['side effect', 'import "./foo";', "require('./foo');", undefined],
     [
       'mixed',
       'import Foo, { Bar, Baz } from "./foo";',
-      "let foo$0 = require('./foo'); let Foo = foo$0.default; let { Bar, Baz } = foo$0;",
+      "var foo$0 = require('./foo'); var Foo = foo$0.default; var { Bar, Baz } = foo$0;",
       undefined,
     ],
     [
@@ -51,13 +51,13 @@ describe('import rewriting', () => {
     [
       'type only imports',
       'import Bar from "./bar";\nimport Foo from "./foo";\nconst foo: Foo = Bar',
-      "let bar$0 = require('./bar'); let Bar = bar$0.default;\n\nconst foo: Foo = Bar",
+      "var bar$0 = require('./bar'); var Bar = bar$0.default;\n\nconst foo: Foo = Bar",
       { syntax: 'typescript' },
     ],
     [
       'preserves new lines',
       'import { \nBar,\nBaz\n} from "./foo";',
-      "\n\n\nlet { Bar, Baz } = require('./foo');",
+      "\n\n\nvar { Bar, Baz } = require('./foo');",
       undefined,
     ],
   ])('compiles %s', (_, input, expected, options: any) => {
