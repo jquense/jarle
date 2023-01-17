@@ -2,10 +2,10 @@
 
 import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import usePrismTheme from '@theme/hooks/usePrismTheme';
+import { usePrismTheme } from '@docusaurus/theme-common';
 import Playground from '@theme/Playground';
 import CodeLiveScope from '@theme/CodeLiveScope';
-import CodeBlock from '@theme-init/CodeBlock';
+import CodeBlock from '@theme-original/CodeBlock';
 
 const getLanguage = (className = '') => {
   const [, mode] = className.match(/language-(\w+)/) || [];

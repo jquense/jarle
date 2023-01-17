@@ -14,6 +14,15 @@ describe('general parsing smoketest', () => {
 });
 
 describe('import rewriting', () => {
+  // it('parses', () => {
+  //   console.log(
+  //     transform(`<div/>`, {
+  //       syntax: 'typescript',
+  //       wrapLastExpression: true,
+  //     }).code
+  //   );
+  // });
+
   test.each([
     ['no import', 'import "./foo";', "require('./foo');", undefined],
 
@@ -51,7 +60,7 @@ describe('import rewriting', () => {
     [
       'type only imports',
       'import Bar from "./bar";\nimport Foo from "./foo";\nconst foo: Foo = Bar',
-      "var bar$0 = require('./bar'); var Bar = bar$0.default;\n\nconst foo: Foo = Bar",
+      "var bar$0 = require('./bar'); var Bar = bar$0.default;\n\nconst foo = Bar",
       { syntax: 'typescript' },
     ],
     [
@@ -195,18 +204,26 @@ return React.createElement(Wrapper, null,
 );
     `,
     ],
-    ['replaces export default', `export default <div />`, `; return <div />`],
+    [
+      'replaces export default',
+      `export default <div />`,
+      `exports.default = <div />`,
+    ],
     [
       'prefers export default',
       `export default <div />;\n<span/>`,
-      `; return <div />;\n<span/>`,
+      `exports.default = <div />;\n<span/>`,
     ],
     [
       'return class',
       `const bar = true;\nclass foo {}`,
       `const bar = true;\nreturn class foo {}`,
     ],
-    ['export class', `export default class foo {}`, `; return class foo {}`],
+    [
+      'export class',
+      `export default class foo {}`,
+      ` class foo {} exports.default = foo;`,
+    ],
     [
       'return function',
       `const bar = true\nfunction foo() {}`,
@@ -215,7 +232,7 @@ return React.createElement(Wrapper, null,
     [
       'export function',
       `export default function foo() {}`,
-      `; return function foo() {}`,
+      ` function foo() {} exports.default = foo;`,
     ],
     [
       'export function 2',

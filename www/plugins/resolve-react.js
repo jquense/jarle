@@ -2,7 +2,7 @@ module.exports = () => ({
   name: 'resolve-react',
   configureWebpack() {
     return {
-      devtool: 'inline-module-source-map',
+      devtool: 'inline-source-map',
       resolve: {
         alias: {
           react: require.resolve('react'),

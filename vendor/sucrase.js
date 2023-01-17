@@ -1,21 +1,15 @@
-import TokenProcessor from 'sucrase/dist/TokenProcessor';
-import { parse } from 'sucrase/dist/parser';
-import { transform } from 'sucrase/';
+import { transform, getSucraseContext, RootTransformer } from 'sucrase/';
 import { TokenType as tt } from 'sucrase/dist/parser/tokenizer/types';
-import { HelperManager } from 'sucrase/dist/HelperManager';
-import NameManager from 'sucrase/dist/NameManager';
 import CJSImportProcessor from 'sucrase/dist/CJSImportProcessor';
 import computeSourceMap from 'sucrase/dist/computeSourceMap';
-import { getNonTypeIdentifiers } from 'sucrase/dist/util/getNonTypeIdentifiers';
+import { parse } from 'sucrase/dist/esm/parser';
 
 export {
-  TokenProcessor,
+  RootTransformer,
   tt,
   parse,
-  HelperManager,
-  NameManager,
+  getSucraseContext,
   CJSImportProcessor,
   transform,
   computeSourceMap,
-  getNonTypeIdentifiers,
 };

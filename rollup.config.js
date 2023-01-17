@@ -14,9 +14,4 @@ export default [
       commonjs(), // so Rollup can convert `ms` to an ES module
     ],
   },
-  {
-    input: 'vendor/sucrase.d.ts',
-    output: [{ file: 'src/transform/parser.d.ts', format: 'es' }],
-    plugins: [dts()],
-  },
 ];

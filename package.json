@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "add-import": "sed -i '' 's/__IMPORT__/(s) => import(\\/\\* webpackIgnore: true \\*\\/ \\/\\* @vite-ignore \\*\\/ s)/' ./{lib,esm}/Provider.js",
-    "build:parser": "yarn patch-package && yarn rollup -c rollup.config.js",
+    "build:parser": "yarn rollup -c rollup.config.js",
     "build": "yarn build:parser && 4c build src && yarn add-import && node ./build-themes.js",
     "prepublishOnly": "yarn run build",
     "tdd": "jest --watch",
@@ -63,8 +63,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rollup": "^2.59.0",
-    "sucrase": "^3.20.3",
-    "rollup-plugin-dts": "^4.0.1"
+    "rollup-plugin-dts": "^4.0.1",
+    "sucrase": "^3.29.0"
   },
   "dependencies": {
     "@restart/hooks": "^0.4.1",

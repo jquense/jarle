@@ -1,27 +1,22 @@
 import React from 'react';
 import renderProps from '@docpocalypse/props-table';
-import { MDXRenderer } from '@mdx-js/react';
 import Heading from '@theme/Heading';
 
 import styles from './styles.module.css';
 
-const H3 = Heading('h3');
-
 function PropsTable({ metadata }) {
-  const { name } = metadata;
-
   const props = renderProps(metadata.props || []);
 
   return (
     <>
       {props.map((prop) => (
         <React.Fragment key={prop.name}>
-          <H3 id={prop.name}>
+          <Heading as={'h3'} id={prop.name}>
             <span>{prop.name}</span>
             {prop.propData.required && (
               <strong className={styles.required}>required</strong>
             )}
-          </H3>
+          </Heading>
 
           {React.createElement(prop.propData.description)}
           <div>

@@ -9,12 +9,13 @@ import React, {
   useState,
   isValidElement,
   createElement,
+  useCallback,
 } from 'react';
 import { isValidElementType } from 'react-is';
-import { decode } from 'sourcemap-codec';
-import { Import } from './transform';
+// import { decode } from 'sourcemap-codec';
+import { Import, transform } from './transform';
 
-import transpile, { parseImports } from './transpile';
+const hasRenderCall = (code: string) => !!code.match(/render\(/);
 
 const prettierComment =
   /(\{\s*\/\*\s+prettier-ignore\s+\*\/\s*\})|(\/\/\s+prettier-ignore)/gim;
@@ -62,11 +63,7 @@ const wrapAsComponent = (ctx: string) => {
   return `return React.createElement(function StateContainer() {\n${ctx}\n})`;
 };
 
-function handleError(
-  err: any,
-  result: ReturnType<typeof transpile>,
-  fn: Function
-): LiveError {
+function handleError(err: any, fn: Function): LiveError {
   const fnStr = fn.toString();
   // account for the function chrome lines
   const offset = fnStr.slice(0, fnStr.indexOf('{')).split(/\n/).length;
@@ -84,16 +81,16 @@ function handleError(
   }
   if (!pos) return err;
 
-  if (result.map) {
-    const decoded = decode(result.map.mappings);
+  // if (result.map) {
+  //   const decoded = decode(result.map.mappings);
 
-    const line = pos.line - offset;
-    const mapping = decoded[line]?.find(([col]) => col === pos.column);
+  //   const line = pos.line - offset;
+  //   const mapping = decoded[line]?.find(([col]) => col === pos.column);
 
-    if (mapping) {
-      err.location = { line: mapping[2], column: mapping[3] };
-    }
-  }
+  //   if (mapping) {
+  //     err.location = { line: mapping[2], column: mapping[3] };
+  //   }
+  // }
 
   return err;
 }
@@ -106,16 +103,11 @@ interface CodeToComponentOptions<S extends {}> {
 }
 
 function codeToComponent<TScope extends {}>(
-  code: string,
-  {
-    scope,
-    preample,
-    isTypeScript,
-    renderAsComponent = false,
-  }: CodeToComponentOptions<TScope>
+  compiledCode: string,
+  { scope, preample, renderAsComponent = false }: CodeToComponentOptions<TScope>
 ): Promise<React.ReactElement> {
   return new Promise((resolve, reject) => {
-    const isInline = !code.match(/render\S*\(\S*</);
+    const isInline = !hasRenderCall(compiledCode);
 
     if (renderAsComponent && !isInline) {
       throw new Error(
@@ -123,12 +115,6 @@ function codeToComponent<TScope extends {}>(
           'Either provide your own stateful component, or return a jsx element directly.'
       );
     }
-
-    const result = transpile(code, {
-      inline: isInline,
-      isTypeScript,
-      wrapper: renderAsComponent ? wrapAsComponent : undefined,
-    });
 
     const render = (element: JSX.Element) => {
       if (element === undefined) {
@@ -142,34 +128,48 @@ function codeToComponent<TScope extends {}>(
     // const [clearTimes, timers] = createTimers();
     // DU NA NA NAAAH
     const finalScope = { ...hooks, ...scope };
+    const exports = {};
 
-    const args = ['React', 'render'].concat(Object.keys(finalScope));
-    const values = [React, render].concat(Object.values(finalScope));
+    const args = ['React', 'render', 'exports'].concat(Object.keys(finalScope));
+    const values = [React, render, exports].concat(Object.values(finalScope));
 
-    let body = result.code;
+    let body = compiledCode;
+
+    if (renderAsComponent) {
+      body = `return React.createElement(function StateContainer() {\n${body}\n})`;
+    }
+
     if (preample) body = `${preample}\n\n${body}`;
 
     // eslint-disable-next-line no-new-func
     const fn = new Function(...args, body);
 
-    let element;
+    let element: any;
     try {
       element = fn(...values);
     } catch (err) {
-      reject(handleError(err, result, fn));
+      reject(handleError(err, fn));
       return;
     }
 
-    if (!isInline) return;
+    const exportedValues = Object.values(exports);
+
+    if ('default' in exports) {
+      element = exports.default ?? element;
+    } else if (exportedValues.length) {
+      element = exportedValues[0] ?? element;
+    }
 
     if (element === undefined) {
-      reject(new SyntaxError('The code did not return a JSX element'));
+      if (isInline) {
+        reject(new SyntaxError('The code did not return a JSX element'));
+      }
       return;
     }
     if (!isValidElement(element)) {
       if (isValidElementType(element)) {
         element = createElement(element);
-      } else {
+      } else if (isInline) {
         reject(
           new SyntaxError(
             'The code did not return a valid React element or element type'
@@ -177,6 +177,7 @@ function codeToComponent<TScope extends {}>(
         );
       }
     }
+
     resolve(element);
   });
 }
@@ -267,30 +268,59 @@ function defaultResolveImports(sources) {
   return Promise.all(sources.map(__IMPORT__));
 }
 
-function useNormalizedCode(
-  code: string,
+function useCompiledCode(
+  consumerCode: string,
   showImports: boolean,
   isTypeScript: boolean,
   setError: any
-): [compiledCode: string, imports: Import[], importBlock: string] {
-  return useMemo(() => {
-    const nextCode = code.replace(prettierComment, '').trim();
-    if (showImports) return [nextCode, [], ''];
-    try {
-      const result = parseImports(nextCode, true, isTypeScript);
-      return [
-        result.code,
-        result.imports,
-        result.imports
-          .map((i) => i.code)
-          .join('\n')
-          .trimStart(),
-      ];
-    } catch (err) {
-      setError(err);
-      return [code, [], ''];
-    }
-  }, [code, showImports]);
+) {
+  const compile = useCallback(
+    (nextCode) => {
+      const isInline = !hasRenderCall(nextCode);
+
+      nextCode = nextCode.replace(prettierComment, '').trim();
+
+      try {
+        return transform(nextCode, {
+          compiledFilename: 'compiled.js',
+          filename: 'example.js',
+          wrapLastExpression: isInline,
+          syntax: isTypeScript ? 'typescript' : 'js',
+          transforms: isTypeScript
+            ? ['typescript', 'imports', 'jsx']
+            : ['imports', 'jsx'],
+        });
+      } catch (err) {
+        setError(err);
+        return { code: nextCode, imports: [] };
+      }
+    },
+    [isTypeScript, setError]
+  );
+
+  const initialResult = useMemo(() => {
+    const nextCode = consumerCode.replace(prettierComment, '').trim();
+
+    return !showImports
+      ? transform(nextCode, {
+          syntax: isTypeScript ? 'typescript' : 'js',
+          compiledFilename: 'compiled.js',
+          filename: 'example.js',
+          removeImports: true,
+          transforms: [],
+        })
+      : { code: nextCode, imports: [] };
+  }, [consumerCode, compile, showImports]);
+
+  return [
+    {
+      compiledCode: showImports
+        ? initialResult.code
+        : initialResult.code.trimStart(),
+      removedImports: showImports ? [] : initialResult.imports,
+    },
+    compile,
+  ] as const;
 }
 
 /**
@@ -311,22 +341,23 @@ export default function Provider<TScope extends {} = {}>({
   const [error, setError] = useState<LiveError | null>(null);
   const [{ element }, setState] = useState<State>({ element: null });
   const isTypeScript = isTypeScriptEnabled(language);
-  const [cleanCode, ogImports, ogImportBlock] = useNormalizedCode(
+
+  const [initialResult, compile] = useCompiledCode(
     rawCode,
     showImports,
     isTypeScript,
     setError
   );
+  const initialCompiledCode = initialResult.compiledCode;
 
   const handleChange = useEventCallback((nextCode: string) => {
     try {
-      const { code: compiledCode, imports } = parseImports(
-        nextCode,
-        false,
-        isTypeScript
-      );
+      const { code: compiledCode, imports } = compile(nextCode);
+
       const sources = Array.from(
-        new Set([...ogImports, ...imports].map((i) => i.source))
+        new Set(
+          [...initialResult.removedImports, ...imports].map((i) => i.source)
+        )
       );
 
       Promise.resolve(resolveImports(sources))
@@ -338,7 +369,10 @@ export default function Provider<TScope extends {} = {}>({
             renderAsComponent,
             isTypeScript,
             // also include the orginal imports if they were removed
-            preample: ogImportBlock,
+            preample: initialResult.removedImports
+              .map((i) => i.code)
+              .join('\n')
+              .trimStart(),
             scope: {
               ...scope,
               require: getRequire(fetchedImports),
@@ -363,8 +397,8 @@ export default function Provider<TScope extends {} = {}>({
   });
 
   useEffect(() => {
-    handleChange(cleanCode);
-  }, [cleanCode, scope, handleChange]);
+    handleChange(initialCompiledCode);
+  }, [initialCompiledCode, scope, handleChange]);
 
   const context = useMemo(
     () => ({
@@ -372,11 +406,11 @@ export default function Provider<TScope extends {} = {}>({
       error,
       element,
       language,
-      code: cleanCode,
+      code: initialCompiledCode,
       onError: setError,
       onChange: handleChange,
     }),
-    [cleanCode, element, error, handleChange, language, theme]
+    [initialCompiledCode, element, error, handleChange, language, theme]
   );
 
   return <Context.Provider value={context}>{children}</Context.Provider>;
