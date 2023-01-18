@@ -13,9 +13,10 @@ import React, {
 } from 'react';
 import { isValidElementType } from 'react-is';
 // import { decode } from 'sourcemap-codec';
-import { Import, transform } from './transform';
+import { transform } from './transform';
 
-const hasRenderCall = (code: string) => !!code.match(/render\(/);
+// try and match render() calls with arguments to avoid false positives with class components
+const hasRenderCall = (code: string) => !!code.match(/render\((?!\s*\))/gm);
 
 const prettierComment =
   /(\{\s*\/\*\s+prettier-ignore\s+\*\/\s*\})|(\/\/\s+prettier-ignore)/gim;
@@ -59,10 +60,6 @@ const getRequire = (imports?: Record<string, any>) =>
       : { default: obj };
   };
 
-const wrapAsComponent = (ctx: string) => {
-  return `return React.createElement(function StateContainer() {\n${ctx}\n})`;
-};
-
 function handleError(err: any, fn: Function): LiveError {
   const fnStr = fn.toString();
   // account for the function chrome lines
@@ -97,6 +94,7 @@ function handleError(err: any, fn: Function): LiveError {
 
 interface CodeToComponentOptions<S extends {}> {
   scope?: S;
+  exportToRender?: string;
   renderAsComponent?: boolean;
   preample?: string;
   isTypeScript?: boolean;
@@ -104,7 +102,12 @@ interface CodeToComponentOptions<S extends {}> {
 
 function codeToComponent<TScope extends {}>(
   compiledCode: string,
-  { scope, preample, renderAsComponent = false }: CodeToComponentOptions<TScope>
+  {
+    scope,
+    preample,
+    exportToRender,
+    renderAsComponent = false,
+  }: CodeToComponentOptions<TScope>
 ): Promise<React.ReactElement> {
   return new Promise((resolve, reject) => {
     const isInline = !hasRenderCall(compiledCode);
@@ -128,7 +131,7 @@ function codeToComponent<TScope extends {}>(
     // const [clearTimes, timers] = createTimers();
     // DU NA NA NAAAH
     const finalScope = { ...hooks, ...scope };
-    const exports = {};
+    const exports: Record<string, any> = {};
 
     const args = ['React', 'render', 'exports'].concat(Object.keys(finalScope));
     const values = [React, render, exports].concat(Object.values(finalScope));
@@ -157,7 +160,7 @@ function codeToComponent<TScope extends {}>(
     if ('default' in exports) {
       element = exports.default ?? element;
     } else if (exportedValues.length) {
-      element = exportedValues[0] ?? element;
+      element = exports[exportToRender!] ?? exportedValues[0] ?? element;
     }
 
     if (element === undefined) {
@@ -191,6 +194,11 @@ export interface Props<TScope> {
    * A string of code to render
    */
   code: string;
+
+  /**
+   * The named export of the code that JARLE should attempt to render if present
+   */
+  exportToRender?: string;
 
   /** A context object of values automatically available for use in editor code */
   scope?: TScope;
@@ -333,6 +341,7 @@ export default function Provider<TScope extends {} = {}>({
   code: rawCode,
   language,
   theme,
+  exportToRender,
   showImports = true,
   renderAsComponent = false,
   resolveImports = defaultResolveImports,
@@ -368,6 +377,7 @@ export default function Provider<TScope extends {} = {}>({
           codeToComponent(compiledCode, {
             renderAsComponent,
             isTypeScript,
+            exportToRender,
             // also include the orginal imports if they were removed
             preample: initialResult.removedImports
               .map((i) => i.code)

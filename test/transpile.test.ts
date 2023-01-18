@@ -1,19 +1,21 @@
-import transpile, { parseImports } from '../src/transpile';
+import transpile from '../src/transpile';
 
 describe('parseImports', () => {
   it('removes imports', () => {
-    const result = parseImports(
+    const result = transpile(
       `
         import Foo from './foo.js'
 
         <Foo />
       `,
-      true,
-      false
+      { showImports: false }
     );
 
     expect(result.code).toMatchInlineSnapshot(`
-      "        <Foo />
+      "const _jsxFileName = \\"\\";
+              
+
+              React.createElement(Foo, {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}} )
             "
     `);
 
@@ -30,18 +32,20 @@ describe('parseImports', () => {
   });
 
   it('removes imports with Typescript', () => {
-    const result = parseImports(
+    const result = transpile(
       `
         import Foo, { Bar } from './foo.js';
 
         <Foo<Bar> />
       `,
-      true,
-      true
+      { showImports: false, isTypeScript: true }
     );
 
     expect(result.code).toMatchInlineSnapshot(`
-      "        <Foo<Bar> />
+      "const _jsxFileName = \\"\\";
+              
+
+              React.createElement(Foo, {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}} )
             "
     `);
 

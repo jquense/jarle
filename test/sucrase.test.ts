@@ -61,7 +61,7 @@ describe('import rewriting', () => {
       'type only imports',
       'import Bar from "./bar";\nimport Foo from "./foo";\nconst foo: Foo = Bar',
       "var bar$0 = require('./bar'); var Bar = bar$0.default;\n\nconst foo = Bar",
-      { syntax: 'typescript' },
+      { transforms: ['typescript'] },
     ],
     [
       'preserves new lines',
@@ -258,8 +258,9 @@ return React.createElement(Wrapper, null,
       `function foo(){\nlet bar = 1; return baz;};return baz`,
     ],
   ])('compiles %s', (_, input, expected) => {
-    expect(transform(input, { wrapLastExpression: true }).code).toEqual(
-      expected
-    );
+    expect(
+      transform(input, { transforms: ['imports'], wrapLastExpression: true })
+        .code
+    ).toEqual(expected);
   });
 });
