@@ -288,37 +288,40 @@ function useCompiledCode(
 
       nextCode = nextCode.replace(prettierComment, '').trim();
 
-      try {
-        return transform(nextCode, {
-          compiledFilename: 'compiled.js',
-          filename: 'example.js',
-          wrapLastExpression: isInline,
-          syntax: isTypeScript ? 'typescript' : 'js',
-          transforms: isTypeScript
-            ? ['typescript', 'imports', 'jsx']
-            : ['imports', 'jsx'],
-        });
-      } catch (err) {
-        setError(err);
-        return { code: nextCode, imports: [] };
-      }
+      return transform(nextCode, {
+        compiledFilename: 'compiled.js',
+        filename: 'example.js',
+        wrapLastExpression: isInline,
+        syntax: isTypeScript ? 'typescript' : 'js',
+        transforms: isTypeScript
+          ? ['typescript', 'imports', 'jsx']
+          : ['imports', 'jsx'],
+      });
     },
-    [isTypeScript, setError]
+    [isTypeScript]
   );
 
   const initialResult = useMemo(() => {
     const nextCode = consumerCode.replace(prettierComment, '').trim();
+    const emptyResponse = { code: nextCode, imports: [] };
 
-    return !showImports
-      ? transform(nextCode, {
-          syntax: isTypeScript ? 'typescript' : 'js',
-          compiledFilename: 'compiled.js',
-          filename: 'example.js',
-          removeImports: true,
-          transforms: [],
-        })
-      : { code: nextCode, imports: [] };
-  }, [consumerCode, compile, showImports]);
+    if (showImports) {
+      return { code: nextCode, imports: [] };
+    }
+
+    try {
+      return transform(nextCode, {
+        syntax: isTypeScript ? 'typescript' : 'js',
+        compiledFilename: 'compiled.js',
+        filename: 'example.js',
+        removeImports: true,
+        transforms: [],
+      });
+    } catch (error) {
+      setError(error);
+      return { code: nextCode, imports: [] };
+    }
+  }, [consumerCode, compile, setError, showImports]);
 
   return [
     {
