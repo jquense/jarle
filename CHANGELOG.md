@@ -1,3 +1,14 @@
+# [2.1.0](https://github.com/jquense/jarle/compare/v2.0.0...v2.1.0) (2023-01-18)
+
+
+### Features
+
+* support named exports, and upgrade sucrase ([3031638](https://github.com/jquense/jarle/commit/3031638c51f67ede9cfe43c351ea4871ca76c473))
+
+
+
+
+
 # [2.0.0](https://github.com/jquense/jarle/compare/v2.0.0-beta.1...v2.0.0) (2022-01-18)
 
 
