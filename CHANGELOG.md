@@ -1,3 +1,14 @@
+## [2.1.1](https://github.com/jquense/jarle/compare/v2.1.0...v2.1.1) (2023-01-18)
+
+
+### Bug Fixes
+
+* don't render invalid code ([1a2cfe1](https://github.com/jquense/jarle/commit/1a2cfe165a1943ddf71d19a87eac66dadccee6aa))
+
+
+
+
+
 # [2.1.0](https://github.com/jquense/jarle/compare/v2.0.0...v2.1.0) (2023-01-18)
 
 
