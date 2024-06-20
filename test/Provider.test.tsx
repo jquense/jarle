@@ -1,9 +1,9 @@
 /* eslint-disable require-await */
 
 import { mount } from 'enzyme';
-import React from 'react';
+import { describe, it, expect } from 'vitest';
 import { act } from 'react-dom/test-utils';
-import Provider, { Props, useElement, useError } from '../src/Provider';
+import Provider, { Props, useElement, useError } from '../src/Provider.js';
 
 describe('Provider', () => {
   async function mountProvider(props: Props<{}>) {

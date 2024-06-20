@@ -1,16 +1,17 @@
 {
-  "extends": "@4c/tsconfig/web.json",
   "compilerOptions": {
     "rootDir": "src",
     "target": "esnext",
     "useDefineForClassFields": true,
     "lib": ["esnext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
-    "declarationMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "declaration": true,
     "jsx": "react-jsx",
 
     /* Linting */

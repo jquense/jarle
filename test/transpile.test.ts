@@ -1,4 +1,5 @@
-import transpile from '../src/transpile';
+import { describe, it, expect } from 'vitest';
+import transpile from '../src/transpile.ts';
 
 describe('parseImports', () => {
   it('removes imports', () => {
@@ -12,7 +13,7 @@ describe('parseImports', () => {
     );
 
     expect(result.code).toMatchInlineSnapshot(`
-      "const _jsxFileName = \\"\\";
+      "const _jsxFileName = "";
               
 
               React.createElement(Foo, {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}} )
@@ -20,11 +21,11 @@ describe('parseImports', () => {
     `);
 
     expect(result.imports).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "base": "Foo",
           "code": "var foo_js$0 = require('./foo.js'); var Foo = foo_js$0.default;",
-          "keys": Array [],
+          "keys": [],
           "source": "./foo.js",
         },
       ]
@@ -42,7 +43,7 @@ describe('parseImports', () => {
     );
 
     expect(result.code).toMatchInlineSnapshot(`
-      "const _jsxFileName = \\"\\";
+      "const _jsxFileName = "";
               
 
               React.createElement(Foo, {__self: this, __source: {fileName: _jsxFileName, lineNumber: 4}} )
@@ -50,11 +51,11 @@ describe('parseImports', () => {
     `);
 
     expect(result.imports).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "base": "Foo",
           "code": "var foo_js$0 = require('./foo.js'); var Foo = foo_js$0.default;",
-          "keys": Array [],
+          "keys": [],
           "source": "./foo.js",
         },
       ]
