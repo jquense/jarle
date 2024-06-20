@@ -4,7 +4,7 @@ import {
   type CJSImportProcessor,
   type RootTransformer,
   tt,
-} from './parser';
+} from './parser.js';
 
 function findLastExpression(tokens: TokenProcessor) {
   let lastExprIdx: number | null = null;

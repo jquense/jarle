@@ -1,5 +1,4 @@
-import useEventCallback from '@restart/hooks/useEventCallback';
-import useMounted from '@restart/hooks/useMounted';
+import { useEventCallback, useMounted } from '@restart/hooks';
 import type { PrismTheme } from 'prism-react-renderer';
 import React, {
   ReactNode,
@@ -13,7 +12,7 @@ import React, {
 } from 'react';
 import { isValidElementType } from 'react-is';
 // import { decode } from 'sourcemap-codec';
-import { transform } from './transform';
+import { transform } from './transform/index.js';
 
 // try and match render() calls with arguments to avoid false positives with class components
 const hasRenderCall = (code: string) => !!code.match(/render\((?!\s*\))/gm);
@@ -128,7 +127,6 @@ function codeToComponent<TScope extends {}>(
       resolve(element);
     };
 
-    // const [clearTimes, timers] = createTimers();
     // DU NA NA NAAAH
     const finalScope = { ...hooks, ...scope };
     const exports: Record<string, any> = {};

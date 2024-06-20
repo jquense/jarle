@@ -1,8 +1,6 @@
 {
   "name": "jarle",
   "version": "2.1.1",
-  "main": "lib/index.js",
-  "module": "esm/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jquense/jarle.git"
@@ -10,10 +8,10 @@
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "add-import": "sed -i '' 's/__IMPORT__/(s) => import(\\/\\* webpackIgnore: true \\*\\/ \\/\\* @vite-ignore \\*\\/ s)/' ./{lib,esm}/Provider.js",
+    "add-import": "",
     "build:parser": "yarn patch-package && yarn rollup -c rollup.config.js",
-    "build": "yarn build:parser && 4c build src && yarn add-import && node ./build-themes.js",
-    "prepublishOnly": "yarn run build",
+    "build": "yarn build:parser && 4c build src && yarn add-import",
+    "prepare": "yarn run build",
     "release": "4c release",
     "tdd": "jest --watch",
     "test": "jest"
@@ -23,6 +21,29 @@
     "lib",
     "themes"
   ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "import": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      }
+    },
+    "./*": {
+      "require": {
+        "types": "./lib/*.d.ts",
+        "default": "./lib/*.js"
+      },
+      "import": {
+        "types": "./esm/*.d.ts",
+        "default": "./esm/*.js"
+      }
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -67,12 +88,13 @@
     "rollup": "^2.59.0",
     "rollup-plugin-dts": "^4.0.1",
     "sucrase": "^3.35.0",
+    "tshy": "^1.15.1",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@restart/hooks": "^0.4.1",
-    "@types/react": "^17.0.33",
-    "@types/react-dom": "^17.0.10",
+    "@restart/hooks": "^0.4.16",
+    "@types/react": "^17.0.80",
+    "@types/react-dom": "^17.0.25",
     "@types/react-is": "^17.0.3",
     "prism-react-renderer": "^2.3.1",
     "react-is": "^17.0.2",

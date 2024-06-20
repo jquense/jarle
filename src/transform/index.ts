@@ -1,8 +1,12 @@
-import type { SucraseContext, Options as SucraseOptions } from 'sucrase';
-import { Transform } from 'sucrase/dist/Options';
-import ImportRemoverTransformer, { Import } from './ImportTransformer';
-import { getSucraseContext, RootTransformer } from './parser';
-import wrapLastExpression from './wrapLastExpression';
+import type {
+  Transform,
+  SucraseContext,
+  Options as SucraseOptions,
+} from 'sucrase';
+
+import ImportRemoverTransformer, { Import } from './ImportTransformer.js';
+import { getSucraseContext, RootTransformer } from './parser.js';
+import wrapLastExpression from './wrapLastExpression.js';
 
 export type { Import };
 

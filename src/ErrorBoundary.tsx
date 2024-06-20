@@ -1,5 +1,5 @@
 import React from 'react';
-import { Context } from './Provider';
+import { Context } from './Provider.js';
 
 interface Props {
   element: React.ReactNode;

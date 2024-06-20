@@ -1,6 +1,4 @@
 import { Highlight, Prism, type PrismTheme } from 'prism-react-renderer';
-import useMergeState from '@restart/hooks/useMergeState';
-import useStableMemo from '@restart/hooks/useStableMemo';
 import React, {
   useCallback,
   useEffect,
@@ -11,10 +9,10 @@ import React, {
 } from 'react';
 import SimpleCodeEditor from 'react-simple-code-editor';
 
-import { mapTokens } from './CodeBlock';
-import InfoMessage from './InfoMessage';
-import { useLiveContext } from './Provider';
-import LineNumber from './LineNumber';
+import { mapTokens } from './CodeBlock.js';
+import InfoMessage from './InfoMessage.js';
+import { useLiveContext } from './Provider.js';
+import LineNumber from './LineNumber.js';
 
 let uid = 0;
 
@@ -22,7 +20,7 @@ function useStateFromProp<TProp>(prop: TProp) {
   const state = useState(prop);
   const firstRef = useRef(true);
 
-  useStableMemo(() => {
+  useMemo(() => {
     if (firstRef.current) {
       firstRef.current = false;
       return;
@@ -109,7 +107,7 @@ const Editor = React.forwardRef(
       onChange(code || '');
     }, [code, onChange]);
 
-    const [{ visible, ignoreTab, keyboardFocused }, setState] = useMergeState({
+    const [{ visible, ignoreTab, keyboardFocused }, setState] = useState({
       visible: false,
       ignoreTab: false,
       keyboardFocused: false,
@@ -122,10 +120,10 @@ const Editor = React.forwardRef(
 
       if (ignoreTab && key !== 'Tab' && key !== 'Shift') {
         if (key === 'Enter') event.preventDefault();
-        setState({ ignoreTab: false });
+        setState(prev => ({ ...prev, ignoreTab: false }));
       }
       if (!ignoreTab && key === 'Escape') {
-        setState({ ignoreTab: true });
+        setState(prev => ({ ...prev, ignoreTab: true }));
       }
     };
 
@@ -140,9 +138,10 @@ const Editor = React.forwardRef(
 
     const handleBlur = (e: React.FocusEvent) => {
       if (e.target !== e.currentTarget) return;
-      setState({
+      setState(prev => ({ 
+        ...prev,
         visible: false,
-      });
+      }));
     };
 
     const handleMouseDown = () => {

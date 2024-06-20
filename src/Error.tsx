@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useError } from './Provider';
+import { useError } from './Provider.js';
 
 /**
  * Displays an sytax or runtime error that occured when rendering the code

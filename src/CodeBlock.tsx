@@ -1,7 +1,7 @@
 import { Highlight, Language, Prism, PrismTheme } from 'prism-react-renderer';
 import React from 'react';
-import LineNumber from './LineNumber';
-import { LineOutputProps } from './prism';
+import LineNumber from './LineNumber.js';
+import { LineOutputProps } from './prism.js';
 
 type MapTokens = Omit<LineOutputProps, 'props'> & {
   getLineNumbers?: (line: number) => React.ReactNode;

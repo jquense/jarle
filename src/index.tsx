@@ -1,12 +1,12 @@
 import { Prism, themes } from 'prism-react-renderer';
 
-import CodeBlock from './CodeBlock';
-import Editor from './Editor';
-import Error from './Error';
-import InfoMessage from './InfoMessage';
-import Preview from './Preview';
-import Provider, { ImportResolver as _ImportResolver } from './Provider';
-import highlight from './highlight';
+import CodeBlock from './CodeBlock.js';
+import Editor from './Editor.js';
+import Error from './Error.js';
+import InfoMessage from './InfoMessage.js';
+import Preview from './Preview.js';
+import Provider, { ImportResolver as _ImportResolver } from './Provider.js';
+import highlight from './highlight.js';
 
 export type ImportResolver = _ImportResolver;
 

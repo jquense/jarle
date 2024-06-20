@@ -1,10 +1,10 @@
 import { SucraseContext } from 'sucrase';
 import {
   TokenProcessor,
-  CJSImportProcessor,
-  RootTransformer,
+  type CJSImportProcessor,
+  type RootTransformer,
   tt,
-} from './parser';
+} from './parser.js';
 
 export type Import = {
   code: string;
