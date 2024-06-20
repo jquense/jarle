@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Editor, Error, Preview, Provider, InfoMessage } from '../../../../src';
+import {
+  Editor,
+  Preview,
+  Provider,
+  InfoMessage,
+  useError,
+} from '../../../../src';
 
 import * as Jarle from '../../../../src';
 
@@ -38,9 +44,8 @@ function Playground({
   inline,
   ...props
 }) {
+  const error = useError();
   const ref = React.useRef(null);
-  const previewRef = React.useRef(null);
-  // const resolveImports = React.useContext(Context)
 
   React.useEffect(() => {
     let observer = new ResizeObserver(([entry]) => {
@@ -74,11 +79,21 @@ function Playground({
 
         <div className={styles.playgroundPreview}>
           <Preview />
-          <Error className={styles.error} />
+          <Error />
         </div>
       </Provider>
     </div>
   );
+}
+
+function Error(props) {
+  const error = useError();
+
+  return error ? (
+    <div className={styles.errorOverlay}>
+      <pre className={styles.error}>{error.toString()}</pre>
+    </div>
+  ) : null;
 }
 
 export default Playground;

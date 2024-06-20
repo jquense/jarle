@@ -8,9 +8,7 @@
   "author": "Jason Quense <monastic.panic@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "add-import": "",
-    "build:parser": "yarn patch-package && yarn rollup -c rollup.config.js",
-    "build": "yarn build:parser && 4c build src && yarn add-import",
+    "build": "./build.sh",
     "prepare": "yarn run build",
     "release": "4c release",
     "tdd": "jest --watch",

@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-
 import ErrorBoundary from './ErrorBoundary.js';
 import { useElement, useError } from './Provider.js';
 
@@ -8,13 +6,14 @@ import { useElement, useError } from './Provider.js';
  */
 const Preview = ({
   className,
-  holderTheme,
+  showLastValid = true,
   ...props
 }: {
   className?: string;
-
-  /** An optional holder.js theme */
-  holderTheme?: any;
+  /**
+   * Whether an error should reset the preview to an empty state or keep showing the last valid code result.
+   */
+  showLastValid?: boolean;
 }) => {
   const element = useElement();
   const error = useError();
@@ -30,7 +29,7 @@ const Preview = ({
     ...props,
   };
 
-  return error ? null : (
+  return !showLastValid && error ? null : (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
     <div className={className} onClick={handleClick} {...previewProps}>
       <ErrorBoundary element={element} />
