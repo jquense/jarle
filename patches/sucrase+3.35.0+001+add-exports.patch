@@ -1,0 +1,21 @@
+diff --git a/node_modules/sucrase/dist/esm/index.js b/node_modules/sucrase/dist/esm/index.js
+index 41a7aa0..61b1d3e 100644
+--- a/node_modules/sucrase/dist/esm/index.js
++++ b/node_modules/sucrase/dist/esm/index.js
+@@ -131,3 +131,5 @@ function getSucraseContext(code, options) {
+   }
+   return {tokenProcessor, scopes, nameManager, importProcessor, helperManager};
+ }
++
++export { RootTransformer, getSucraseContext }
+diff --git a/node_modules/sucrase/dist/index.js b/node_modules/sucrase/dist/index.js
+index 6395245..8f12513 100644
+--- a/node_modules/sucrase/dist/index.js
++++ b/node_modules/sucrase/dist/index.js
+@@ -131,3 +131,6 @@ function getSucraseContext(code, options) {
+   }
+   return {tokenProcessor, scopes, nameManager, importProcessor, helperManager};
+ }
++
++exports.getSucraseContext = getSucraseContext;
++exports.RootTransformer = _RootTransformer2.default

@@ -10,6 +10,19 @@ describe('general parsing smoketest', () => {
         let f = obj?.a?.b?.()
       `
     );
+
+    transform(
+      `
+        const obj = { a: { b: 1, c: true }} 
+
+        function foo<const T extends string>(a: T): T {
+          return a;
+        }
+
+        let f: number = obj?.a?.b?.() satisfies number
+      `,
+      { transforms: ['typescript'] }
+    );
   });
 });
 

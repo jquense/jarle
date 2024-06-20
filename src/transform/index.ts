@@ -1,4 +1,4 @@
-import { SucraseContext, Options as SucraseOptions } from 'sucrase';
+import type { SucraseContext, Options as SucraseOptions } from 'sucrase';
 import { Transform } from 'sucrase/dist/Options';
 import ImportRemoverTransformer, { Import } from './ImportTransformer';
 import { getSucraseContext, RootTransformer } from './parser';
@@ -6,10 +6,12 @@ import wrapLastExpression from './wrapLastExpression';
 
 export type { Import };
 
+type TransformerResult = ReturnType<RootTransformer['transform']>;
+
 class JarleRootTransformer extends RootTransformer {
   private importTransformer: ImportRemoverTransformer;
 
-  private wrapLastExpression: (result: string) => string;
+  private wrapLastExpression: (result: TransformerResult) => TransformerResult;
 
   constructor(
     context: SucraseContext,
@@ -26,15 +28,17 @@ class JarleRootTransformer extends RootTransformer {
     this.transformers.unshift(this.importTransformer);
 
     this.wrapLastExpression = options.wrapLastExpression
-      ? (result: string) => {
-          return wrapLastExpression(
-            getSucraseContext(result, {
-              ...options,
-              transforms: parsingTransforms,
-            })
+      ? (result: TransformerResult) => {
+          return (
+            wrapLastExpression(
+              getSucraseContext(result.code, {
+                ...options,
+                transforms: parsingTransforms,
+              })
+            ) ?? result
           );
         }
-      : (result: string) => result;
+      : (result: TransformerResult) => result;
   }
 
   get imports() {
@@ -44,7 +48,7 @@ class JarleRootTransformer extends RootTransformer {
   transform() {
     let result = super.transform();
 
-    result = result
+    result.code = result.code
       .replace('"use strict";', '')
       .replace('exports. default =', 'exports.default =')
       .replace(
@@ -96,7 +100,7 @@ export function transform(code: string, options: Options = {}) {
   );
 
   return {
-    code: transformer.transform(),
+    code: transformer.transform().code,
     imports: transformer.imports,
   };
 }

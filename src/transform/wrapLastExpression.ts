@@ -1,8 +1,8 @@
 import { SucraseContext } from 'sucrase';
 import {
   TokenProcessor,
-  CJSImportProcessor,
-  RootTransformer,
+  type CJSImportProcessor,
+  type RootTransformer,
   tt,
 } from './parser';
 
@@ -63,7 +63,7 @@ export default function wrapLastExpression({ tokenProcessor }: SucraseContext) {
   let lastExprIdx = findLastExpression(tokenProcessor);
 
   if (lastExprIdx == null) {
-    return tokenProcessor.code;
+    return 
   }
 
   while (!tokenProcessor.isAtEnd()) {

@@ -39,6 +39,7 @@ var ContextualKeyword$1; (function (ContextualKeyword) {
   const _symbol = _static + 1; ContextualKeyword[ContextualKeyword["_symbol"] = _symbol] = "_symbol";
   const _type = _symbol + 1; ContextualKeyword[ContextualKeyword["_type"] = _type] = "_type";
   const _unique = _type + 1; ContextualKeyword[ContextualKeyword["_unique"] = _unique] = "_unique";
+  const _using = _unique + 1; ContextualKeyword[ContextualKeyword["_using"] = _using] = "_using";
 })(ContextualKeyword$1 || (ContextualKeyword$1 = {}));
 
 // Generated file, do not edit! Run "yarn generate" to re-generate this file.
@@ -740,7 +741,7 @@ function isLineTerminator$1() {
 
 // Consume a semicolon, or, failing that, see if we are allowed to
 // pretend that there is a semicolon at this position.
-function semicolon$1() {
+function semicolon$2() {
   if (!isLineTerminator$1()) {
     unexpected$1('Unexpected token, expected ";"');
   }
@@ -840,7 +841,7 @@ for (let numChar = charCodes$1.digit0; numChar <= charCodes$1.digit9; numChar++)
 // prettier-ignore
 const READ_WORD_TREE$1 = new Int32Array([
   // ""
-  -1, 27, 783, 918, 1755, 2376, 2862, 3483, -1, 3699, -1, 4617, 4752, 4833, 5130, 5508, 5940, -1, 6480, 6939, 7749, 8181, 8343, 8505, -1, 8721, -1,
+  -1, 27, 783, 918, 1755, 2376, 2862, 3483, -1, 3699, -1, 4617, 4752, 4833, 5130, 5508, 5940, -1, 6480, 6939, 7749, 8181, 8451, 8613, -1, 8829, -1,
   // "a"
   -1, -1, 54, 243, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 432, -1, -1, -1, 675, -1, -1, -1,
   // "ab"
@@ -1446,7 +1447,7 @@ const READ_WORD_TREE$1 = new Int32Array([
   // "typeof"
   (TokenType$1._typeof << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "u"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8208, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8208, -1, -1, -1, -1, 8343, -1, -1, -1, -1, -1, -1, -1,
   // "un"
   -1, -1, -1, -1, -1, -1, -1, -1, -1, 8235, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "uni"
@@ -1457,42 +1458,50 @@ const READ_WORD_TREE$1 = new Int32Array([
   -1, -1, -1, -1, -1, 8316, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "unique"
   ContextualKeyword$1._unique << 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "us"
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8370, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "usi"
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8397, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "usin"
+  -1, -1, -1, -1, -1, -1, -1, 8424, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "using"
+  ContextualKeyword$1._using << 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "v"
-  -1, 8370, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8424, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, 8478, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8532, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "va"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8397, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8505, -1, -1, -1, -1, -1, -1, -1, -1,
   // "var"
   (TokenType$1._var << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "vo"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8451, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8559, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "voi"
-  -1, -1, -1, -1, 8478, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, 8586, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "void"
   (TokenType$1._void << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "w"
-  -1, -1, -1, -1, -1, -1, -1, -1, 8532, 8640, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, 8640, 8748, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "wh"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8559, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "whi"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8586, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8694, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "whil"
-  -1, -1, -1, -1, -1, 8613, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, 8721, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "while"
   (TokenType$1._while << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "wi"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8667, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8775, -1, -1, -1, -1, -1, -1,
   // "wit"
-  -1, -1, -1, -1, -1, -1, -1, -1, 8694, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, 8802, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "with"
   (TokenType$1._with << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "y"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8748, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8856, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yi"
-  -1, -1, -1, -1, -1, 8775, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, 8883, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yie"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8802, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8910, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yiel"
-  -1, -1, -1, -1, 8829, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, 8937, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yield"
   (TokenType$1._yield << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 ]);
@@ -2060,11 +2069,25 @@ function readToken_lt$1() {
       finishOp$1(TokenType$1.assign, 3);
       return;
     }
-    // This still might be two instances of <, e.g. the TS type argument
-    // expression f<<T>() => void>() , but parse as left shift for now and we'll
-    // retokenize if necessary. We can't use isType for this case because we
-    // don't know yet if we're in a type.
-    finishOp$1(TokenType$1.bitShiftL, 2);
+    // We see <<, but need to be really careful about whether to treat it as a
+    // true left-shift or as two < tokens.
+    if (state$1.isType) {
+      // Within a type, << might come up in a snippet like `Array<<T>() => void>`,
+      // so treat it as two < tokens. Importantly, this should only override <<
+      // rather than other tokens like <= . If we treated <= as < in a type
+      // context, then the snippet `a as T <= 1` would incorrectly start parsing
+      // a type argument on T. We don't need to worry about `a as T << 1`
+      // because TypeScript disallows that syntax.
+      finishOp$1(TokenType$1.lessThan, 1);
+    } else {
+      // Outside a type, this might be a true left-shift operator, or it might
+      // still be two open-type-arg tokens, such as in `f<<T>() => void>()`. We
+      // look at the token while considering the `f`, so we don't yet know that
+      // we're in a type context. In this case, we initially tokenize as a
+      // left-shift and correct after-the-fact as necessary in
+      // tsParseTypeArgumentsWithPossibleBitshift .
+      finishOp$1(TokenType$1.bitShiftL, 2);
+    }
     return;
   }
 
@@ -2105,8 +2128,18 @@ function readToken_gt$1() {
 }
 
 /**
- * Called after `as` expressions in TS; we're switching from a type to a
- * non-type context, so a > token may actually be >= .
+ * Reinterpret a possible > token when transitioning from a type to a non-type
+ * context.
+ *
+ * This comes up in two situations where >= needs to be treated as one token:
+ * - After an `as` expression, like in the code `a as T >= 1`.
+ * - In a type argument in an expression context, e.g. `f(a < b, c >= d)`, we
+ *   need to see the token as >= so that we get an error and backtrack to
+ *   normal expression parsing.
+ *
+ * Other situations require >= to be seen as two tokens, e.g.
+ * `const x: Array<T>=[];`, so it's important to treat > as its own token in
+ * typical type parsing situations.
  */
 function rescan_gt$1() {
   if (state$1.type === TokenType$1.greaterThan) {
@@ -3438,7 +3471,7 @@ class JSXTransformer$2 extends Transformer$2 {
  * Spec for identifiers: https://tc39.github.io/ecma262/#prod-IdentifierStart.
  *
  * Really only treat anything starting with a-z as tag names.  `_`, `$`, `é`
- * should be treated as copmonent names
+ * should be treated as component names
  */
 function startsWithLowerCase$1(s) {
   const firstChar = s.charCodeAt(0);
@@ -3664,8 +3697,9 @@ class CJSImportProcessor$2 {
      enableLegacyTypeScriptModuleInterop,
      options,
      isTypeScriptTransformEnabled,
+     keepUnusedImports,
      helperManager,
-  ) {this.nameManager = nameManager;this.tokens = tokens;this.enableLegacyTypeScriptModuleInterop = enableLegacyTypeScriptModuleInterop;this.options = options;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;this.helperManager = helperManager;CJSImportProcessor$2.prototype.__init.call(this);CJSImportProcessor$2.prototype.__init2.call(this);CJSImportProcessor$2.prototype.__init3.call(this);CJSImportProcessor$2.prototype.__init4.call(this);CJSImportProcessor$2.prototype.__init5.call(this);}
+  ) {this.nameManager = nameManager;this.tokens = tokens;this.enableLegacyTypeScriptModuleInterop = enableLegacyTypeScriptModuleInterop;this.options = options;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;this.keepUnusedImports = keepUnusedImports;this.helperManager = helperManager;CJSImportProcessor$2.prototype.__init.call(this);CJSImportProcessor$2.prototype.__init2.call(this);CJSImportProcessor$2.prototype.__init3.call(this);CJSImportProcessor$2.prototype.__init4.call(this);CJSImportProcessor$2.prototype.__init5.call(this);}
 
   preprocessTokens() {
     for (let i = 0; i < this.tokens.tokens.length; i++) {
@@ -3686,8 +3720,8 @@ class CJSImportProcessor$2 {
   }
 
   /**
-   * In TypeScript, import statements that only import types should be removed. This does not count
-   * bare imports.
+   * In TypeScript, import statements that only import types should be removed.
+   * This includes `import {} from 'foo';`, but not `import 'foo';`.
    */
   pruneTypeOnlyImports() {
     this.nonTypeIdentifiers = getNonTypeIdentifiers$2(this.tokens, this.options);
@@ -3705,14 +3739,18 @@ class CJSImportProcessor$2 {
         ...importInfo.wildcardNames,
         ...importInfo.namedImports.map(({localName}) => localName),
       ];
-      if (names.every((name) => this.isTypeName(name))) {
+      if (names.every((name) => this.shouldAutomaticallyElideImportedName(name))) {
         this.importsToReplace.set(path, "");
       }
     }
   }
 
-  isTypeName(name) {
-    return this.isTypeScriptTransformEnabled && !this.nonTypeIdentifiers.has(name);
+  shouldAutomaticallyElideImportedName(name) {
+    return (
+      this.isTypeScriptTransformEnabled &&
+      !this.keepUnusedImports &&
+      !this.nonTypeIdentifiers.has(name)
+    );
   }
 
    generateImportReplacements() {
@@ -4072,26 +4110,346 @@ class CJSImportProcessor$2 {
 }
 
 /**
- * Generate a simple source map indicating that each line maps directly to the original line.
+ * SetArray acts like a `Set` (allowing only one occurrence of a string `key`), but provides the
+ * index of the `key` in the backing array.
+ *
+ * This is designed to allow synchronizing a second array with the contents of the backing array,
+ * like how in a sourcemap `sourcesContent[i]` is the source content associated with `source[i]`,
+ * and there are never duplicates.
+ */
+class SetArray {
+    constructor() {
+        this._indexes = { __proto__: null };
+        this.array = [];
+    }
+}
+/**
+ * Typescript doesn't allow friend access to private fields, so this just casts the set into a type
+ * with public access modifiers.
+ */
+function cast$1(set) {
+    return set;
+}
+/**
+ * Gets the index associated with `key` in the backing array, if it is already present.
+ */
+function get(setarr, key) {
+    return cast$1(setarr)._indexes[key];
+}
+/**
+ * Puts `key` into the backing array, if it is not already present. Returns
+ * the index of the `key` in the backing array.
+ */
+function put(setarr, key) {
+    // The key may or may not be present. If it is present, it's a number.
+    const index = get(setarr, key);
+    if (index !== undefined)
+        return index;
+    const { array, _indexes: indexes } = cast$1(setarr);
+    const length = array.push(key);
+    return (indexes[key] = length - 1);
+}
+
+const comma = ','.charCodeAt(0);
+const semicolon$1 = ';'.charCodeAt(0);
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+const intToChar = new Uint8Array(64); // 64 possible chars.
+const charToInt = new Uint8Array(128); // z is 122 in ASCII
+for (let i = 0; i < chars.length; i++) {
+    const c = chars.charCodeAt(i);
+    intToChar[i] = c;
+    charToInt[c] = i;
+}
+// Provide a fallback for older environments.
+const td = typeof TextDecoder !== 'undefined'
+    ? /* #__PURE__ */ new TextDecoder()
+    : typeof Buffer !== 'undefined'
+        ? {
+            decode(buf) {
+                const out = Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength);
+                return out.toString();
+            },
+        }
+        : {
+            decode(buf) {
+                let out = '';
+                for (let i = 0; i < buf.length; i++) {
+                    out += String.fromCharCode(buf[i]);
+                }
+                return out;
+            },
+        };
+function encode(decoded) {
+    const state = new Int32Array(5);
+    const bufLength = 1024 * 16;
+    const subLength = bufLength - 36;
+    const buf = new Uint8Array(bufLength);
+    const sub = buf.subarray(0, subLength);
+    let pos = 0;
+    let out = '';
+    for (let i = 0; i < decoded.length; i++) {
+        const line = decoded[i];
+        if (i > 0) {
+            if (pos === bufLength) {
+                out += td.decode(buf);
+                pos = 0;
+            }
+            buf[pos++] = semicolon$1;
+        }
+        if (line.length === 0)
+            continue;
+        state[0] = 0;
+        for (let j = 0; j < line.length; j++) {
+            const segment = line[j];
+            // We can push up to 5 ints, each int can take at most 7 chars, and we
+            // may push a comma.
+            if (pos > subLength) {
+                out += td.decode(sub);
+                buf.copyWithin(0, subLength, pos);
+                pos -= subLength;
+            }
+            if (j > 0)
+                buf[pos++] = comma;
+            pos = encodeInteger(buf, pos, state, segment, 0); // genColumn
+            if (segment.length === 1)
+                continue;
+            pos = encodeInteger(buf, pos, state, segment, 1); // sourcesIndex
+            pos = encodeInteger(buf, pos, state, segment, 2); // sourceLine
+            pos = encodeInteger(buf, pos, state, segment, 3); // sourceColumn
+            if (segment.length === 4)
+                continue;
+            pos = encodeInteger(buf, pos, state, segment, 4); // namesIndex
+        }
+    }
+    return out + td.decode(buf.subarray(0, pos));
+}
+function encodeInteger(buf, pos, state, segment, j) {
+    const next = segment[j];
+    let num = next - state[j];
+    state[j] = next;
+    num = num < 0 ? (-num << 1) | 1 : num << 1;
+    do {
+        let clamped = num & 0b011111;
+        num >>>= 5;
+        if (num > 0)
+            clamped |= 0b100000;
+        buf[pos++] = intToChar[clamped];
+    } while (num > 0);
+    return pos;
+}
+
+const COLUMN = 0;
+const SOURCES_INDEX = 1;
+const SOURCE_LINE = 2;
+const SOURCE_COLUMN = 3;
+const NAMES_INDEX = 4;
+
+const NO_NAME = -1;
+/**
+ * Provides the state to generate a sourcemap.
+ */
+class GenMapping {
+    constructor({ file, sourceRoot } = {}) {
+        this._names = new SetArray();
+        this._sources = new SetArray();
+        this._sourcesContent = [];
+        this._mappings = [];
+        this.file = file;
+        this.sourceRoot = sourceRoot;
+        this._ignoreList = new SetArray();
+    }
+}
+/**
+ * Typescript doesn't allow friend access to private fields, so this just casts the map into a type
+ * with public access modifiers.
+ */
+function cast(map) {
+    return map;
+}
+/**
+ * Same as `addSegment`, but will only add the segment if it generates useful information in the
+ * resulting map. This only works correctly if segments are added **in order**, meaning you should
+ * not add a segment with a lower generated line/column than one that came before.
+ */
+const maybeAddSegment = (map, genLine, genColumn, source, sourceLine, sourceColumn, name, content) => {
+    return addSegmentInternal(true, map, genLine, genColumn, source, sourceLine, sourceColumn, name, content);
+};
+/**
+ * Returns a sourcemap object (with decoded mappings) suitable for passing to a library that expects
+ * a sourcemap, or to JSON.stringify.
+ */
+function toDecodedMap(map) {
+    const { _mappings: mappings, _sources: sources, _sourcesContent: sourcesContent, _names: names, _ignoreList: ignoreList, } = cast(map);
+    removeEmptyFinalLines(mappings);
+    return {
+        version: 3,
+        file: map.file || undefined,
+        names: names.array,
+        sourceRoot: map.sourceRoot || undefined,
+        sources: sources.array,
+        sourcesContent,
+        mappings,
+        ignoreList: ignoreList.array,
+    };
+}
+/**
+ * Returns a sourcemap object (with encoded mappings) suitable for passing to a library that expects
+ * a sourcemap, or to JSON.stringify.
+ */
+function toEncodedMap(map) {
+    const decoded = toDecodedMap(map);
+    return Object.assign(Object.assign({}, decoded), { mappings: encode(decoded.mappings) });
+}
+// This split declaration is only so that terser can elminiate the static initialization block.
+function addSegmentInternal(skipable, map, genLine, genColumn, source, sourceLine, sourceColumn, name, content) {
+    const { _mappings: mappings, _sources: sources, _sourcesContent: sourcesContent, _names: names, } = cast(map);
+    const line = getLine(mappings, genLine);
+    const index = getColumnIndex(line, genColumn);
+    if (!source) {
+        if (skipable && skipSourceless(line, index))
+            return;
+        return insert(line, index, [genColumn]);
+    }
+    const sourcesIndex = put(sources, source);
+    const namesIndex = name ? put(names, name) : NO_NAME;
+    if (sourcesIndex === sourcesContent.length)
+        sourcesContent[sourcesIndex] = content !== null && content !== void 0 ? content : null;
+    if (skipable && skipSource(line, index, sourcesIndex, sourceLine, sourceColumn, namesIndex)) {
+        return;
+    }
+    return insert(line, index, name
+        ? [genColumn, sourcesIndex, sourceLine, sourceColumn, namesIndex]
+        : [genColumn, sourcesIndex, sourceLine, sourceColumn]);
+}
+function getLine(mappings, index) {
+    for (let i = mappings.length; i <= index; i++) {
+        mappings[i] = [];
+    }
+    return mappings[index];
+}
+function getColumnIndex(line, genColumn) {
+    let index = line.length;
+    for (let i = index - 1; i >= 0; index = i--) {
+        const current = line[i];
+        if (genColumn >= current[COLUMN])
+            break;
+    }
+    return index;
+}
+function insert(array, index, value) {
+    for (let i = array.length; i > index; i--) {
+        array[i] = array[i - 1];
+    }
+    array[index] = value;
+}
+function removeEmptyFinalLines(mappings) {
+    const { length } = mappings;
+    let len = length;
+    for (let i = len - 1; i >= 0; len = i, i--) {
+        if (mappings[i].length > 0)
+            break;
+    }
+    if (len < length)
+        mappings.length = len;
+}
+function skipSourceless(line, index) {
+    // The start of a line is already sourceless, so adding a sourceless segment to the beginning
+    // doesn't generate any useful information.
+    if (index === 0)
+        return true;
+    const prev = line[index - 1];
+    // If the previous segment is also sourceless, then adding another sourceless segment doesn't
+    // genrate any new information. Else, this segment will end the source/named segment and point to
+    // a sourceless position, which is useful.
+    return prev.length === 1;
+}
+function skipSource(line, index, sourcesIndex, sourceLine, sourceColumn, namesIndex) {
+    // A source/named segment at the start of a line gives position at that genColumn
+    if (index === 0)
+        return false;
+    const prev = line[index - 1];
+    // If the previous segment is sourceless, then we're transitioning to a source.
+    if (prev.length === 1)
+        return false;
+    // If the previous segment maps to the exact same source position, then this segment doesn't
+    // provide any new position information.
+    return (sourcesIndex === prev[SOURCES_INDEX] &&
+        sourceLine === prev[SOURCE_LINE] &&
+        sourceColumn === prev[SOURCE_COLUMN] &&
+        namesIndex === (prev.length === 5 ? prev[NAMES_INDEX] : NO_NAME));
+}
+
+/**
+ * Generate a source map indicating that each line maps directly to the original line,
+ * with the tokens in their new positions.
  */
 function computeSourceMap$2(
-  code,
+  {code: generatedCode, mappings: rawMappings},
   filePath,
-  {compiledFilename},
+  options,
+  source,
+  tokens,
 ) {
-  let mappings = "AAAA";
-  for (let i = 0; i < code.length; i++) {
-    if (code.charCodeAt(i) === charCodes$1.lineFeed) {
-      mappings += ";AACA";
+  const sourceColumns = computeSourceColumns$1(source, tokens);
+  const map = new GenMapping({file: options.compiledFilename});
+  let tokenIndex = 0;
+  // currentMapping is the output source index for the current input token being
+  // considered.
+  let currentMapping = rawMappings[0];
+  while (currentMapping === undefined && tokenIndex < rawMappings.length - 1) {
+    tokenIndex++;
+    currentMapping = rawMappings[tokenIndex];
+  }
+  let line = 0;
+  let lineStart = 0;
+  if (currentMapping !== lineStart) {
+    maybeAddSegment(map, line, 0, filePath, line, 0);
+  }
+  for (let i = 0; i < generatedCode.length; i++) {
+    if (i === currentMapping) {
+      const genColumn = currentMapping - lineStart;
+      const sourceColumn = sourceColumns[tokenIndex];
+      maybeAddSegment(map, line, genColumn, filePath, line, sourceColumn);
+      while (
+        (currentMapping === i || currentMapping === undefined) &&
+        tokenIndex < rawMappings.length - 1
+      ) {
+        tokenIndex++;
+        currentMapping = rawMappings[tokenIndex];
+      }
+    }
+    if (generatedCode.charCodeAt(i) === charCodes$1.lineFeed) {
+      line++;
+      lineStart = i + 1;
+      if (currentMapping !== lineStart) {
+        maybeAddSegment(map, line, 0, filePath, line, 0);
+      }
     }
   }
-  return {
-    version: 3,
-    file: compiledFilename || "",
-    sources: [filePath],
-    mappings,
-    names: [],
-  };
+  const {sourceRoot, sourcesContent, ...sourceMap} = toEncodedMap(map);
+  return sourceMap ;
+}
+
+/**
+ * Create an array mapping each token index to the 0-based column of the start
+ * position of the token.
+ */
+function computeSourceColumns$1(code, tokens) {
+  const sourceColumns = new Array(tokens.length);
+  let tokenIndex = 0;
+  let currentMapping = tokens[tokenIndex].start;
+  let lineStart = 0;
+  for (let i = 0; i < code.length; i++) {
+    if (i === currentMapping) {
+      sourceColumns[tokenIndex] = currentMapping - lineStart;
+      tokenIndex++;
+      currentMapping = tokens[tokenIndex].start;
+    }
+    if (code.charCodeAt(i) === charCodes$1.lineFeed) {
+      lineStart = i + 1;
+    }
+  }
+  return sourceColumns;
 }
 
 const HELPERS = {
@@ -4293,6 +4651,7 @@ function hasShadowedGlobals(tokens, globalNames) {
   for (const token of tokens.tokens) {
     if (
       token.type === TokenType$1.name &&
+      !token.isType &&
       isNonTopLevelDeclaration$1(token) &&
       globalNames.has(tokens.identifierNameForToken(token))
     ) {
@@ -4326,7 +4685,7 @@ function markShadowedGlobals(
 
     const token = tokens.tokens[i];
     const name = tokens.identifierNameForToken(token);
-    if (scopeStack.length > 1 && token.type === TokenType$1.name && globalNames.has(name)) {
+    if (scopeStack.length > 1 && !token.isType && token.type === TokenType$1.name && globalNames.has(name)) {
       if (isBlockScopedDeclaration$1(token)) {
         markShadowedForScope(scopeStack[scopeStack.length - 1], tokens, name);
       } else if (isFunctionScopedDeclaration$1(token)) {
@@ -5349,11 +5708,12 @@ const SourceMapOptions = dist.iface([], {
 const Options = dist.iface([], {
   transforms: dist.array("Transform"),
   disableESTransforms: dist.opt("boolean"),
-  jsxRuntime: dist.opt(dist.union(dist.lit("classic"), dist.lit("automatic"))),
+  jsxRuntime: dist.opt(dist.union(dist.lit("classic"), dist.lit("automatic"), dist.lit("preserve"))),
   production: dist.opt("boolean"),
   jsxImportSource: dist.opt("string"),
   jsxPragma: dist.opt("string"),
   jsxFragmentPragma: dist.opt("string"),
+  keepUnusedImports: dist.opt("boolean"),
   preserveDynamicImport: dist.opt("boolean"),
   injectCreateRequireForImportRequire: dist.opt("boolean"),
   enableLegacyTypeScriptModuleInterop: dist.opt("boolean"),
@@ -5369,6 +5729,11 @@ const exportedTypeSuite = {
 };
 
 const {Options: OptionsChecker} = dist.createCheckers(exportedTypeSuite);
+
+ 
+
+
+
 
 
 
@@ -5744,8 +6109,10 @@ function tsParseImportType() {
 }
 
 function tsParseTypeParameter() {
+  eat$1(TokenType$1._const);
   const hadIn = eat$1(TokenType$1._in);
   const hadOut = eatContextual$1(ContextualKeyword$1._out);
+  eat$1(TokenType$1._const);
   if ((hadIn || hadOut) && !match$1(TokenType$1.name)) {
     // The "in" or "out" keyword must have actually been the type parameter
     // name, so set it as the name.
@@ -5808,7 +6175,7 @@ function tsParseBindingListForSignature(isBlockScope) {
 
 function tsParseTypeMemberSemicolon() {
   if (!eat$1(TokenType$1.comma)) {
-    semicolon$1();
+    semicolon$2();
   }
 }
 
@@ -5950,7 +6317,7 @@ function tsParseMappedType() {
     eat$1(TokenType$1.question);
   }
   tsTryParseType();
-  semicolon$1();
+  semicolon$2();
   expect$1(TokenType$1.braceR);
 }
 
@@ -6385,7 +6752,7 @@ function tsParseTypeAliasDeclaration() {
   tsTryParseTypeParameters();
   expect$1(TokenType$1.eq);
   tsParseType();
-  semicolon$1();
+  semicolon$2();
 }
 
 function tsParseEnumMember() {
@@ -6437,7 +6804,7 @@ function tsParseAmbientExternalModuleDeclaration() {
   if (match$1(TokenType$1.braceL)) {
     tsParseModuleBlock();
   } else {
-    semicolon$1();
+    semicolon$2();
   }
 }
 
@@ -6445,7 +6812,7 @@ function tsParseImportEqualsDeclaration() {
   parseImportedIdentifier();
   expect$1(TokenType$1.eq);
   tsParseModuleReference();
-  semicolon$1();
+  semicolon$2();
 }
 
 function tsIsExternalModuleReference() {
@@ -6510,7 +6877,7 @@ function tsTryParseDeclare() {
     case TokenType$1._var:
     case TokenType$1._let: {
       const oldIsType = pushTypeContext$1(1);
-      parseVarStatement(state$1.type);
+      parseVarStatement(state$1.type !== TokenType$1._var);
       popTypeContext$1(oldIsType);
       return true;
     }
@@ -6680,9 +7047,7 @@ function tsTryParseGenericAsyncArrowFunction() {
  * where bitshift would be illegal anyway (e.g. in a class "extends" clause).
  *
  * This hack is useful to handle situations like foo<<T>() => void>() where
- * there can legitimately be two open-angle-brackets in a row in TS. This
- * situation is very obscure and (as of this writing) is handled by Babel but
- * not TypeScript itself, so it may be fine in the future to remove this case.
+ * there can legitimately be two open-angle-brackets in a row in TS.
  */
 function tsParseTypeArgumentsWithPossibleBitshift() {
   if (state$1.type === TokenType$1.bitShiftL) {
@@ -6695,11 +7060,26 @@ function tsParseTypeArgumentsWithPossibleBitshift() {
 function tsParseTypeArguments() {
   const oldIsType = pushTypeContext$1(0);
   expect$1(TokenType$1.lessThan);
-  while (!eat$1(TokenType$1.greaterThan) && !state$1.error) {
+  while (!match$1(TokenType$1.greaterThan) && !state$1.error) {
     tsParseType();
     eat$1(TokenType$1.comma);
   }
-  popTypeContext$1(oldIsType);
+  if (!oldIsType) {
+    // If the type arguments are present in an expression context, e.g.
+    // f<number>(), then the > sign should be tokenized as a non-type token.
+    // In particular, f(a < b, c >= d) should parse the >= as a single token,
+    // resulting in a syntax error and fallback to the non-type-args
+    // interpretation. In the success case, even though the > is tokenized as a
+    // non-type token, it still must be marked as a type token so that it is
+    // erased.
+    popTypeContext$1(oldIsType);
+    rescan_gt$1();
+    expect$1(TokenType$1.greaterThan);
+    state$1.tokens[state$1.tokens.length - 1].isType = true;
+  } else {
+    expect$1(TokenType$1.greaterThan);
+    popTypeContext$1(oldIsType);
+  }
 }
 
 function tsIsDeclarationStart() {
@@ -6830,18 +7210,24 @@ function tsTryParseExport() {
   } else if (eat$1(TokenType$1.eq)) {
     // `export = x;`
     parseExpression();
-    semicolon$1();
+    semicolon$2();
     return true;
   } else if (eatContextual$1(ContextualKeyword$1._as)) {
     // `export as namespace A;`
     // See `parseNamespaceExportDeclaration` in TypeScript's own parser
     expectContextual$1(ContextualKeyword$1._namespace);
     parseIdentifier();
-    semicolon$1();
+    semicolon$2();
     return true;
   } else {
-    if (isContextual$1(ContextualKeyword$1._type) && lookaheadType$1() === TokenType$1.braceL) {
-      next$1();
+    if (isContextual$1(ContextualKeyword$1._type)) {
+      const nextType = lookaheadType$1();
+      // export type {foo} from 'a';
+      // export type * from 'a';'
+      // export type * as ns from 'a';'
+      if (nextType === TokenType$1.braceL || nextType === TokenType$1.star) {
+        next$1();
+      }
     }
     return false;
   }
@@ -6988,7 +7374,7 @@ function tsTryParseClassMemberWithIsStatic(isStatic) {
 function tsParseIdentifierStatement(contextualKeyword) {
   const matched = tsParseExpressionStatement(contextualKeyword);
   if (!matched) {
-    semicolon$1();
+    semicolon$2();
   }
 }
 
@@ -7261,10 +7647,24 @@ function jsxParseNamespacedName(identifierRole) {
 // Parses element name in any form - namespaced, member
 // or single identifier.
 function jsxParseElementName() {
+  const firstTokenIndex = state$1.tokens.length;
   jsxParseNamespacedName(IdentifierRole$1.Access);
+  let hadDot = false;
   while (match$1(TokenType$1.dot)) {
+    hadDot = true;
     nextJSXTagToken();
     jsxParseIdentifier();
+  }
+  // For tags like <div> with a lowercase letter and no dots, the name is
+  // actually *not* an identifier access, since it's referring to a built-in
+  // tag name. Remove the identifier role in this case so that it's not
+  // accidentally transformed by the imports transform when preserving JSX.
+  if (!hadDot) {
+    const firstToken = state$1.tokens[firstTokenIndex];
+    const firstChar = input.charCodeAt(firstToken.start);
+    if (firstChar >= charCodes$1.lowercaseA && firstChar <= charCodes$1.lowercaseZ) {
+      firstToken.identifierRole = null;
+    }
   }
 }
 
@@ -8506,7 +8906,7 @@ function flowParseDeclareFunction() {
 
   flowParseTypeAndPredicateInitialiser();
 
-  semicolon$1();
+  semicolon$2();
 }
 
 function flowParseDeclare() {
@@ -8538,7 +8938,7 @@ function flowParseDeclare() {
 function flowParseDeclareVariable() {
   next$1();
   flowParseTypeAnnotatableIdentifier();
-  semicolon$1();
+  semicolon$2();
 }
 
 function flowParseDeclareModule() {
@@ -8571,7 +8971,7 @@ function flowParseDeclareExportDeclaration() {
     } else {
       // declare export default [type];
       flowParseType();
-      semicolon$1();
+      semicolon$2();
     }
   } else if (
     match$1(TokenType$1._var) || // declare export var ...
@@ -8596,7 +8996,7 @@ function flowParseDeclareExportDeclaration() {
 function flowParseDeclareModuleExports() {
   expectContextual$1(ContextualKeyword$1._exports);
   flowParseTypeAnnotation();
-  semicolon$1();
+  semicolon$2();
 }
 
 function flowParseDeclareTypeAlias() {
@@ -8669,7 +9069,7 @@ function flowParseTypeAlias() {
   }
 
   flowParseTypeInitialiser(TokenType$1.eq);
-  semicolon$1();
+  semicolon$2();
 }
 
 function flowParseOpaqueType(declare) {
@@ -8688,7 +9088,7 @@ function flowParseOpaqueType(declare) {
   if (!declare) {
     flowParseTypeInitialiser(TokenType$1.eq);
   }
-  semicolon$1();
+  semicolon$2();
 }
 
 function flowParseTypeParameter() {
@@ -9214,7 +9614,7 @@ function flowParseIdentifierStatement(contextualKeyword) {
       popTypeContext$1(oldIsType);
     }
   }
-  semicolon$1();
+  semicolon$2();
 }
 
 // export type
@@ -9583,6 +9983,7 @@ function parseStatementContent(declaration, isTopLevel) {
       return;
     case TokenType$1._switch:
       parseSwitchStatement();
+      state$1.tokens[startTokenIndex].isTopLevel = isTopLevel;
       return;
     case TokenType$1._throw:
       parseThrowStatement();
@@ -9596,7 +9997,7 @@ function parseStatementContent(declaration, isTopLevel) {
       if (!declaration) unexpected$1(); // NOTE: falls through to _var
 
     case TokenType$1._var:
-      parseVarStatement(starttype);
+      parseVarStatement(starttype !== TokenType$1._var);
       return;
 
     case TokenType$1._while:
@@ -9631,11 +10032,23 @@ function parseStatementContent(declaration, isTopLevel) {
         if (match$1(TokenType$1._function) && !canInsertSemicolon$1()) {
           expect$1(TokenType$1._function);
           parseFunction(functionStart, true);
-          state$1.tokens[startTokenIndex].isTopLevel = isTopLevel;
           return;
         } else {
           state$1.restoreFromSnapshot(snapshot);
         }
+      } else if (
+        state$1.contextualKeyword === ContextualKeyword$1._using &&
+        !hasFollowingLineBreak$1() &&
+        // Statements like `using[0]` and `using in foo` aren't actual using
+        // declarations.
+        lookaheadType$1() === TokenType$1.name
+      ) {
+        parseVarStatement(true);
+        return;
+      } else if (startsAwaitUsing()) {
+        expectContextual$1(ContextualKeyword$1._await);
+        parseVarStatement(true);
+        return;
       }
   }
 
@@ -9653,11 +10066,11 @@ function parseStatementContent(declaration, isTopLevel) {
       simpleName = token.contextualKeyword;
     }
   }
-
+  
   state$1.tokens[startTokenIndex].isTopLevel = isTopLevel;
 
   if (simpleName == null) {
-    semicolon$1();
+    semicolon$2();
     return;
   }
   if (eat$1(TokenType$1.colon)) {
@@ -9667,6 +10080,48 @@ function parseStatementContent(declaration, isTopLevel) {
     // This was an identifier, so we might want to handle flow/typescript-specific cases.
     parseIdentifierStatement(simpleName);
   }
+}
+
+/**
+ * Determine if we're positioned at an `await using` declaration.
+ *
+ * Note that this can happen either in place of a regular variable declaration
+ * or in a loop body, and in both places, there are similar-looking cases where
+ * we need to return false.
+ *
+ * Examples returning true:
+ * await using foo = bar();
+ * for (await using a of b) {}
+ *
+ * Examples returning false:
+ * await using
+ * await using + 1
+ * await using instanceof T
+ * for (await using;;) {}
+ *
+ * For now, we early return if we don't see `await`, then do a simple
+ * backtracking-based lookahead for the `using` and identifier tokens. In the
+ * future, this could be optimized with a character-based approach.
+ */
+function startsAwaitUsing() {
+  if (!isContextual$1(ContextualKeyword$1._await)) {
+    return false;
+  }
+  const snapshot = state$1.snapshot();
+  // await
+  next$1();
+  if (!isContextual$1(ContextualKeyword$1._using) || hasPrecedingLineBreak$1()) {
+    state$1.restoreFromSnapshot(snapshot);
+    return false;
+  }
+  // using
+  next$1();
+  if (!match$1(TokenType$1.name) || hasPrecedingLineBreak$1()) {
+    state$1.restoreFromSnapshot(snapshot);
+    return false;
+  }
+  state$1.restoreFromSnapshot(snapshot);
+  return true;
 }
 
 function parseDecorators() {
@@ -9685,8 +10140,8 @@ function parseDecorator() {
     while (eat$1(TokenType$1.dot)) {
       parseIdentifier();
     }
+    parseMaybeDecoratorArguments();
   }
-  parseMaybeDecoratorArguments();
 }
 
 function parseMaybeDecoratorArguments() {
@@ -9707,13 +10162,13 @@ function parseBreakContinueStatement() {
   next$1();
   if (!isLineTerminator$1()) {
     parseIdentifier();
-    semicolon$1();
+    semicolon$2();
   }
 }
 
 function parseDebuggerStatement() {
   next$1();
-  semicolon$1();
+  semicolon$2();
 }
 
 function parseDoStatement() {
@@ -9731,6 +10186,23 @@ function parseForStatement() {
   const endTokenIndex = state$1.tokens.length;
   state$1.scopes.push(new Scope$1(startTokenIndex, endTokenIndex, false));
   state$1.scopeDepth--;
+}
+
+/**
+ * Determine if this token is a `using` declaration (explicit resource
+ * management) as part of a loop.
+ * https://github.com/tc39/proposal-explicit-resource-management
+ */
+function isUsingInLoop() {
+  if (!isContextual$1(ContextualKeyword$1._using)) {
+    return false;
+  }
+  // This must be `for (using of`, where `using` is the name of the loop
+  // variable.
+  if (isLookaheadContextual$1(ContextualKeyword$1._of)) {
+    return false;
+  }
+  return true;
 }
 
 // Disambiguating between a `for` and a `for`/`in` or `for`/`of`
@@ -9758,10 +10230,13 @@ function parseAmbiguousForStatement() {
     return;
   }
 
-  if (match$1(TokenType$1._var) || match$1(TokenType$1._let) || match$1(TokenType$1._const)) {
-    const varKind = state$1.type;
+  const isAwaitUsing = startsAwaitUsing();
+  if (isAwaitUsing || match$1(TokenType$1._var) || match$1(TokenType$1._let) || match$1(TokenType$1._const) || isUsingInLoop()) {
+    if (isAwaitUsing) {
+      expectContextual$1(ContextualKeyword$1._await);
+    }
     next$1();
-    parseVar(true, varKind);
+    parseVar(true, state$1.type !== TokenType$1._var);
     if (match$1(TokenType$1._in) || isContextual$1(ContextualKeyword$1._of)) {
       parseForIn(forAwait);
       return;
@@ -9805,7 +10280,7 @@ function parseReturnStatement() {
 
   if (!isLineTerminator$1()) {
     parseExpression();
-    semicolon$1();
+    semicolon$2();
   }
 }
 
@@ -9838,7 +10313,7 @@ function parseSwitchStatement() {
 function parseThrowStatement() {
   next$1();
   parseExpression();
-  semicolon$1();
+  semicolon$2();
 }
 
 function parseCatchClauseParam() {
@@ -9878,10 +10353,10 @@ function parseTryStatement() {
   }
 }
 
-function parseVarStatement(kind) {
+function parseVarStatement(isBlockScope) {
   next$1();
-  parseVar(false, kind);
-  semicolon$1();
+  parseVar(false, isBlockScope);
+  semicolon$2();
 }
 
 function parseWhileStatement() {
@@ -9908,7 +10383,7 @@ function parseIdentifierStatement(contextualKeyword) {
   } else if (isFlowEnabled) {
     flowParseIdentifierStatement(contextualKeyword);
   } else {
-    semicolon$1();
+    semicolon$2();
   }
 }
 
@@ -9968,9 +10443,8 @@ function parseForIn(forAwait) {
 
 // Parse a list of variable declarations.
 
-function parseVar(isFor, kind) {
+function parseVar(isFor, isBlockScope) {
   while (true) {
-    const isBlockScope = kind === TokenType$1._const || kind === TokenType$1._let;
     parseVarHead(isBlockScope);
     if (eat$1(TokenType$1.eq)) {
       const eqIndex = state$1.tokens.length - 1;
@@ -10267,7 +10741,7 @@ function parseClassProperty() {
     parseMaybeAssign();
     state$1.tokens[equalsTokenIndex].rhsEndIndex = state$1.tokens.length;
   }
-  semicolon$1();
+  semicolon$2();
 }
 
 function parseClassId(isStatement, optionalId = false) {
@@ -10371,7 +10845,7 @@ function parseExportDefaultExpression() {
     parseClass(true, true);
   } else {
     parseMaybeAssign();
-    semicolon$1();
+    semicolon$2();
   }
 }
 
@@ -10423,9 +10897,9 @@ function parseExportSpecifiersMaybe() {
 function parseExportFrom() {
   if (eatContextual$1(ContextualKeyword$1._from)) {
     parseExprAtom();
-    maybeParseImportAssertions();
+    maybeParseImportAttributes();
   }
-  semicolon$1();
+  semicolon$2();
 }
 
 function shouldParseExportStar() {
@@ -10508,6 +10982,50 @@ function parseExportSpecifier() {
   }
 }
 
+/**
+ * Starting at the `module` token in an import, determine if it was truly an
+ * import reflection token or just looks like one.
+ *
+ * Returns true for:
+ * import module foo from "foo";
+ * import module from from "foo";
+ *
+ * Returns false for:
+ * import module from "foo";
+ * import module, {bar} from "foo";
+ */
+function isImportReflection() {
+  const snapshot = state$1.snapshot();
+  expectContextual$1(ContextualKeyword$1._module);
+  if (eatContextual$1(ContextualKeyword$1._from)) {
+    if (isContextual$1(ContextualKeyword$1._from)) {
+      state$1.restoreFromSnapshot(snapshot);
+      return true;
+    } else {
+      state$1.restoreFromSnapshot(snapshot);
+      return false;
+    }
+  } else if (match$1(TokenType$1.comma)) {
+    state$1.restoreFromSnapshot(snapshot);
+    return false;
+  } else {
+    state$1.restoreFromSnapshot(snapshot);
+    return true;
+  }
+}
+
+/**
+ * Eat the "module" token from the import reflection proposal.
+ * https://github.com/tc39/proposal-import-reflection
+ */
+function parseMaybeImportReflection() {
+  // isImportReflection does snapshot/restore, so only run it if we see the word
+  // "module".
+  if (isContextual$1(ContextualKeyword$1._module) && isImportReflection()) {
+    next$1();
+  }
+}
+
 // Parses import declaration.
 
 function parseImport() {
@@ -10542,12 +11060,13 @@ function parseImport() {
   if (match$1(TokenType$1.string)) {
     parseExprAtom();
   } else {
+    parseMaybeImportReflection();
     parseImportSpecifiers();
     expectContextual$1(ContextualKeyword$1._from);
     parseExprAtom();
   }
-  maybeParseImportAssertions();
-  semicolon$1();
+  maybeParseImportAttributes();
+  semicolon$2();
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -10622,13 +11141,14 @@ function parseImportSpecifier() {
 }
 
 /**
- * Parse import assertions like `assert {type: "json"}`.
+ * Parse import attributes like `with {type: "json"}`, or the legacy form
+ * `assert {type: "json"}`.
  *
- * Import assertions technically have their own syntax, but are always parseable
+ * Import attributes technically have their own syntax, but are always parseable
  * as a plain JS object, so just do that for simplicity.
  */
-function maybeParseImportAssertions() {
-  if (isContextual$1(ContextualKeyword$1._assert) && !hasPrecedingLineBreak$1()) {
+function maybeParseImportAttributes() {
+  if (match$1(TokenType$1._with) || (isContextual$1(ContextualKeyword$1._assert) && !hasPrecedingLineBreak$1())) {
     next$1();
     parseObj(false, false);
   }
@@ -10712,7 +11232,10 @@ function isAsyncOperation(tokens) {
 
 class TokenProcessor {
    __init() {this.resultCode = "";}
-   __init2() {this.tokenIndex = 0;}
+  // Array mapping input token index to optional string index position in the
+  // output code.
+   __init2() {this.resultMappings = new Array(this.tokens.length);}
+   __init3() {this.tokenIndex = 0;}
 
   constructor(
      code,
@@ -10720,13 +11243,20 @@ class TokenProcessor {
      isFlowEnabled,
      disableESTransforms,
      helperManager,
-  ) {this.code = code;this.tokens = tokens;this.isFlowEnabled = isFlowEnabled;this.disableESTransforms = disableESTransforms;this.helperManager = helperManager;TokenProcessor.prototype.__init.call(this);TokenProcessor.prototype.__init2.call(this);}
+  ) {this.code = code;this.tokens = tokens;this.isFlowEnabled = isFlowEnabled;this.disableESTransforms = disableESTransforms;this.helperManager = helperManager;TokenProcessor.prototype.__init.call(this);TokenProcessor.prototype.__init2.call(this);TokenProcessor.prototype.__init3.call(this);}
 
   /**
-   * Make a new TokenProcessor for things like lookahead.
+   * Snapshot the token state in a way that can be restored later, useful for
+   * things like lookahead.
+   *
+   * resultMappings do not need to be copied since in all use cases, they will
+   * be overwritten anyway after restore.
    */
   snapshot() {
-    return {resultCode: this.resultCode, tokenIndex: this.tokenIndex};
+    return {
+      resultCode: this.resultCode,
+      tokenIndex: this.tokenIndex,
+    };
   }
 
   restoreToSnapshot(snapshot) {
@@ -10749,6 +11279,7 @@ class TokenProcessor {
 
   reset() {
     this.resultCode = "";
+    this.resultMappings = new Array(this.tokens.length);
     this.tokenIndex = 0;
   }
 
@@ -10869,6 +11400,7 @@ class TokenProcessor {
   replaceToken(newCode) {
     this.resultCode += this.previousWhitespaceAndComments();
     this.appendTokenPrefix();
+    this.resultMappings[this.tokenIndex] = this.resultCode.length;
     this.resultCode += newCode;
     this.appendTokenSuffix();
     this.tokenIndex++;
@@ -10877,6 +11409,7 @@ class TokenProcessor {
   replaceTokenTrimmingLeftWhitespace(newCode) {
     this.resultCode += this.previousWhitespaceAndComments().replace(/[^\r\n]/g, "");
     this.appendTokenPrefix();
+    this.resultMappings[this.tokenIndex] = this.resultCode.length;
     this.resultCode += newCode;
     this.appendTokenSuffix();
     this.tokenIndex++;
@@ -10918,6 +11451,7 @@ class TokenProcessor {
   copyToken() {
     this.resultCode += this.previousWhitespaceAndComments();
     this.appendTokenPrefix();
+    this.resultMappings[this.tokenIndex] = this.resultCode.length;
     this.resultCode += this.code.slice(
       this.tokens[this.tokenIndex].start,
       this.tokens[this.tokenIndex].end,
@@ -10930,6 +11464,7 @@ class TokenProcessor {
     this.resultCode += this.previousWhitespaceAndComments();
     this.appendTokenPrefix();
     this.resultCode += prefix;
+    this.resultMappings[this.tokenIndex] = this.resultCode.length;
     this.resultCode += this.code.slice(
       this.tokens[this.tokenIndex].start,
       this.tokens[this.tokenIndex].end,
@@ -11029,7 +11564,7 @@ class TokenProcessor {
       throw new Error("Tried to finish processing tokens before reaching the end.");
     }
     this.resultCode += this.previousWhitespaceAndComments();
-    return this.resultCode;
+    return {code: this.resultCode, mappings: this.resultMappings};
   }
 
   isAtEnd() {
@@ -11274,6 +11809,11 @@ function processConstructor(tokens)
   }
   // )
   tokens.nextToken();
+  // Constructor type annotations are invalid, but skip them anyway since
+  // they're easy to skip.
+  while (tokens.currentToken().isType) {
+    tokens.nextToken();
+  }
   let constructorInsertPos = tokens.currentIndex();
 
   // Advance through body looking for a super call.
@@ -11402,11 +11942,29 @@ function getDeclarationInfo(tokens) {
 }
 
 /**
- * Starting at a potential `assert` token remove the import assertion if there
- * is one.
+ * Starting at `export {`, look ahead and return `true` if this is an
+ * `export {...} from` statement and `false` if this is a plain multi-export.
  */
-function removeMaybeImportAssertion(tokens) {
-  if (tokens.matches2(TokenType$1.name, TokenType$1.braceL) && tokens.matchesContextual(ContextualKeyword$1._assert)) {
+function isExportFrom(tokens) {
+  let closeBraceIndex = tokens.currentIndex();
+  while (!tokens.matches1AtIndex(closeBraceIndex, TokenType$1.braceR)) {
+    closeBraceIndex++;
+  }
+  return (
+    tokens.matchesContextualAtIndex(closeBraceIndex + 1, ContextualKeyword$1._from) &&
+    tokens.matches1AtIndex(closeBraceIndex + 2, TokenType$1.string)
+  );
+}
+
+/**
+ * Starting at a potential `with` or (legacy) `assert` token, remove the import
+ * attributes if they exist.
+ */
+function removeMaybeImportAttributes(tokens) {
+  if (
+    tokens.matches2(TokenType$1._with, TokenType$1.braceL) ||
+    (tokens.matches2(TokenType$1.name, TokenType$1.braceL) && tokens.matchesContextual(ContextualKeyword$1._assert))
+  ) {
     // assert
     tokens.removeToken();
     // {
@@ -11422,10 +11980,11 @@ function removeMaybeImportAssertion(tokens) {
  */
 function shouldElideDefaultExport(
   isTypeScriptTransformEnabled,
+  keepUnusedImports,
   tokens,
   declarationInfo,
 ) {
-  if (!isTypeScriptTransformEnabled) {
+  if (!isTypeScriptTransformEnabled || keepUnusedImports) {
     return false;
   }
   const exportToken = tokens.currentToken();
@@ -11465,12 +12024,16 @@ class CJSImportTransformer extends Transformer$2 {
      tokens,
      importProcessor,
      nameManager,
+     helperManager,
      reactHotLoaderTransformer,
      enableLegacyBabel5ModuleInterop,
+     enableLegacyTypeScriptModuleInterop,
      isTypeScriptTransformEnabled,
+     isFlowTransformEnabled,
      preserveDynamicImport,
+     keepUnusedImports,
   ) {
-    super();this.rootTransformer = rootTransformer;this.tokens = tokens;this.importProcessor = importProcessor;this.nameManager = nameManager;this.reactHotLoaderTransformer = reactHotLoaderTransformer;this.enableLegacyBabel5ModuleInterop = enableLegacyBabel5ModuleInterop;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;this.preserveDynamicImport = preserveDynamicImport;CJSImportTransformer.prototype.__init.call(this);CJSImportTransformer.prototype.__init2.call(this);CJSImportTransformer.prototype.__init3.call(this);    this.declarationInfo = isTypeScriptTransformEnabled
+    super();this.rootTransformer = rootTransformer;this.tokens = tokens;this.importProcessor = importProcessor;this.nameManager = nameManager;this.helperManager = helperManager;this.reactHotLoaderTransformer = reactHotLoaderTransformer;this.enableLegacyBabel5ModuleInterop = enableLegacyBabel5ModuleInterop;this.enableLegacyTypeScriptModuleInterop = enableLegacyTypeScriptModuleInterop;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;this.isFlowTransformEnabled = isFlowTransformEnabled;this.preserveDynamicImport = preserveDynamicImport;this.keepUnusedImports = keepUnusedImports;CJSImportTransformer.prototype.__init.call(this);CJSImportTransformer.prototype.__init2.call(this);CJSImportTransformer.prototype.__init3.call(this);    this.declarationInfo = isTypeScriptTransformEnabled
       ? getDeclarationInfo(tokens)
       : EMPTY_DECLARATION_INFO;
   }
@@ -11530,7 +12093,7 @@ class CJSImportTransformer extends Transformer$2 {
 
    processImportEquals() {
     const importName = this.tokens.identifierNameAtIndex(this.tokens.currentIndex() + 1);
-    if (this.importProcessor.isTypeName(importName)) {
+    if (this.importProcessor.shouldAutomaticallyElideImportedName(importName)) {
       // If this name is only used as a type, elide the whole import.
       elideImportEquals(this.tokens);
     } else {
@@ -11556,7 +12119,10 @@ class CJSImportTransformer extends Transformer$2 {
         this.tokens.copyToken();
         return;
       }
-      this.tokens.replaceToken("Promise.resolve().then(() => require");
+      const requireWrapper = this.enableLegacyTypeScriptModuleInterop
+        ? ""
+        : `${this.helperManager.getHelperName("interopRequireWildcard")}(`;
+      this.tokens.replaceToken(`Promise.resolve().then(() => ${requireWrapper}require`);
       const contextId = this.tokens.currentToken().contextId;
       if (contextId == null) {
         throw new Error("Expected context ID on dynamic import invocation.");
@@ -11565,32 +12131,42 @@ class CJSImportTransformer extends Transformer$2 {
       while (!this.tokens.matchesContextIdAndLabel(TokenType$1.parenR, contextId)) {
         this.rootTransformer.processToken();
       }
-      this.tokens.replaceToken("))");
+      this.tokens.replaceToken(requireWrapper ? ")))" : "))");
       return;
     }
 
-    const wasOnlyTypes = this.removeImportAndDetectIfType();
-
-    if (wasOnlyTypes) {
+    const shouldElideImport = this.removeImportAndDetectIfShouldElide();
+    if (shouldElideImport) {
       this.tokens.removeToken();
     } else {
       const path = this.tokens.stringValue();
       this.tokens.replaceTokenTrimmingLeftWhitespace(this.importProcessor.claimImportCode(path));
       this.tokens.appendCode(this.importProcessor.claimImportCode(path));
     }
-    removeMaybeImportAssertion(this.tokens);
+    removeMaybeImportAttributes(this.tokens);
     if (this.tokens.matches1(TokenType$1.semi)) {
       this.tokens.removeToken();
     }
   }
 
   /**
-   * Erase this import, and return true if it was either of the form "import type" or contained only
-   * "type" named imports. Such imports should not even do a side-effect import.
+   * Erase this import (since any CJS output would be completely different), and
+   * return true if this import is should be elided due to being a type-only
+   * import. Such imports will not be emitted at all to avoid side effects.
+   *
+   * Import elision only happens with the TypeScript or Flow transforms enabled.
+   *
+   * TODO: This function has some awkward overlap with
+   *  CJSImportProcessor.pruneTypeOnlyImports , and the two should be unified.
+   *  That function handles TypeScript implicit import name elision, and removes
+   *  an import if all typical imported names (without `type`) are removed due
+   *  to being type-only imports. This function handles Flow import removal and
+   *  properly distinguishes `import 'foo'` from `import {} from 'foo'` for TS
+   *  purposes.
    *
    * The position should end at the import string.
    */
-   removeImportAndDetectIfType() {
+   removeImportAndDetectIfShouldElide() {
     this.tokens.removeInitialToken();
     if (
       this.tokens.matchesContextual(ContextualKeyword$1._type) &&
@@ -11614,24 +12190,41 @@ class CJSImportTransformer extends Transformer$2 {
       return false;
     }
 
-    let foundNonType = false;
+    let foundNonTypeImport = false;
+    let foundAnyNamedImport = false;
     while (!this.tokens.matches1(TokenType$1.string)) {
       // Check if any named imports are of the form "foo" or "foo as bar", with
       // no leading "type".
-      if ((!foundNonType && this.tokens.matches1(TokenType$1.braceL)) || this.tokens.matches1(TokenType$1.comma)) {
+      if (
+        (!foundNonTypeImport && this.tokens.matches1(TokenType$1.braceL)) ||
+        this.tokens.matches1(TokenType$1.comma)
+      ) {
         this.tokens.removeToken();
+        if (!this.tokens.matches1(TokenType$1.braceR)) {
+          foundAnyNamedImport = true;
+        }
         if (
           this.tokens.matches2(TokenType$1.name, TokenType$1.comma) ||
           this.tokens.matches2(TokenType$1.name, TokenType$1.braceR) ||
           this.tokens.matches4(TokenType$1.name, TokenType$1.name, TokenType$1.name, TokenType$1.comma) ||
           this.tokens.matches4(TokenType$1.name, TokenType$1.name, TokenType$1.name, TokenType$1.braceR)
         ) {
-          foundNonType = true;
+          foundNonTypeImport = true;
         }
       }
       this.tokens.removeToken();
     }
-    return !foundNonType;
+    if (this.keepUnusedImports) {
+      return false;
+    }
+    if (this.isTypeScriptTransformEnabled) {
+      return !foundNonTypeImport;
+    } else if (this.isFlowTransformEnabled) {
+      // In Flow, unlike TS, `import {} from 'foo';` preserves the import.
+      return foundAnyNamedImport && !foundNonTypeImport;
+    } else {
+      return false;
+    }
   }
 
    removeRemainingImport() {
@@ -11708,17 +12301,57 @@ class CJSImportTransformer extends Transformer$2 {
       this.tokens.matches2(TokenType$1._export, TokenType$1._enum) ||
       this.tokens.matches3(TokenType$1._export, TokenType$1._const, TokenType$1._enum)
     ) {
+      this.hadNamedExport = true;
       // Let the TypeScript transform handle it.
       return false;
     }
     if (this.tokens.matches2(TokenType$1._export, TokenType$1._default)) {
-      this.hadDefaultExport = true;
       if (this.tokens.matches3(TokenType$1._export, TokenType$1._default, TokenType$1._enum)) {
+        this.hadDefaultExport = true;
         // Flow export default enums need some special handling, so handle them
         // in that tranform rather than this one.
         return false;
       }
       this.processExportDefault();
+      return true;
+    } else if (this.tokens.matches2(TokenType$1._export, TokenType$1.braceL)) {
+      this.processExportBindings();
+      return true;
+    } else if (
+      this.tokens.matches2(TokenType$1._export, TokenType$1.name) &&
+      this.tokens.matchesContextualAtIndex(this.tokens.currentIndex() + 1, ContextualKeyword$1._type)
+    ) {
+      // export type {a};
+      // export type {a as b};
+      // export type {a} from './b';
+      // export type * from './b';
+      // export type * as ns from './b';
+      this.tokens.removeInitialToken();
+      this.tokens.removeToken();
+      if (this.tokens.matches1(TokenType$1.braceL)) {
+        while (!this.tokens.matches1(TokenType$1.braceR)) {
+          this.tokens.removeToken();
+        }
+        this.tokens.removeToken();
+      } else {
+        // *
+        this.tokens.removeToken();
+        if (this.tokens.matches1(TokenType$1._as)) {
+          // as
+          this.tokens.removeToken();
+          // ns
+          this.tokens.removeToken();
+        }
+      }
+      // Remove type re-export `... } from './T'`
+      if (
+        this.tokens.matchesContextual(ContextualKeyword$1._from) &&
+        this.tokens.matches1AtIndex(this.tokens.currentIndex() + 1, TokenType$1.string)
+      ) {
+        this.tokens.removeToken();
+        this.tokens.removeToken();
+        removeMaybeImportAttributes(this.tokens);
+      }
       return true;
     }
     this.hadNamedExport = true;
@@ -11738,36 +12371,13 @@ class CJSImportTransformer extends Transformer$2 {
       return true;
     } else if (
       this.tokens.matches2(TokenType$1._export, TokenType$1._class) ||
-      this.tokens.matches3(TokenType$1._export, TokenType$1._abstract, TokenType$1._class)
+      this.tokens.matches3(TokenType$1._export, TokenType$1._abstract, TokenType$1._class) ||
+      this.tokens.matches2(TokenType$1._export, TokenType$1.at)
     ) {
       this.processExportClass();
       return true;
-    } else if (this.tokens.matches2(TokenType$1._export, TokenType$1.braceL)) {
-      this.processExportBindings();
-      return true;
     } else if (this.tokens.matches2(TokenType$1._export, TokenType$1.star)) {
       this.processExportStar();
-      return true;
-    } else if (
-      this.tokens.matches3(TokenType$1._export, TokenType$1.name, TokenType$1.braceL) &&
-      this.tokens.matchesContextualAtIndex(this.tokens.currentIndex() + 1, ContextualKeyword$1._type)
-    ) {
-      // TS `export type {` case: just remove the export entirely.
-      this.tokens.removeInitialToken();
-      while (!this.tokens.matches1(TokenType$1.braceR)) {
-        this.tokens.removeToken();
-      }
-      this.tokens.removeToken();
-
-      // Remove type re-export `... } from './T'`
-      if (
-        this.tokens.matchesContextual(ContextualKeyword$1._from) &&
-        this.tokens.matches1AtIndex(this.tokens.currentIndex() + 1, TokenType$1.string)
-      ) {
-        this.tokens.removeToken();
-        this.tokens.removeToken();
-        removeMaybeImportAssertion(this.tokens);
-      }
       return true;
     } else {
       throw new Error("Unrecognized export syntax.");
@@ -11900,6 +12510,7 @@ class CJSImportTransformer extends Transformer$2 {
   }
 
    processExportDefault() {
+    let exportedRuntimeValue = true;
     if (
       this.tokens.matches4(TokenType$1._export, TokenType$1._default, TokenType$1._function, TokenType$1.name) ||
       // export default async function
@@ -11917,24 +12528,30 @@ class CJSImportTransformer extends Transformer$2 {
       this.tokens.appendCode(` exports.default = ${name};`);
     } else if (
       this.tokens.matches4(TokenType$1._export, TokenType$1._default, TokenType$1._class, TokenType$1.name) ||
-      this.tokens.matches5(TokenType$1._export, TokenType$1._default, TokenType$1._abstract, TokenType$1._class, TokenType$1.name)
+      this.tokens.matches5(TokenType$1._export, TokenType$1._default, TokenType$1._abstract, TokenType$1._class, TokenType$1.name) ||
+      this.tokens.matches3(TokenType$1._export, TokenType$1._default, TokenType$1.at)
     ) {
       this.tokens.removeInitialToken();
       this.tokens.removeToken();
+      this.copyDecorators();
       if (this.tokens.matches1(TokenType$1._abstract)) {
         this.tokens.removeToken();
       }
       const name = this.rootTransformer.processNamedClass();
       this.tokens.appendCode(` exports.default = ${name};`);
-    } else if (this.tokens.matches3(TokenType$1._export, TokenType$1._default, TokenType$1.at)) {
-      throw new Error("Export default statements with decorators are not yet supported.");
       // After this point, this is a plain "export default E" statement.
     } else if (
-      shouldElideDefaultExport(this.isTypeScriptTransformEnabled, this.tokens, this.declarationInfo)
+      shouldElideDefaultExport(
+        this.isTypeScriptTransformEnabled,
+        this.keepUnusedImports,
+        this.tokens,
+        this.declarationInfo,
+      )
     ) {
       // If the exported value is just an identifier and should be elided by TypeScript
       // rules, then remove it entirely. It will always have the form `export default e`,
       // where `e` is an identifier.
+      exportedRuntimeValue = false;
       this.tokens.removeInitialToken();
       this.tokens.removeToken();
       this.tokens.removeToken();
@@ -11951,6 +12568,31 @@ class CJSImportTransformer extends Transformer$2 {
       this.tokens.replaceToken("exports.");
       this.tokens.copyToken();
       this.tokens.appendCode(" =");
+    }
+    if (exportedRuntimeValue) {
+      this.hadDefaultExport = true;
+    }
+  }
+
+   copyDecorators() {
+    while (this.tokens.matches1(TokenType$1.at)) {
+      this.tokens.copyToken();
+      if (this.tokens.matches1(TokenType$1.parenL)) {
+        this.tokens.copyExpectedToken(TokenType$1.parenL);
+        this.rootTransformer.processBalancedCode();
+        this.tokens.copyExpectedToken(TokenType$1.parenR);
+      } else {
+        this.tokens.copyExpectedToken(TokenType$1.name);
+        while (this.tokens.matches1(TokenType$1.dot)) {
+          this.tokens.copyExpectedToken(TokenType$1.dot);
+          this.tokens.copyExpectedToken(TokenType$1.name);
+        }
+        if (this.tokens.matches1(TokenType$1.parenL)) {
+          this.tokens.copyExpectedToken(TokenType$1.parenL);
+          this.rootTransformer.processBalancedCode();
+          this.tokens.copyExpectedToken(TokenType$1.parenR);
+        }
+      }
     }
   }
 
@@ -12153,6 +12795,7 @@ class CJSImportTransformer extends Transformer$2 {
    */
    processExportClass() {
     this.tokens.removeInitialToken();
+    this.copyDecorators();
     if (this.tokens.matches1(TokenType$1._abstract)) {
       this.tokens.removeToken();
     }
@@ -12179,6 +12822,8 @@ class CJSImportTransformer extends Transformer$2 {
     this.tokens.removeInitialToken();
     this.tokens.removeToken();
 
+    const isReExport = isExportFrom(this.tokens);
+
     const exportStatements = [];
     while (true) {
       if (this.tokens.matches1(TokenType$1.braceR)) {
@@ -12187,12 +12832,22 @@ class CJSImportTransformer extends Transformer$2 {
       }
 
       const specifierInfo = getImportExportSpecifierInfo$2(this.tokens);
+
       while (this.tokens.currentIndex() < specifierInfo.endIndex) {
         this.tokens.removeToken();
       }
-      if (!specifierInfo.isType && !this.shouldElideExportedIdentifier(specifierInfo.leftName)) {
-        const localName = specifierInfo.leftName;
+
+      const shouldRemoveExport =
+        specifierInfo.isType ||
+        (!isReExport && this.shouldElideExportedIdentifier(specifierInfo.leftName));
+      if (!shouldRemoveExport) {
         const exportedName = specifierInfo.rightName;
+        if (exportedName === "default") {
+          this.hadDefaultExport = true;
+        } else {
+          this.hadNamedExport = true;
+        }
+        const localName = specifierInfo.leftName;
         const newLocalName = this.importProcessor.getIdentifierReplacement(localName);
         exportStatements.push(`exports.${exportedName} = ${newLocalName || localName};`);
       }
@@ -12218,7 +12873,7 @@ class CJSImportTransformer extends Transformer$2 {
       this.tokens.removeToken();
       const path = this.tokens.stringValue();
       this.tokens.replaceTokenTrimmingLeftWhitespace(this.importProcessor.claimImportCode(path));
-      removeMaybeImportAssertion(this.tokens);
+      removeMaybeImportAttributes(this.tokens);
     } else {
       // This is a normal named export, so use that.
       this.tokens.appendCode(exportStatements.join(" "));
@@ -12236,14 +12891,18 @@ class CJSImportTransformer extends Transformer$2 {
     }
     const path = this.tokens.stringValue();
     this.tokens.replaceTokenTrimmingLeftWhitespace(this.importProcessor.claimImportCode(path));
-    removeMaybeImportAssertion(this.tokens);
+    removeMaybeImportAttributes(this.tokens);
     if (this.tokens.matches1(TokenType$1.semi)) {
       this.tokens.removeToken();
     }
   }
 
    shouldElideExportedIdentifier(name) {
-    return this.isTypeScriptTransformEnabled && !this.declarationInfo.valueDeclarations.has(name);
+    return (
+      this.isTypeScriptTransformEnabled &&
+      !this.keepUnusedImports &&
+      !this.declarationInfo.valueDeclarations.has(name)
+    );
   }
 }
 
@@ -12262,14 +12921,18 @@ class ESMImportTransformer extends Transformer$2 {
      helperManager,
      reactHotLoaderTransformer,
      isTypeScriptTransformEnabled,
+     isFlowTransformEnabled,
+     keepUnusedImports,
     options,
   ) {
-    super();this.tokens = tokens;this.nameManager = nameManager;this.helperManager = helperManager;this.reactHotLoaderTransformer = reactHotLoaderTransformer;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;    this.nonTypeIdentifiers = isTypeScriptTransformEnabled
-      ? getNonTypeIdentifiers$2(tokens, options)
-      : new Set();
-    this.declarationInfo = isTypeScriptTransformEnabled
-      ? getDeclarationInfo(tokens)
-      : EMPTY_DECLARATION_INFO;
+    super();this.tokens = tokens;this.nameManager = nameManager;this.helperManager = helperManager;this.reactHotLoaderTransformer = reactHotLoaderTransformer;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;this.isFlowTransformEnabled = isFlowTransformEnabled;this.keepUnusedImports = keepUnusedImports;    this.nonTypeIdentifiers =
+      isTypeScriptTransformEnabled && !keepUnusedImports
+        ? getNonTypeIdentifiers$2(tokens, options)
+        : new Set();
+    this.declarationInfo =
+      isTypeScriptTransformEnabled && !keepUnusedImports
+        ? getDeclarationInfo(tokens)
+        : EMPTY_DECLARATION_INFO;
     this.injectCreateRequireForImportRequire = Boolean(options.injectCreateRequireForImportRequire);
   }
 
@@ -12316,16 +12979,31 @@ class ESMImportTransformer extends Transformer$2 {
       return this.processNamedExports();
     }
     if (
-      this.tokens.matches3(TokenType$1._export, TokenType$1.name, TokenType$1.braceL) &&
+      this.tokens.matches2(TokenType$1._export, TokenType$1.name) &&
       this.tokens.matchesContextualAtIndex(this.tokens.currentIndex() + 1, ContextualKeyword$1._type)
     ) {
-      // TS `export type {` case: just remove the export entirely.
+      // export type {a};
+      // export type {a as b};
+      // export type {a} from './b';
+      // export type * from './b';
+      // export type * as ns from './b';
       this.tokens.removeInitialToken();
-      while (!this.tokens.matches1(TokenType$1.braceR)) {
-        this.tokens.removeToken();
-      }
       this.tokens.removeToken();
-
+      if (this.tokens.matches1(TokenType$1.braceL)) {
+        while (!this.tokens.matches1(TokenType$1.braceR)) {
+          this.tokens.removeToken();
+        }
+        this.tokens.removeToken();
+      } else {
+        // *
+        this.tokens.removeToken();
+        if (this.tokens.matches1(TokenType$1._as)) {
+          // as
+          this.tokens.removeToken();
+          // ns
+          this.tokens.removeToken();
+        }
+      }
       // Remove type re-export `... } from './T'`
       if (
         this.tokens.matchesContextual(ContextualKeyword$1._from) &&
@@ -12333,7 +13011,7 @@ class ESMImportTransformer extends Transformer$2 {
       ) {
         this.tokens.removeToken();
         this.tokens.removeToken();
-        removeMaybeImportAssertion(this.tokens);
+        removeMaybeImportAttributes(this.tokens);
       }
       return true;
     }
@@ -12342,7 +13020,7 @@ class ESMImportTransformer extends Transformer$2 {
 
    processImportEquals() {
     const importName = this.tokens.identifierNameAtIndex(this.tokens.currentIndex() + 1);
-    if (this.isTypeName(importName)) {
+    if (this.shouldAutomaticallyElideImportedName(importName)) {
       // If this name is only used as a type, elide the whole import.
       elideImportEquals(this.tokens);
     } else if (this.injectCreateRequireForImportRequire) {
@@ -12377,7 +13055,7 @@ class ESMImportTransformer extends Transformer$2 {
         this.tokens.removeToken();
       }
       this.tokens.removeToken();
-      removeMaybeImportAssertion(this.tokens);
+      removeMaybeImportAttributes(this.tokens);
       if (this.tokens.matches1(TokenType$1.semi)) {
         this.tokens.removeToken();
       }
@@ -12408,11 +13086,21 @@ class ESMImportTransformer extends Transformer$2 {
       return false;
     }
 
+    // Skip the "module" token in import reflection.
+    if (
+      this.tokens.matchesContextual(ContextualKeyword$1._module) &&
+      this.tokens.matchesContextualAtIndex(this.tokens.currentIndex() + 2, ContextualKeyword$1._from)
+    ) {
+      this.tokens.copyToken();
+    }
+
     let foundNonTypeImport = false;
+    let foundAnyNamedImport = false;
     let needsComma = false;
 
+    // Handle default import.
     if (this.tokens.matches1(TokenType$1.name)) {
-      if (this.isTypeName(this.tokens.identifierName())) {
+      if (this.shouldAutomaticallyElideImportedName(this.tokens.identifierName())) {
         this.tokens.removeToken();
         if (this.tokens.matches1(TokenType$1.comma)) {
           this.tokens.removeToken();
@@ -12436,7 +13124,7 @@ class ESMImportTransformer extends Transformer$2 {
     }
 
     if (this.tokens.matches1(TokenType$1.star)) {
-      if (this.isTypeName(this.tokens.identifierNameAtRelativeIndex(2))) {
+      if (this.shouldAutomaticallyElideImportedName(this.tokens.identifierNameAtRelativeIndex(2))) {
         this.tokens.removeToken();
         this.tokens.removeToken();
         this.tokens.removeToken();
@@ -12455,8 +13143,12 @@ class ESMImportTransformer extends Transformer$2 {
       }
       this.tokens.copyToken();
       while (!this.tokens.matches1(TokenType$1.braceR)) {
+        foundAnyNamedImport = true;
         const specifierInfo = getImportExportSpecifierInfo$2(this.tokens);
-        if (specifierInfo.isType || this.isTypeName(specifierInfo.rightName)) {
+        if (
+          specifierInfo.isType ||
+          this.shouldAutomaticallyElideImportedName(specifierInfo.rightName)
+        ) {
           while (this.tokens.currentIndex() < specifierInfo.endIndex) {
             this.tokens.removeToken();
           }
@@ -12476,16 +13168,35 @@ class ESMImportTransformer extends Transformer$2 {
       this.tokens.copyExpectedToken(TokenType$1.braceR);
     }
 
-    return !foundNonTypeImport;
+    if (this.keepUnusedImports) {
+      return false;
+    }
+    if (this.isTypeScriptTransformEnabled) {
+      return !foundNonTypeImport;
+    } else if (this.isFlowTransformEnabled) {
+      // In Flow, unlike TS, `import {} from 'foo';` preserves the import.
+      return foundAnyNamedImport && !foundNonTypeImport;
+    } else {
+      return false;
+    }
   }
 
-   isTypeName(name) {
-    return this.isTypeScriptTransformEnabled && !this.nonTypeIdentifiers.has(name);
+   shouldAutomaticallyElideImportedName(name) {
+    return (
+      this.isTypeScriptTransformEnabled &&
+      !this.keepUnusedImports &&
+      !this.nonTypeIdentifiers.has(name)
+    );
   }
 
    processExportDefault() {
     if (
-      shouldElideDefaultExport(this.isTypeScriptTransformEnabled, this.tokens, this.declarationInfo)
+      shouldElideDefaultExport(
+        this.isTypeScriptTransformEnabled,
+        this.keepUnusedImports,
+        this.tokens,
+        this.declarationInfo,
+      )
     ) {
       // If the exported value is just an identifier and should be elided by TypeScript
       // rules, then remove it entirely. It will always have the form `export default e`,
@@ -12521,8 +13232,14 @@ class ESMImportTransformer extends Transformer$2 {
   }
 
   /**
-   * In TypeScript, we need to remove named exports that were never declared or only declared as a
-   * type.
+   * Handle a statement with one of these forms:
+   * export {a, type b};
+   * export {c, type d} from 'foo';
+   *
+   * In both cases, any explicit type exports should be removed. In the first
+   * case, we also need to handle implicit export elision for names declared as
+   * types. In the second case, we must NOT do implicit named export elision,
+   * but we must remove the runtime import if all exports are type exports.
    */
    processNamedExports() {
     if (!this.isTypeScriptTransformEnabled) {
@@ -12531,9 +13248,14 @@ class ESMImportTransformer extends Transformer$2 {
     this.tokens.copyExpectedToken(TokenType$1._export);
     this.tokens.copyExpectedToken(TokenType$1.braceL);
 
+    const isReExport = isExportFrom(this.tokens);
+    let foundNonTypeExport = false;
     while (!this.tokens.matches1(TokenType$1.braceR)) {
       const specifierInfo = getImportExportSpecifierInfo$2(this.tokens);
-      if (specifierInfo.isType || this.shouldElideExportedName(specifierInfo.leftName)) {
+      if (
+        specifierInfo.isType ||
+        (!isReExport && this.shouldElideExportedName(specifierInfo.leftName))
+      ) {
         // Type export, so remove all tokens, including any comma.
         while (this.tokens.currentIndex() < specifierInfo.endIndex) {
           this.tokens.removeToken();
@@ -12543,6 +13265,7 @@ class ESMImportTransformer extends Transformer$2 {
         }
       } else {
         // Non-type export, so copy all tokens, including any comma.
+        foundNonTypeExport = true;
         while (this.tokens.currentIndex() < specifierInfo.endIndex) {
           this.tokens.copyToken();
         }
@@ -12552,6 +13275,15 @@ class ESMImportTransformer extends Transformer$2 {
       }
     }
     this.tokens.copyExpectedToken(TokenType$1.braceR);
+
+    if (!this.keepUnusedImports && isReExport && !foundNonTypeExport) {
+      // This is a type-only re-export, so skip evaluating the other module. Technically this
+      // leaves the statement as `export {}`, but that's ok since that's a no-op.
+      this.tokens.removeToken();
+      this.tokens.removeToken();
+      removeMaybeImportAttributes(this.tokens);
+    }
+
     return true;
   }
 
@@ -12563,6 +13295,7 @@ class ESMImportTransformer extends Transformer$2 {
    shouldElideExportedName(name) {
     return (
       this.isTypeScriptTransformEnabled &&
+      !this.keepUnusedImports &&
       this.declarationInfo.typeDeclarations.has(name) &&
       !this.declarationInfo.valueDeclarations.has(name)
     );
@@ -13633,9 +14366,11 @@ class RootTransformer {
     }
 
     if (transforms.includes("jsx")) {
-      this.transformers.push(
-        new JSXTransformer$2(this, tokenProcessor, importProcessor, this.nameManager, options),
-      );
+      if (options.jsxRuntime !== "preserve") {
+        this.transformers.push(
+          new JSXTransformer$2(this, tokenProcessor, importProcessor, this.nameManager, options),
+        );
+      }
       this.transformers.push(
         new ReactDisplayNameTransformer(this, tokenProcessor, importProcessor, options),
       );
@@ -13663,10 +14398,14 @@ class RootTransformer {
           tokenProcessor,
           importProcessor,
           this.nameManager,
+          this.helperManager,
           reactHotLoaderTransformer,
           enableLegacyBabel5ModuleInterop,
+          Boolean(options.enableLegacyTypeScriptModuleInterop),
           transforms.includes("typescript"),
+          transforms.includes("flow"),
           Boolean(options.preserveDynamicImport),
+          Boolean(options.keepUnusedImports),
         ),
       );
     } else {
@@ -13677,6 +14416,8 @@ class RootTransformer {
           this.helperManager,
           reactHotLoaderTransformer,
           transforms.includes("typescript"),
+          transforms.includes("flow"),
+          Boolean(options.keepUnusedImports),
           options,
         ),
       );
@@ -13717,16 +14458,25 @@ class RootTransformer {
     for (const transformer of this.transformers) {
       suffix += transformer.getSuffixCode();
     }
-    let code = this.tokens.finish();
+    const result = this.tokens.finish();
+    let {code} = result;
     if (code.startsWith("#!")) {
       let newlineIndex = code.indexOf("\n");
       if (newlineIndex === -1) {
         newlineIndex = code.length;
         code += "\n";
       }
-      return code.slice(0, newlineIndex + 1) + prefix + code.slice(newlineIndex + 1) + suffix;
+      return {
+        code: code.slice(0, newlineIndex + 1) + prefix + code.slice(newlineIndex + 1) + suffix,
+        // The hashbang line has no tokens, so shifting the tokens to account
+        // for prefix can happen normally.
+        mappings: this.shiftMappings(result.mappings, prefix.length),
+      };
     } else {
-      return prefix + this.tokens.finish() + suffix;
+      return {
+        code: prefix + code + suffix,
+        mappings: this.shiftMappings(result.mappings, prefix.length),
+      };
     }
   }
 
@@ -14004,6 +14754,19 @@ class RootTransformer {
     }
     return false;
   }
+
+  shiftMappings(
+    mappings,
+    prefixLength,
+  ) {
+    for (let i = 0; i < mappings.length; i++) {
+      const mapping = mappings[i];
+      if (mapping !== undefined) {
+        mappings[i] = mapping + prefixLength;
+      }
+    }
+    return mappings;
+  }
 }
 
 /**
@@ -14097,14 +14860,21 @@ function transform(code, options) {
       Boolean(options.enableLegacyBabel5ModuleInterop),
       options,
     );
-    let result = {code: transformer.transform()};
+    const transformerResult = transformer.transform();
+    let result = {code: transformerResult.code};
     if (options.sourceMapOptions) {
       if (!options.filePath) {
         throw new Error("filePath must be specified when generating a source map.");
       }
       result = {
         ...result,
-        sourceMap: computeSourceMap$2(result.code, options.filePath, options.sourceMapOptions),
+        sourceMap: computeSourceMap$2(
+          transformerResult,
+          options.filePath,
+          options.sourceMapOptions,
+          code,
+          sucraseContext.tokenProcessor.tokens,
+        ),
       };
     }
     return result;
@@ -14154,16 +14924,18 @@ function getSucraseContext(code, options) {
       enableLegacyTypeScriptModuleInterop,
       options,
       options.transforms.includes("typescript"),
+      Boolean(options.keepUnusedImports),
       helperManager,
     );
     importProcessor.preprocessTokens();
     // We need to mark shadowed globals after processing imports so we know that the globals are,
     // but before type-only import pruning, since that relies on shadowing information.
     identifyShadowedGlobals(tokenProcessor, scopes, importProcessor.getGlobalNames());
-    if (options.transforms.includes("typescript")) {
+    if (options.transforms.includes("typescript") && !options.keepUnusedImports) {
       importProcessor.pruneTypeOnlyImports();
     }
-  } else if (options.transforms.includes("typescript")) {
+  } else if (options.transforms.includes("typescript") && !options.keepUnusedImports) {
+    // Shadowed global detection is needed for TS implicit elision of imported names.
     identifyShadowedGlobals(tokenProcessor, scopes, getTSImportedNames(tokenProcessor));
   }
   return {tokenProcessor, scopes, nameManager, importProcessor, helperManager};
@@ -14585,6 +15357,7 @@ Object.defineProperty(keywords, "__esModule", {value: true});var ContextualKeywo
   const _symbol = _static + 1; ContextualKeyword[ContextualKeyword["_symbol"] = _symbol] = "_symbol";
   const _type = _symbol + 1; ContextualKeyword[ContextualKeyword["_type"] = _type] = "_type";
   const _unique = _type + 1; ContextualKeyword[ContextualKeyword["_unique"] = _unique] = "_unique";
+  const _using = _unique + 1; ContextualKeyword[ContextualKeyword["_using"] = _using] = "_using";
 })(ContextualKeyword || (keywords.ContextualKeyword = ContextualKeyword = {}));
 
 Object.defineProperty(state, "__esModule", {value: true});
@@ -15070,7 +15843,7 @@ var _types$6 = types;
 // prettier-ignore
  const READ_WORD_TREE = new Int32Array([
   // ""
-  -1, 27, 783, 918, 1755, 2376, 2862, 3483, -1, 3699, -1, 4617, 4752, 4833, 5130, 5508, 5940, -1, 6480, 6939, 7749, 8181, 8343, 8505, -1, 8721, -1,
+  -1, 27, 783, 918, 1755, 2376, 2862, 3483, -1, 3699, -1, 4617, 4752, 4833, 5130, 5508, 5940, -1, 6480, 6939, 7749, 8181, 8451, 8613, -1, 8829, -1,
   // "a"
   -1, -1, 54, 243, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 432, -1, -1, -1, 675, -1, -1, -1,
   // "ab"
@@ -15676,7 +16449,7 @@ var _types$6 = types;
   // "typeof"
   (_types$6.TokenType._typeof << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "u"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8208, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8208, -1, -1, -1, -1, 8343, -1, -1, -1, -1, -1, -1, -1,
   // "un"
   -1, -1, -1, -1, -1, -1, -1, -1, -1, 8235, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "uni"
@@ -15687,42 +16460,50 @@ var _types$6 = types;
   -1, -1, -1, -1, -1, 8316, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "unique"
   _keywords$2.ContextualKeyword._unique << 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "us"
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8370, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "usi"
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8397, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "usin"
+  -1, -1, -1, -1, -1, -1, -1, 8424, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  // "using"
+  _keywords$2.ContextualKeyword._using << 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "v"
-  -1, 8370, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8424, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, 8478, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8532, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "va"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8397, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8505, -1, -1, -1, -1, -1, -1, -1, -1,
   // "var"
   (_types$6.TokenType._var << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "vo"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8451, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8559, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "voi"
-  -1, -1, -1, -1, 8478, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, 8586, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "void"
   (_types$6.TokenType._void << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "w"
-  -1, -1, -1, -1, -1, -1, -1, -1, 8532, 8640, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, 8640, 8748, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "wh"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8559, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8667, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "whi"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8586, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8694, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "whil"
-  -1, -1, -1, -1, -1, 8613, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, 8721, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "while"
   (_types$6.TokenType._while << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "wi"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8667, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8775, -1, -1, -1, -1, -1, -1,
   // "wit"
-  -1, -1, -1, -1, -1, -1, -1, -1, 8694, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, 8802, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "with"
   (_types$6.TokenType._with << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "y"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8748, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, 8856, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yi"
-  -1, -1, -1, -1, -1, 8775, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, 8883, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yie"
-  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8802, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 8910, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yiel"
-  -1, -1, -1, -1, 8829, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, 8937, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   // "yield"
   (_types$6.TokenType._yield << 1) + 1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 ]); readWordTree.READ_WORD_TREE = READ_WORD_TREE;
@@ -16306,11 +17087,25 @@ function readToken_lt() {
       finishOp(_types$4.TokenType.assign, 3);
       return;
     }
-    // This still might be two instances of <, e.g. the TS type argument
-    // expression f<<T>() => void>() , but parse as left shift for now and we'll
-    // retokenize if necessary. We can't use isType for this case because we
-    // don't know yet if we're in a type.
-    finishOp(_types$4.TokenType.bitShiftL, 2);
+    // We see <<, but need to be really careful about whether to treat it as a
+    // true left-shift or as two < tokens.
+    if (_base.state.isType) {
+      // Within a type, << might come up in a snippet like `Array<<T>() => void>`,
+      // so treat it as two < tokens. Importantly, this should only override <<
+      // rather than other tokens like <= . If we treated <= as < in a type
+      // context, then the snippet `a as T <= 1` would incorrectly start parsing
+      // a type argument on T. We don't need to worry about `a as T << 1`
+      // because TypeScript disallows that syntax.
+      finishOp(_types$4.TokenType.lessThan, 1);
+    } else {
+      // Outside a type, this might be a true left-shift operator, or it might
+      // still be two open-type-arg tokens, such as in `f<<T>() => void>()`. We
+      // look at the token while considering the `f`, so we don't yet know that
+      // we're in a type context. In this case, we initially tokenize as a
+      // left-shift and correct after-the-fact as necessary in
+      // tsParseTypeArgumentsWithPossibleBitshift .
+      finishOp(_types$4.TokenType.bitShiftL, 2);
+    }
     return;
   }
 
@@ -16351,8 +17146,18 @@ function readToken_gt() {
 }
 
 /**
- * Called after `as` expressions in TS; we're switching from a type to a
- * non-type context, so a > token may actually be >= .
+ * Reinterpret a possible > token when transitioning from a type to a non-type
+ * context.
+ *
+ * This comes up in two situations where >= needs to be treated as one token:
+ * - After an `as` expression, like in the code `a as T >= 1`.
+ * - In a type argument in an expression context, e.g. `f(a < b, c >= d)`, we
+ *   need to see the token as >= so that we get an error and backtrack to
+ *   normal expression parsing.
+ *
+ * Other situations require >= to be seen as two tokens, e.g.
+ * `const x: Array<T>=[];`, so it's important to treat > as its own token in
+ * typical type parsing situations.
  */
  function rescan_gt() {
   if (_base.state.type === _types$4.TokenType.greaterThan) {
@@ -17734,7 +18539,7 @@ var _Transformer = Transformer$1; var _Transformer2 = _interopRequireDefault$2(_
  * Spec for identifiers: https://tc39.github.io/ecma262/#prod-IdentifierStart.
  *
  * Really only treat anything starting with a-z as tag names.  `_`, `$`, `é`
- * should be treated as copmonent names
+ * should be treated as component names
  */
  function startsWithLowerCase(s) {
   const firstChar = s.charCodeAt(0);
@@ -17992,8 +18797,9 @@ var _getNonTypeIdentifiers = getNonTypeIdentifiers$1;
      enableLegacyTypeScriptModuleInterop,
      options,
      isTypeScriptTransformEnabled,
+     keepUnusedImports,
      helperManager,
-  ) {this.nameManager = nameManager;this.tokens = tokens;this.enableLegacyTypeScriptModuleInterop = enableLegacyTypeScriptModuleInterop;this.options = options;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;this.helperManager = helperManager;CJSImportProcessor.prototype.__init.call(this);CJSImportProcessor.prototype.__init2.call(this);CJSImportProcessor.prototype.__init3.call(this);CJSImportProcessor.prototype.__init4.call(this);CJSImportProcessor.prototype.__init5.call(this);}
+  ) {this.nameManager = nameManager;this.tokens = tokens;this.enableLegacyTypeScriptModuleInterop = enableLegacyTypeScriptModuleInterop;this.options = options;this.isTypeScriptTransformEnabled = isTypeScriptTransformEnabled;this.keepUnusedImports = keepUnusedImports;this.helperManager = helperManager;CJSImportProcessor.prototype.__init.call(this);CJSImportProcessor.prototype.__init2.call(this);CJSImportProcessor.prototype.__init3.call(this);CJSImportProcessor.prototype.__init4.call(this);CJSImportProcessor.prototype.__init5.call(this);}
 
   preprocessTokens() {
     for (let i = 0; i < this.tokens.tokens.length; i++) {
@@ -18014,8 +18820,8 @@ var _getNonTypeIdentifiers = getNonTypeIdentifiers$1;
   }
 
   /**
-   * In TypeScript, import statements that only import types should be removed. This does not count
-   * bare imports.
+   * In TypeScript, import statements that only import types should be removed.
+   * This includes `import {} from 'foo';`, but not `import 'foo';`.
    */
   pruneTypeOnlyImports() {
     this.nonTypeIdentifiers = _getNonTypeIdentifiers.getNonTypeIdentifiers.call(void 0, this.tokens, this.options);
@@ -18033,14 +18839,18 @@ var _getNonTypeIdentifiers = getNonTypeIdentifiers$1;
         ...importInfo.wildcardNames,
         ...importInfo.namedImports.map(({localName}) => localName),
       ];
-      if (names.every((name) => this.isTypeName(name))) {
+      if (names.every((name) => this.shouldAutomaticallyElideImportedName(name))) {
         this.importsToReplace.set(path, "");
       }
     }
   }
 
-  isTypeName(name) {
-    return this.isTypeScriptTransformEnabled && !this.nonTypeIdentifiers.has(name);
+  shouldAutomaticallyElideImportedName(name) {
+    return (
+      this.isTypeScriptTransformEnabled &&
+      !this.keepUnusedImports &&
+      !this.nonTypeIdentifiers.has(name)
+    );
   }
 
    generateImportReplacements() {
@@ -18401,7 +19211,1364 @@ var _getNonTypeIdentifiers = getNonTypeIdentifiers$1;
 
 var computeSourceMap$1 = {};
 
-Object.defineProperty(computeSourceMap$1, "__esModule", {value: true});
+var genMapping_umd = {exports: {}};
+
+var setArray_umd = {exports: {}};
+
+(function (module, exports) {
+(function (global, factory) {
+    factory(exports) ;
+})(commonjsGlobal, (function (exports) {
+    /**
+     * SetArray acts like a `Set` (allowing only one occurrence of a string `key`), but provides the
+     * index of the `key` in the backing array.
+     *
+     * This is designed to allow synchronizing a second array with the contents of the backing array,
+     * like how in a sourcemap `sourcesContent[i]` is the source content associated with `source[i]`,
+     * and there are never duplicates.
+     */
+    class SetArray {
+        constructor() {
+            this._indexes = { __proto__: null };
+            this.array = [];
+        }
+    }
+    /**
+     * Typescript doesn't allow friend access to private fields, so this just casts the set into a type
+     * with public access modifiers.
+     */
+    function cast(set) {
+        return set;
+    }
+    /**
+     * Gets the index associated with `key` in the backing array, if it is already present.
+     */
+    function get(setarr, key) {
+        return cast(setarr)._indexes[key];
+    }
+    /**
+     * Puts `key` into the backing array, if it is not already present. Returns
+     * the index of the `key` in the backing array.
+     */
+    function put(setarr, key) {
+        // The key may or may not be present. If it is present, it's a number.
+        const index = get(setarr, key);
+        if (index !== undefined)
+            return index;
+        const { array, _indexes: indexes } = cast(setarr);
+        const length = array.push(key);
+        return (indexes[key] = length - 1);
+    }
+    /**
+     * Pops the last added item out of the SetArray.
+     */
+    function pop(setarr) {
+        const { array, _indexes: indexes } = cast(setarr);
+        if (array.length === 0)
+            return;
+        const last = array.pop();
+        indexes[last] = undefined;
+    }
+    /**
+     * Removes the key, if it exists in the set.
+     */
+    function remove(setarr, key) {
+        const index = get(setarr, key);
+        if (index === undefined)
+            return;
+        const { array, _indexes: indexes } = cast(setarr);
+        for (let i = index + 1; i < array.length; i++) {
+            const k = array[i];
+            array[i - 1] = k;
+            indexes[k]--;
+        }
+        indexes[key] = undefined;
+        array.pop();
+    }
+
+    exports.SetArray = SetArray;
+    exports.get = get;
+    exports.pop = pop;
+    exports.put = put;
+    exports.remove = remove;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+}));
+
+}(setArray_umd, setArray_umd.exports));
+
+var sourcemapCodec_umd = {exports: {}};
+
+(function (module, exports) {
+(function (global, factory) {
+    factory(exports) ;
+})(commonjsGlobal, (function (exports) {
+    const comma = ','.charCodeAt(0);
+    const semicolon = ';'.charCodeAt(0);
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    const intToChar = new Uint8Array(64); // 64 possible chars.
+    const charToInt = new Uint8Array(128); // z is 122 in ASCII
+    for (let i = 0; i < chars.length; i++) {
+        const c = chars.charCodeAt(i);
+        intToChar[i] = c;
+        charToInt[c] = i;
+    }
+    // Provide a fallback for older environments.
+    const td = typeof TextDecoder !== 'undefined'
+        ? /* #__PURE__ */ new TextDecoder()
+        : typeof Buffer !== 'undefined'
+            ? {
+                decode(buf) {
+                    const out = Buffer.from(buf.buffer, buf.byteOffset, buf.byteLength);
+                    return out.toString();
+                },
+            }
+            : {
+                decode(buf) {
+                    let out = '';
+                    for (let i = 0; i < buf.length; i++) {
+                        out += String.fromCharCode(buf[i]);
+                    }
+                    return out;
+                },
+            };
+    function decode(mappings) {
+        const state = new Int32Array(5);
+        const decoded = [];
+        let index = 0;
+        do {
+            const semi = indexOf(mappings, index);
+            const line = [];
+            let sorted = true;
+            let lastCol = 0;
+            state[0] = 0;
+            for (let i = index; i < semi; i++) {
+                let seg;
+                i = decodeInteger(mappings, i, state, 0); // genColumn
+                const col = state[0];
+                if (col < lastCol)
+                    sorted = false;
+                lastCol = col;
+                if (hasMoreVlq(mappings, i, semi)) {
+                    i = decodeInteger(mappings, i, state, 1); // sourcesIndex
+                    i = decodeInteger(mappings, i, state, 2); // sourceLine
+                    i = decodeInteger(mappings, i, state, 3); // sourceColumn
+                    if (hasMoreVlq(mappings, i, semi)) {
+                        i = decodeInteger(mappings, i, state, 4); // namesIndex
+                        seg = [col, state[1], state[2], state[3], state[4]];
+                    }
+                    else {
+                        seg = [col, state[1], state[2], state[3]];
+                    }
+                }
+                else {
+                    seg = [col];
+                }
+                line.push(seg);
+            }
+            if (!sorted)
+                sort(line);
+            decoded.push(line);
+            index = semi + 1;
+        } while (index <= mappings.length);
+        return decoded;
+    }
+    function indexOf(mappings, index) {
+        const idx = mappings.indexOf(';', index);
+        return idx === -1 ? mappings.length : idx;
+    }
+    function decodeInteger(mappings, pos, state, j) {
+        let value = 0;
+        let shift = 0;
+        let integer = 0;
+        do {
+            const c = mappings.charCodeAt(pos++);
+            integer = charToInt[c];
+            value |= (integer & 31) << shift;
+            shift += 5;
+        } while (integer & 32);
+        const shouldNegate = value & 1;
+        value >>>= 1;
+        if (shouldNegate) {
+            value = -0x80000000 | -value;
+        }
+        state[j] += value;
+        return pos;
+    }
+    function hasMoreVlq(mappings, i, length) {
+        if (i >= length)
+            return false;
+        return mappings.charCodeAt(i) !== comma;
+    }
+    function sort(line) {
+        line.sort(sortComparator);
+    }
+    function sortComparator(a, b) {
+        return a[0] - b[0];
+    }
+    function encode(decoded) {
+        const state = new Int32Array(5);
+        const bufLength = 1024 * 16;
+        const subLength = bufLength - 36;
+        const buf = new Uint8Array(bufLength);
+        const sub = buf.subarray(0, subLength);
+        let pos = 0;
+        let out = '';
+        for (let i = 0; i < decoded.length; i++) {
+            const line = decoded[i];
+            if (i > 0) {
+                if (pos === bufLength) {
+                    out += td.decode(buf);
+                    pos = 0;
+                }
+                buf[pos++] = semicolon;
+            }
+            if (line.length === 0)
+                continue;
+            state[0] = 0;
+            for (let j = 0; j < line.length; j++) {
+                const segment = line[j];
+                // We can push up to 5 ints, each int can take at most 7 chars, and we
+                // may push a comma.
+                if (pos > subLength) {
+                    out += td.decode(sub);
+                    buf.copyWithin(0, subLength, pos);
+                    pos -= subLength;
+                }
+                if (j > 0)
+                    buf[pos++] = comma;
+                pos = encodeInteger(buf, pos, state, segment, 0); // genColumn
+                if (segment.length === 1)
+                    continue;
+                pos = encodeInteger(buf, pos, state, segment, 1); // sourcesIndex
+                pos = encodeInteger(buf, pos, state, segment, 2); // sourceLine
+                pos = encodeInteger(buf, pos, state, segment, 3); // sourceColumn
+                if (segment.length === 4)
+                    continue;
+                pos = encodeInteger(buf, pos, state, segment, 4); // namesIndex
+            }
+        }
+        return out + td.decode(buf.subarray(0, pos));
+    }
+    function encodeInteger(buf, pos, state, segment, j) {
+        const next = segment[j];
+        let num = next - state[j];
+        state[j] = next;
+        num = num < 0 ? (-num << 1) | 1 : num << 1;
+        do {
+            let clamped = num & 0b011111;
+            num >>>= 5;
+            if (num > 0)
+                clamped |= 0b100000;
+            buf[pos++] = intToChar[clamped];
+        } while (num > 0);
+        return pos;
+    }
+
+    exports.decode = decode;
+    exports.encode = encode;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+}));
+
+}(sourcemapCodec_umd, sourcemapCodec_umd.exports));
+
+var traceMapping_umd = {exports: {}};
+
+var resolveUri_umd = {exports: {}};
+
+(function (module, exports) {
+(function (global, factory) {
+    module.exports = factory() ;
+})(commonjsGlobal, (function () {
+    // Matches the scheme of a URL, eg "http://"
+    const schemeRegex = /^[\w+.-]+:\/\//;
+    /**
+     * Matches the parts of a URL:
+     * 1. Scheme, including ":", guaranteed.
+     * 2. User/password, including "@", optional.
+     * 3. Host, guaranteed.
+     * 4. Port, including ":", optional.
+     * 5. Path, including "/", optional.
+     * 6. Query, including "?", optional.
+     * 7. Hash, including "#", optional.
+     */
+    const urlRegex = /^([\w+.-]+:)\/\/([^@/#?]*@)?([^:/#?]*)(:\d+)?(\/[^#?]*)?(\?[^#]*)?(#.*)?/;
+    /**
+     * File URLs are weird. They dont' need the regular `//` in the scheme, they may or may not start
+     * with a leading `/`, they can have a domain (but only if they don't start with a Windows drive).
+     *
+     * 1. Host, optional.
+     * 2. Path, which may include "/", guaranteed.
+     * 3. Query, including "?", optional.
+     * 4. Hash, including "#", optional.
+     */
+    const fileRegex = /^file:(?:\/\/((?![a-z]:)[^/#?]*)?)?(\/?[^#?]*)(\?[^#]*)?(#.*)?/i;
+    function isAbsoluteUrl(input) {
+        return schemeRegex.test(input);
+    }
+    function isSchemeRelativeUrl(input) {
+        return input.startsWith('//');
+    }
+    function isAbsolutePath(input) {
+        return input.startsWith('/');
+    }
+    function isFileUrl(input) {
+        return input.startsWith('file:');
+    }
+    function isRelative(input) {
+        return /^[.?#]/.test(input);
+    }
+    function parseAbsoluteUrl(input) {
+        const match = urlRegex.exec(input);
+        return makeUrl(match[1], match[2] || '', match[3], match[4] || '', match[5] || '/', match[6] || '', match[7] || '');
+    }
+    function parseFileUrl(input) {
+        const match = fileRegex.exec(input);
+        const path = match[2];
+        return makeUrl('file:', '', match[1] || '', '', isAbsolutePath(path) ? path : '/' + path, match[3] || '', match[4] || '');
+    }
+    function makeUrl(scheme, user, host, port, path, query, hash) {
+        return {
+            scheme,
+            user,
+            host,
+            port,
+            path,
+            query,
+            hash,
+            type: 7 /* Absolute */,
+        };
+    }
+    function parseUrl(input) {
+        if (isSchemeRelativeUrl(input)) {
+            const url = parseAbsoluteUrl('http:' + input);
+            url.scheme = '';
+            url.type = 6 /* SchemeRelative */;
+            return url;
+        }
+        if (isAbsolutePath(input)) {
+            const url = parseAbsoluteUrl('http://foo.com' + input);
+            url.scheme = '';
+            url.host = '';
+            url.type = 5 /* AbsolutePath */;
+            return url;
+        }
+        if (isFileUrl(input))
+            return parseFileUrl(input);
+        if (isAbsoluteUrl(input))
+            return parseAbsoluteUrl(input);
+        const url = parseAbsoluteUrl('http://foo.com/' + input);
+        url.scheme = '';
+        url.host = '';
+        url.type = input
+            ? input.startsWith('?')
+                ? 3 /* Query */
+                : input.startsWith('#')
+                    ? 2 /* Hash */
+                    : 4 /* RelativePath */
+            : 1 /* Empty */;
+        return url;
+    }
+    function stripPathFilename(path) {
+        // If a path ends with a parent directory "..", then it's a relative path with excess parent
+        // paths. It's not a file, so we can't strip it.
+        if (path.endsWith('/..'))
+            return path;
+        const index = path.lastIndexOf('/');
+        return path.slice(0, index + 1);
+    }
+    function mergePaths(url, base) {
+        normalizePath(base, base.type);
+        // If the path is just a "/", then it was an empty path to begin with (remember, we're a relative
+        // path).
+        if (url.path === '/') {
+            url.path = base.path;
+        }
+        else {
+            // Resolution happens relative to the base path's directory, not the file.
+            url.path = stripPathFilename(base.path) + url.path;
+        }
+    }
+    /**
+     * The path can have empty directories "//", unneeded parents "foo/..", or current directory
+     * "foo/.". We need to normalize to a standard representation.
+     */
+    function normalizePath(url, type) {
+        const rel = type <= 4 /* RelativePath */;
+        const pieces = url.path.split('/');
+        // We need to preserve the first piece always, so that we output a leading slash. The item at
+        // pieces[0] is an empty string.
+        let pointer = 1;
+        // Positive is the number of real directories we've output, used for popping a parent directory.
+        // Eg, "foo/bar/.." will have a positive 2, and we can decrement to be left with just "foo".
+        let positive = 0;
+        // We need to keep a trailing slash if we encounter an empty directory (eg, splitting "foo/" will
+        // generate `["foo", ""]` pieces). And, if we pop a parent directory. But once we encounter a
+        // real directory, we won't need to append, unless the other conditions happen again.
+        let addTrailingSlash = false;
+        for (let i = 1; i < pieces.length; i++) {
+            const piece = pieces[i];
+            // An empty directory, could be a trailing slash, or just a double "//" in the path.
+            if (!piece) {
+                addTrailingSlash = true;
+                continue;
+            }
+            // If we encounter a real directory, then we don't need to append anymore.
+            addTrailingSlash = false;
+            // A current directory, which we can always drop.
+            if (piece === '.')
+                continue;
+            // A parent directory, we need to see if there are any real directories we can pop. Else, we
+            // have an excess of parents, and we'll need to keep the "..".
+            if (piece === '..') {
+                if (positive) {
+                    addTrailingSlash = true;
+                    positive--;
+                    pointer--;
+                }
+                else if (rel) {
+                    // If we're in a relativePath, then we need to keep the excess parents. Else, in an absolute
+                    // URL, protocol relative URL, or an absolute path, we don't need to keep excess.
+                    pieces[pointer++] = piece;
+                }
+                continue;
+            }
+            // We've encountered a real directory. Move it to the next insertion pointer, which accounts for
+            // any popped or dropped directories.
+            pieces[pointer++] = piece;
+            positive++;
+        }
+        let path = '';
+        for (let i = 1; i < pointer; i++) {
+            path += '/' + pieces[i];
+        }
+        if (!path || (addTrailingSlash && !path.endsWith('/..'))) {
+            path += '/';
+        }
+        url.path = path;
+    }
+    /**
+     * Attempts to resolve `input` URL/path relative to `base`.
+     */
+    function resolve(input, base) {
+        if (!input && !base)
+            return '';
+        const url = parseUrl(input);
+        let inputType = url.type;
+        if (base && inputType !== 7 /* Absolute */) {
+            const baseUrl = parseUrl(base);
+            const baseType = baseUrl.type;
+            switch (inputType) {
+                case 1 /* Empty */:
+                    url.hash = baseUrl.hash;
+                // fall through
+                case 2 /* Hash */:
+                    url.query = baseUrl.query;
+                // fall through
+                case 3 /* Query */:
+                case 4 /* RelativePath */:
+                    mergePaths(url, baseUrl);
+                // fall through
+                case 5 /* AbsolutePath */:
+                    // The host, user, and port are joined, you can't copy one without the others.
+                    url.user = baseUrl.user;
+                    url.host = baseUrl.host;
+                    url.port = baseUrl.port;
+                // fall through
+                case 6 /* SchemeRelative */:
+                    // The input doesn't have a schema at least, so we need to copy at least that over.
+                    url.scheme = baseUrl.scheme;
+            }
+            if (baseType > inputType)
+                inputType = baseType;
+        }
+        normalizePath(url, inputType);
+        const queryHash = url.query + url.hash;
+        switch (inputType) {
+            // This is impossible, because of the empty checks at the start of the function.
+            // case UrlType.Empty:
+            case 2 /* Hash */:
+            case 3 /* Query */:
+                return queryHash;
+            case 4 /* RelativePath */: {
+                // The first char is always a "/", and we need it to be relative.
+                const path = url.path.slice(1);
+                if (!path)
+                    return queryHash || '.';
+                if (isRelative(base || input) && !isRelative(path)) {
+                    // If base started with a leading ".", or there is no base and input started with a ".",
+                    // then we need to ensure that the relative path starts with a ".". We don't know if
+                    // relative starts with a "..", though, so check before prepending.
+                    return './' + path + queryHash;
+                }
+                return path + queryHash;
+            }
+            case 5 /* AbsolutePath */:
+                return url.path + queryHash;
+            default:
+                return url.scheme + '//' + url.user + url.host + url.port + url.path + queryHash;
+        }
+    }
+
+    return resolve;
+
+}));
+
+}(resolveUri_umd));
+
+(function (module, exports) {
+(function (global, factory) {
+    factory(exports, sourcemapCodec_umd.exports, resolveUri_umd.exports) ;
+})(commonjsGlobal, (function (exports, sourcemapCodec, resolveUri) {
+    function resolve(input, base) {
+        // The base is always treated as a directory, if it's not empty.
+        // https://github.com/mozilla/source-map/blob/8cb3ee57/lib/util.js#L327
+        // https://github.com/chromium/chromium/blob/da4adbb3/third_party/blink/renderer/devtools/front_end/sdk/SourceMap.js#L400-L401
+        if (base && !base.endsWith('/'))
+            base += '/';
+        return resolveUri(input, base);
+    }
+
+    /**
+     * Removes everything after the last "/", but leaves the slash.
+     */
+    function stripFilename(path) {
+        if (!path)
+            return '';
+        const index = path.lastIndexOf('/');
+        return path.slice(0, index + 1);
+    }
+
+    const COLUMN = 0;
+    const SOURCES_INDEX = 1;
+    const SOURCE_LINE = 2;
+    const SOURCE_COLUMN = 3;
+    const NAMES_INDEX = 4;
+    const REV_GENERATED_LINE = 1;
+    const REV_GENERATED_COLUMN = 2;
+
+    function maybeSort(mappings, owned) {
+        const unsortedIndex = nextUnsortedSegmentLine(mappings, 0);
+        if (unsortedIndex === mappings.length)
+            return mappings;
+        // If we own the array (meaning we parsed it from JSON), then we're free to directly mutate it. If
+        // not, we do not want to modify the consumer's input array.
+        if (!owned)
+            mappings = mappings.slice();
+        for (let i = unsortedIndex; i < mappings.length; i = nextUnsortedSegmentLine(mappings, i + 1)) {
+            mappings[i] = sortSegments(mappings[i], owned);
+        }
+        return mappings;
+    }
+    function nextUnsortedSegmentLine(mappings, start) {
+        for (let i = start; i < mappings.length; i++) {
+            if (!isSorted(mappings[i]))
+                return i;
+        }
+        return mappings.length;
+    }
+    function isSorted(line) {
+        for (let j = 1; j < line.length; j++) {
+            if (line[j][COLUMN] < line[j - 1][COLUMN]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    function sortSegments(line, owned) {
+        if (!owned)
+            line = line.slice();
+        return line.sort(sortComparator);
+    }
+    function sortComparator(a, b) {
+        return a[COLUMN] - b[COLUMN];
+    }
+
+    let found = false;
+    /**
+     * A binary search implementation that returns the index if a match is found.
+     * If no match is found, then the left-index (the index associated with the item that comes just
+     * before the desired index) is returned. To maintain proper sort order, a splice would happen at
+     * the next index:
+     *
+     * ```js
+     * const array = [1, 3];
+     * const needle = 2;
+     * const index = binarySearch(array, needle, (item, needle) => item - needle);
+     *
+     * assert.equal(index, 0);
+     * array.splice(index + 1, 0, needle);
+     * assert.deepEqual(array, [1, 2, 3]);
+     * ```
+     */
+    function binarySearch(haystack, needle, low, high) {
+        while (low <= high) {
+            const mid = low + ((high - low) >> 1);
+            const cmp = haystack[mid][COLUMN] - needle;
+            if (cmp === 0) {
+                found = true;
+                return mid;
+            }
+            if (cmp < 0) {
+                low = mid + 1;
+            }
+            else {
+                high = mid - 1;
+            }
+        }
+        found = false;
+        return low - 1;
+    }
+    function upperBound(haystack, needle, index) {
+        for (let i = index + 1; i < haystack.length; index = i++) {
+            if (haystack[i][COLUMN] !== needle)
+                break;
+        }
+        return index;
+    }
+    function lowerBound(haystack, needle, index) {
+        for (let i = index - 1; i >= 0; index = i--) {
+            if (haystack[i][COLUMN] !== needle)
+                break;
+        }
+        return index;
+    }
+    function memoizedState() {
+        return {
+            lastKey: -1,
+            lastNeedle: -1,
+            lastIndex: -1,
+        };
+    }
+    /**
+     * This overly complicated beast is just to record the last tested line/column and the resulting
+     * index, allowing us to skip a few tests if mappings are monotonically increasing.
+     */
+    function memoizedBinarySearch(haystack, needle, state, key) {
+        const { lastKey, lastNeedle, lastIndex } = state;
+        let low = 0;
+        let high = haystack.length - 1;
+        if (key === lastKey) {
+            if (needle === lastNeedle) {
+                found = lastIndex !== -1 && haystack[lastIndex][COLUMN] === needle;
+                return lastIndex;
+            }
+            if (needle >= lastNeedle) {
+                // lastIndex may be -1 if the previous needle was not found.
+                low = lastIndex === -1 ? 0 : lastIndex;
+            }
+            else {
+                high = lastIndex;
+            }
+        }
+        state.lastKey = key;
+        state.lastNeedle = needle;
+        return (state.lastIndex = binarySearch(haystack, needle, low, high));
+    }
+
+    // Rebuilds the original source files, with mappings that are ordered by source line/column instead
+    // of generated line/column.
+    function buildBySources(decoded, memos) {
+        const sources = memos.map(buildNullArray);
+        for (let i = 0; i < decoded.length; i++) {
+            const line = decoded[i];
+            for (let j = 0; j < line.length; j++) {
+                const seg = line[j];
+                if (seg.length === 1)
+                    continue;
+                const sourceIndex = seg[SOURCES_INDEX];
+                const sourceLine = seg[SOURCE_LINE];
+                const sourceColumn = seg[SOURCE_COLUMN];
+                const originalSource = sources[sourceIndex];
+                const originalLine = (originalSource[sourceLine] || (originalSource[sourceLine] = []));
+                const memo = memos[sourceIndex];
+                // The binary search either found a match, or it found the left-index just before where the
+                // segment should go. Either way, we want to insert after that. And there may be multiple
+                // generated segments associated with an original location, so there may need to move several
+                // indexes before we find where we need to insert.
+                let index = upperBound(originalLine, sourceColumn, memoizedBinarySearch(originalLine, sourceColumn, memo, sourceLine));
+                memo.lastIndex = ++index;
+                insert(originalLine, index, [sourceColumn, i, seg[COLUMN]]);
+            }
+        }
+        return sources;
+    }
+    function insert(array, index, value) {
+        for (let i = array.length; i > index; i--) {
+            array[i] = array[i - 1];
+        }
+        array[index] = value;
+    }
+    // Null arrays allow us to use ordered index keys without actually allocating contiguous memory like
+    // a real array. We use a null-prototype object to avoid prototype pollution and deoptimizations.
+    // Numeric properties on objects are magically sorted in ascending order by the engine regardless of
+    // the insertion order. So, by setting any numeric keys, even out of order, we'll get ascending
+    // order when iterating with for-in.
+    function buildNullArray() {
+        return { __proto__: null };
+    }
+
+    const AnyMap = function (map, mapUrl) {
+        const parsed = parse(map);
+        if (!('sections' in parsed)) {
+            return new TraceMap(parsed, mapUrl);
+        }
+        const mappings = [];
+        const sources = [];
+        const sourcesContent = [];
+        const names = [];
+        const ignoreList = [];
+        recurse(parsed, mapUrl, mappings, sources, sourcesContent, names, ignoreList, 0, 0, Infinity, Infinity);
+        const joined = {
+            version: 3,
+            file: parsed.file,
+            names,
+            sources,
+            sourcesContent,
+            mappings,
+            ignoreList,
+        };
+        return presortedDecodedMap(joined);
+    };
+    function parse(map) {
+        return typeof map === 'string' ? JSON.parse(map) : map;
+    }
+    function recurse(input, mapUrl, mappings, sources, sourcesContent, names, ignoreList, lineOffset, columnOffset, stopLine, stopColumn) {
+        const { sections } = input;
+        for (let i = 0; i < sections.length; i++) {
+            const { map, offset } = sections[i];
+            let sl = stopLine;
+            let sc = stopColumn;
+            if (i + 1 < sections.length) {
+                const nextOffset = sections[i + 1].offset;
+                sl = Math.min(stopLine, lineOffset + nextOffset.line);
+                if (sl === stopLine) {
+                    sc = Math.min(stopColumn, columnOffset + nextOffset.column);
+                }
+                else if (sl < stopLine) {
+                    sc = columnOffset + nextOffset.column;
+                }
+            }
+            addSection(map, mapUrl, mappings, sources, sourcesContent, names, ignoreList, lineOffset + offset.line, columnOffset + offset.column, sl, sc);
+        }
+    }
+    function addSection(input, mapUrl, mappings, sources, sourcesContent, names, ignoreList, lineOffset, columnOffset, stopLine, stopColumn) {
+        const parsed = parse(input);
+        if ('sections' in parsed)
+            return recurse(...arguments);
+        const map = new TraceMap(parsed, mapUrl);
+        const sourcesOffset = sources.length;
+        const namesOffset = names.length;
+        const decoded = decodedMappings(map);
+        const { resolvedSources, sourcesContent: contents, ignoreList: ignores } = map;
+        append(sources, resolvedSources);
+        append(names, map.names);
+        if (contents)
+            append(sourcesContent, contents);
+        else
+            for (let i = 0; i < resolvedSources.length; i++)
+                sourcesContent.push(null);
+        if (ignores)
+            for (let i = 0; i < ignores.length; i++)
+                ignoreList.push(ignores[i] + sourcesOffset);
+        for (let i = 0; i < decoded.length; i++) {
+            const lineI = lineOffset + i;
+            // We can only add so many lines before we step into the range that the next section's map
+            // controls. When we get to the last line, then we'll start checking the segments to see if
+            // they've crossed into the column range. But it may not have any columns that overstep, so we
+            // still need to check that we don't overstep lines, too.
+            if (lineI > stopLine)
+                return;
+            // The out line may already exist in mappings (if we're continuing the line started by a
+            // previous section). Or, we may have jumped ahead several lines to start this section.
+            const out = getLine(mappings, lineI);
+            // On the 0th loop, the section's column offset shifts us forward. On all other lines (since the
+            // map can be multiple lines), it doesn't.
+            const cOffset = i === 0 ? columnOffset : 0;
+            const line = decoded[i];
+            for (let j = 0; j < line.length; j++) {
+                const seg = line[j];
+                const column = cOffset + seg[COLUMN];
+                // If this segment steps into the column range that the next section's map controls, we need
+                // to stop early.
+                if (lineI === stopLine && column >= stopColumn)
+                    return;
+                if (seg.length === 1) {
+                    out.push([column]);
+                    continue;
+                }
+                const sourcesIndex = sourcesOffset + seg[SOURCES_INDEX];
+                const sourceLine = seg[SOURCE_LINE];
+                const sourceColumn = seg[SOURCE_COLUMN];
+                out.push(seg.length === 4
+                    ? [column, sourcesIndex, sourceLine, sourceColumn]
+                    : [column, sourcesIndex, sourceLine, sourceColumn, namesOffset + seg[NAMES_INDEX]]);
+            }
+        }
+    }
+    function append(arr, other) {
+        for (let i = 0; i < other.length; i++)
+            arr.push(other[i]);
+    }
+    function getLine(arr, index) {
+        for (let i = arr.length; i <= index; i++)
+            arr[i] = [];
+        return arr[index];
+    }
+
+    const LINE_GTR_ZERO = '`line` must be greater than 0 (lines start at line 1)';
+    const COL_GTR_EQ_ZERO = '`column` must be greater than or equal to 0 (columns start at column 0)';
+    const LEAST_UPPER_BOUND = -1;
+    const GREATEST_LOWER_BOUND = 1;
+    class TraceMap {
+        constructor(map, mapUrl) {
+            const isString = typeof map === 'string';
+            if (!isString && map._decodedMemo)
+                return map;
+            const parsed = (isString ? JSON.parse(map) : map);
+            const { version, file, names, sourceRoot, sources, sourcesContent } = parsed;
+            this.version = version;
+            this.file = file;
+            this.names = names || [];
+            this.sourceRoot = sourceRoot;
+            this.sources = sources;
+            this.sourcesContent = sourcesContent;
+            this.ignoreList = parsed.ignoreList || parsed.x_google_ignoreList || undefined;
+            const from = resolve(sourceRoot || '', stripFilename(mapUrl));
+            this.resolvedSources = sources.map((s) => resolve(s || '', from));
+            const { mappings } = parsed;
+            if (typeof mappings === 'string') {
+                this._encoded = mappings;
+                this._decoded = undefined;
+            }
+            else {
+                this._encoded = undefined;
+                this._decoded = maybeSort(mappings, isString);
+            }
+            this._decodedMemo = memoizedState();
+            this._bySources = undefined;
+            this._bySourceMemos = undefined;
+        }
+    }
+    /**
+     * Typescript doesn't allow friend access to private fields, so this just casts the map into a type
+     * with public access modifiers.
+     */
+    function cast(map) {
+        return map;
+    }
+    /**
+     * Returns the encoded (VLQ string) form of the SourceMap's mappings field.
+     */
+    function encodedMappings(map) {
+        var _a;
+        var _b;
+        return ((_a = (_b = cast(map))._encoded) !== null && _a !== void 0 ? _a : (_b._encoded = sourcemapCodec.encode(cast(map)._decoded)));
+    }
+    /**
+     * Returns the decoded (array of lines of segments) form of the SourceMap's mappings field.
+     */
+    function decodedMappings(map) {
+        var _a;
+        return ((_a = cast(map))._decoded || (_a._decoded = sourcemapCodec.decode(cast(map)._encoded)));
+    }
+    /**
+     * A low-level API to find the segment associated with a generated line/column (think, from a
+     * stack trace). Line and column here are 0-based, unlike `originalPositionFor`.
+     */
+    function traceSegment(map, line, column) {
+        const decoded = decodedMappings(map);
+        // It's common for parent source maps to have pointers to lines that have no
+        // mapping (like a "//# sourceMappingURL=") at the end of the child file.
+        if (line >= decoded.length)
+            return null;
+        const segments = decoded[line];
+        const index = traceSegmentInternal(segments, cast(map)._decodedMemo, line, column, GREATEST_LOWER_BOUND);
+        return index === -1 ? null : segments[index];
+    }
+    /**
+     * A higher-level API to find the source/line/column associated with a generated line/column
+     * (think, from a stack trace). Line is 1-based, but column is 0-based, due to legacy behavior in
+     * `source-map` library.
+     */
+    function originalPositionFor(map, needle) {
+        let { line, column, bias } = needle;
+        line--;
+        if (line < 0)
+            throw new Error(LINE_GTR_ZERO);
+        if (column < 0)
+            throw new Error(COL_GTR_EQ_ZERO);
+        const decoded = decodedMappings(map);
+        // It's common for parent source maps to have pointers to lines that have no
+        // mapping (like a "//# sourceMappingURL=") at the end of the child file.
+        if (line >= decoded.length)
+            return OMapping(null, null, null, null);
+        const segments = decoded[line];
+        const index = traceSegmentInternal(segments, cast(map)._decodedMemo, line, column, bias || GREATEST_LOWER_BOUND);
+        if (index === -1)
+            return OMapping(null, null, null, null);
+        const segment = segments[index];
+        if (segment.length === 1)
+            return OMapping(null, null, null, null);
+        const { names, resolvedSources } = map;
+        return OMapping(resolvedSources[segment[SOURCES_INDEX]], segment[SOURCE_LINE] + 1, segment[SOURCE_COLUMN], segment.length === 5 ? names[segment[NAMES_INDEX]] : null);
+    }
+    /**
+     * Finds the generated line/column position of the provided source/line/column source position.
+     */
+    function generatedPositionFor(map, needle) {
+        const { source, line, column, bias } = needle;
+        return generatedPosition(map, source, line, column, bias || GREATEST_LOWER_BOUND, false);
+    }
+    /**
+     * Finds all generated line/column positions of the provided source/line/column source position.
+     */
+    function allGeneratedPositionsFor(map, needle) {
+        const { source, line, column, bias } = needle;
+        // SourceMapConsumer uses LEAST_UPPER_BOUND for some reason, so we follow suit.
+        return generatedPosition(map, source, line, column, bias || LEAST_UPPER_BOUND, true);
+    }
+    /**
+     * Iterates each mapping in generated position order.
+     */
+    function eachMapping(map, cb) {
+        const decoded = decodedMappings(map);
+        const { names, resolvedSources } = map;
+        for (let i = 0; i < decoded.length; i++) {
+            const line = decoded[i];
+            for (let j = 0; j < line.length; j++) {
+                const seg = line[j];
+                const generatedLine = i + 1;
+                const generatedColumn = seg[0];
+                let source = null;
+                let originalLine = null;
+                let originalColumn = null;
+                let name = null;
+                if (seg.length !== 1) {
+                    source = resolvedSources[seg[1]];
+                    originalLine = seg[2] + 1;
+                    originalColumn = seg[3];
+                }
+                if (seg.length === 5)
+                    name = names[seg[4]];
+                cb({
+                    generatedLine,
+                    generatedColumn,
+                    source,
+                    originalLine,
+                    originalColumn,
+                    name,
+                });
+            }
+        }
+    }
+    function sourceIndex(map, source) {
+        const { sources, resolvedSources } = map;
+        let index = sources.indexOf(source);
+        if (index === -1)
+            index = resolvedSources.indexOf(source);
+        return index;
+    }
+    /**
+     * Retrieves the source content for a particular source, if its found. Returns null if not.
+     */
+    function sourceContentFor(map, source) {
+        const { sourcesContent } = map;
+        if (sourcesContent == null)
+            return null;
+        const index = sourceIndex(map, source);
+        return index === -1 ? null : sourcesContent[index];
+    }
+    /**
+     * Determines if the source is marked to ignore by the source map.
+     */
+    function isIgnored(map, source) {
+        const { ignoreList } = map;
+        if (ignoreList == null)
+            return false;
+        const index = sourceIndex(map, source);
+        return index === -1 ? false : ignoreList.includes(index);
+    }
+    /**
+     * A helper that skips sorting of the input map's mappings array, which can be expensive for larger
+     * maps.
+     */
+    function presortedDecodedMap(map, mapUrl) {
+        const tracer = new TraceMap(clone(map, []), mapUrl);
+        cast(tracer)._decoded = map.mappings;
+        return tracer;
+    }
+    /**
+     * Returns a sourcemap object (with decoded mappings) suitable for passing to a library that expects
+     * a sourcemap, or to JSON.stringify.
+     */
+    function decodedMap(map) {
+        return clone(map, decodedMappings(map));
+    }
+    /**
+     * Returns a sourcemap object (with encoded mappings) suitable for passing to a library that expects
+     * a sourcemap, or to JSON.stringify.
+     */
+    function encodedMap(map) {
+        return clone(map, encodedMappings(map));
+    }
+    function clone(map, mappings) {
+        return {
+            version: map.version,
+            file: map.file,
+            names: map.names,
+            sourceRoot: map.sourceRoot,
+            sources: map.sources,
+            sourcesContent: map.sourcesContent,
+            mappings,
+            ignoreList: map.ignoreList || map.x_google_ignoreList,
+        };
+    }
+    function OMapping(source, line, column, name) {
+        return { source, line, column, name };
+    }
+    function GMapping(line, column) {
+        return { line, column };
+    }
+    function traceSegmentInternal(segments, memo, line, column, bias) {
+        let index = memoizedBinarySearch(segments, column, memo, line);
+        if (found) {
+            index = (bias === LEAST_UPPER_BOUND ? upperBound : lowerBound)(segments, column, index);
+        }
+        else if (bias === LEAST_UPPER_BOUND)
+            index++;
+        if (index === -1 || index === segments.length)
+            return -1;
+        return index;
+    }
+    function sliceGeneratedPositions(segments, memo, line, column, bias) {
+        let min = traceSegmentInternal(segments, memo, line, column, GREATEST_LOWER_BOUND);
+        // We ignored the bias when tracing the segment so that we're guarnateed to find the first (in
+        // insertion order) segment that matched. Even if we did respect the bias when tracing, we would
+        // still need to call `lowerBound()` to find the first segment, which is slower than just looking
+        // for the GREATEST_LOWER_BOUND to begin with. The only difference that matters for us is when the
+        // binary search didn't match, in which case GREATEST_LOWER_BOUND just needs to increment to
+        // match LEAST_UPPER_BOUND.
+        if (!found && bias === LEAST_UPPER_BOUND)
+            min++;
+        if (min === -1 || min === segments.length)
+            return [];
+        // We may have found the segment that started at an earlier column. If this is the case, then we
+        // need to slice all generated segments that match _that_ column, because all such segments span
+        // to our desired column.
+        const matchedColumn = found ? column : segments[min][COLUMN];
+        // The binary search is not guaranteed to find the lower bound when a match wasn't found.
+        if (!found)
+            min = lowerBound(segments, matchedColumn, min);
+        const max = upperBound(segments, matchedColumn, min);
+        const result = [];
+        for (; min <= max; min++) {
+            const segment = segments[min];
+            result.push(GMapping(segment[REV_GENERATED_LINE] + 1, segment[REV_GENERATED_COLUMN]));
+        }
+        return result;
+    }
+    function generatedPosition(map, source, line, column, bias, all) {
+        var _a;
+        line--;
+        if (line < 0)
+            throw new Error(LINE_GTR_ZERO);
+        if (column < 0)
+            throw new Error(COL_GTR_EQ_ZERO);
+        const { sources, resolvedSources } = map;
+        let sourceIndex = sources.indexOf(source);
+        if (sourceIndex === -1)
+            sourceIndex = resolvedSources.indexOf(source);
+        if (sourceIndex === -1)
+            return all ? [] : GMapping(null, null);
+        const generated = ((_a = cast(map))._bySources || (_a._bySources = buildBySources(decodedMappings(map), (cast(map)._bySourceMemos = sources.map(memoizedState)))));
+        const segments = generated[sourceIndex][line];
+        if (segments == null)
+            return all ? [] : GMapping(null, null);
+        const memo = cast(map)._bySourceMemos[sourceIndex];
+        if (all)
+            return sliceGeneratedPositions(segments, memo, line, column, bias);
+        const index = traceSegmentInternal(segments, memo, line, column, bias);
+        if (index === -1)
+            return GMapping(null, null);
+        const segment = segments[index];
+        return GMapping(segment[REV_GENERATED_LINE] + 1, segment[REV_GENERATED_COLUMN]);
+    }
+
+    exports.AnyMap = AnyMap;
+    exports.GREATEST_LOWER_BOUND = GREATEST_LOWER_BOUND;
+    exports.LEAST_UPPER_BOUND = LEAST_UPPER_BOUND;
+    exports.TraceMap = TraceMap;
+    exports.allGeneratedPositionsFor = allGeneratedPositionsFor;
+    exports.decodedMap = decodedMap;
+    exports.decodedMappings = decodedMappings;
+    exports.eachMapping = eachMapping;
+    exports.encodedMap = encodedMap;
+    exports.encodedMappings = encodedMappings;
+    exports.generatedPositionFor = generatedPositionFor;
+    exports.isIgnored = isIgnored;
+    exports.originalPositionFor = originalPositionFor;
+    exports.presortedDecodedMap = presortedDecodedMap;
+    exports.sourceContentFor = sourceContentFor;
+    exports.traceSegment = traceSegment;
+
+}));
+
+}(traceMapping_umd, traceMapping_umd.exports));
+
+(function (module, exports) {
+(function (global, factory) {
+    factory(exports, setArray_umd.exports, sourcemapCodec_umd.exports, traceMapping_umd.exports) ;
+})(commonjsGlobal, (function (exports, setArray, sourcemapCodec, traceMapping) {
+    const COLUMN = 0;
+    const SOURCES_INDEX = 1;
+    const SOURCE_LINE = 2;
+    const SOURCE_COLUMN = 3;
+    const NAMES_INDEX = 4;
+
+    const NO_NAME = -1;
+    /**
+     * Provides the state to generate a sourcemap.
+     */
+    class GenMapping {
+        constructor({ file, sourceRoot } = {}) {
+            this._names = new setArray.SetArray();
+            this._sources = new setArray.SetArray();
+            this._sourcesContent = [];
+            this._mappings = [];
+            this.file = file;
+            this.sourceRoot = sourceRoot;
+            this._ignoreList = new setArray.SetArray();
+        }
+    }
+    /**
+     * Typescript doesn't allow friend access to private fields, so this just casts the map into a type
+     * with public access modifiers.
+     */
+    function cast(map) {
+        return map;
+    }
+    function addSegment(map, genLine, genColumn, source, sourceLine, sourceColumn, name, content) {
+        return addSegmentInternal(false, map, genLine, genColumn, source, sourceLine, sourceColumn, name, content);
+    }
+    function addMapping(map, mapping) {
+        return addMappingInternal(false, map, mapping);
+    }
+    /**
+     * Same as `addSegment`, but will only add the segment if it generates useful information in the
+     * resulting map. This only works correctly if segments are added **in order**, meaning you should
+     * not add a segment with a lower generated line/column than one that came before.
+     */
+    const maybeAddSegment = (map, genLine, genColumn, source, sourceLine, sourceColumn, name, content) => {
+        return addSegmentInternal(true, map, genLine, genColumn, source, sourceLine, sourceColumn, name, content);
+    };
+    /**
+     * Same as `addMapping`, but will only add the mapping if it generates useful information in the
+     * resulting map. This only works correctly if mappings are added **in order**, meaning you should
+     * not add a mapping with a lower generated line/column than one that came before.
+     */
+    const maybeAddMapping = (map, mapping) => {
+        return addMappingInternal(true, map, mapping);
+    };
+    /**
+     * Adds/removes the content of the source file to the source map.
+     */
+    function setSourceContent(map, source, content) {
+        const { _sources: sources, _sourcesContent: sourcesContent } = cast(map);
+        const index = setArray.put(sources, source);
+        sourcesContent[index] = content;
+    }
+    function setIgnore(map, source, ignore = true) {
+        const { _sources: sources, _sourcesContent: sourcesContent, _ignoreList: ignoreList } = cast(map);
+        const index = setArray.put(sources, source);
+        if (index === sourcesContent.length)
+            sourcesContent[index] = null;
+        if (ignore)
+            setArray.put(ignoreList, index);
+        else
+            setArray.remove(ignoreList, index);
+    }
+    /**
+     * Returns a sourcemap object (with decoded mappings) suitable for passing to a library that expects
+     * a sourcemap, or to JSON.stringify.
+     */
+    function toDecodedMap(map) {
+        const { _mappings: mappings, _sources: sources, _sourcesContent: sourcesContent, _names: names, _ignoreList: ignoreList, } = cast(map);
+        removeEmptyFinalLines(mappings);
+        return {
+            version: 3,
+            file: map.file || undefined,
+            names: names.array,
+            sourceRoot: map.sourceRoot || undefined,
+            sources: sources.array,
+            sourcesContent,
+            mappings,
+            ignoreList: ignoreList.array,
+        };
+    }
+    /**
+     * Returns a sourcemap object (with encoded mappings) suitable for passing to a library that expects
+     * a sourcemap, or to JSON.stringify.
+     */
+    function toEncodedMap(map) {
+        const decoded = toDecodedMap(map);
+        return Object.assign(Object.assign({}, decoded), { mappings: sourcemapCodec.encode(decoded.mappings) });
+    }
+    /**
+     * Constructs a new GenMapping, using the already present mappings of the input.
+     */
+    function fromMap(input) {
+        const map = new traceMapping.TraceMap(input);
+        const gen = new GenMapping({ file: map.file, sourceRoot: map.sourceRoot });
+        putAll(cast(gen)._names, map.names);
+        putAll(cast(gen)._sources, map.sources);
+        cast(gen)._sourcesContent = map.sourcesContent || map.sources.map(() => null);
+        cast(gen)._mappings = traceMapping.decodedMappings(map);
+        if (map.ignoreList)
+            putAll(cast(gen)._ignoreList, map.ignoreList);
+        return gen;
+    }
+    /**
+     * Returns an array of high-level mapping objects for every recorded segment, which could then be
+     * passed to the `source-map` library.
+     */
+    function allMappings(map) {
+        const out = [];
+        const { _mappings: mappings, _sources: sources, _names: names } = cast(map);
+        for (let i = 0; i < mappings.length; i++) {
+            const line = mappings[i];
+            for (let j = 0; j < line.length; j++) {
+                const seg = line[j];
+                const generated = { line: i + 1, column: seg[COLUMN] };
+                let source = undefined;
+                let original = undefined;
+                let name = undefined;
+                if (seg.length !== 1) {
+                    source = sources.array[seg[SOURCES_INDEX]];
+                    original = { line: seg[SOURCE_LINE] + 1, column: seg[SOURCE_COLUMN] };
+                    if (seg.length === 5)
+                        name = names.array[seg[NAMES_INDEX]];
+                }
+                out.push({ generated, source, original, name });
+            }
+        }
+        return out;
+    }
+    // This split declaration is only so that terser can elminiate the static initialization block.
+    function addSegmentInternal(skipable, map, genLine, genColumn, source, sourceLine, sourceColumn, name, content) {
+        const { _mappings: mappings, _sources: sources, _sourcesContent: sourcesContent, _names: names, } = cast(map);
+        const line = getLine(mappings, genLine);
+        const index = getColumnIndex(line, genColumn);
+        if (!source) {
+            if (skipable && skipSourceless(line, index))
+                return;
+            return insert(line, index, [genColumn]);
+        }
+        const sourcesIndex = setArray.put(sources, source);
+        const namesIndex = name ? setArray.put(names, name) : NO_NAME;
+        if (sourcesIndex === sourcesContent.length)
+            sourcesContent[sourcesIndex] = content !== null && content !== void 0 ? content : null;
+        if (skipable && skipSource(line, index, sourcesIndex, sourceLine, sourceColumn, namesIndex)) {
+            return;
+        }
+        return insert(line, index, name
+            ? [genColumn, sourcesIndex, sourceLine, sourceColumn, namesIndex]
+            : [genColumn, sourcesIndex, sourceLine, sourceColumn]);
+    }
+    function getLine(mappings, index) {
+        for (let i = mappings.length; i <= index; i++) {
+            mappings[i] = [];
+        }
+        return mappings[index];
+    }
+    function getColumnIndex(line, genColumn) {
+        let index = line.length;
+        for (let i = index - 1; i >= 0; index = i--) {
+            const current = line[i];
+            if (genColumn >= current[COLUMN])
+                break;
+        }
+        return index;
+    }
+    function insert(array, index, value) {
+        for (let i = array.length; i > index; i--) {
+            array[i] = array[i - 1];
+        }
+        array[index] = value;
+    }
+    function removeEmptyFinalLines(mappings) {
+        const { length } = mappings;
+        let len = length;
+        for (let i = len - 1; i >= 0; len = i, i--) {
+            if (mappings[i].length > 0)
+                break;
+        }
+        if (len < length)
+            mappings.length = len;
+    }
+    function putAll(setarr, array) {
+        for (let i = 0; i < array.length; i++)
+            setArray.put(setarr, array[i]);
+    }
+    function skipSourceless(line, index) {
+        // The start of a line is already sourceless, so adding a sourceless segment to the beginning
+        // doesn't generate any useful information.
+        if (index === 0)
+            return true;
+        const prev = line[index - 1];
+        // If the previous segment is also sourceless, then adding another sourceless segment doesn't
+        // genrate any new information. Else, this segment will end the source/named segment and point to
+        // a sourceless position, which is useful.
+        return prev.length === 1;
+    }
+    function skipSource(line, index, sourcesIndex, sourceLine, sourceColumn, namesIndex) {
+        // A source/named segment at the start of a line gives position at that genColumn
+        if (index === 0)
+            return false;
+        const prev = line[index - 1];
+        // If the previous segment is sourceless, then we're transitioning to a source.
+        if (prev.length === 1)
+            return false;
+        // If the previous segment maps to the exact same source position, then this segment doesn't
+        // provide any new position information.
+        return (sourcesIndex === prev[SOURCES_INDEX] &&
+            sourceLine === prev[SOURCE_LINE] &&
+            sourceColumn === prev[SOURCE_COLUMN] &&
+            namesIndex === (prev.length === 5 ? prev[NAMES_INDEX] : NO_NAME));
+    }
+    function addMappingInternal(skipable, map, mapping) {
+        const { generated, source, original, name, content } = mapping;
+        if (!source) {
+            return addSegmentInternal(skipable, map, generated.line - 1, generated.column, null, null, null, null, null);
+        }
+        return addSegmentInternal(skipable, map, generated.line - 1, generated.column, source, original.line - 1, original.column, name, content);
+    }
+
+    exports.GenMapping = GenMapping;
+    exports.addMapping = addMapping;
+    exports.addSegment = addSegment;
+    exports.allMappings = allMappings;
+    exports.fromMap = fromMap;
+    exports.maybeAddMapping = maybeAddMapping;
+    exports.maybeAddSegment = maybeAddSegment;
+    exports.setIgnore = setIgnore;
+    exports.setSourceContent = setSourceContent;
+    exports.toDecodedMap = toDecodedMap;
+    exports.toEncodedMap = toEncodedMap;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+}));
+
+}(genMapping_umd, genMapping_umd.exports));
+
+Object.defineProperty(computeSourceMap$1, "__esModule", {value: true});var _genmapping = genMapping_umd.exports;
+
+
+
 var _charcodes = charcodes;
 
 
@@ -18414,27 +20581,78 @@ var _charcodes = charcodes;
 
 
 
+
 /**
- * Generate a simple source map indicating that each line maps directly to the original line.
+ * Generate a source map indicating that each line maps directly to the original line,
+ * with the tokens in their new positions.
  */
  function computeSourceMap(
-  code,
+  {code: generatedCode, mappings: rawMappings},
   filePath,
-  {compiledFilename},
+  options,
+  source,
+  tokens,
 ) {
-  let mappings = "AAAA";
-  for (let i = 0; i < code.length; i++) {
-    if (code.charCodeAt(i) === _charcodes.charCodes.lineFeed) {
-      mappings += ";AACA";
+  const sourceColumns = computeSourceColumns(source, tokens);
+  const map = new (_genmapping.GenMapping)({file: options.compiledFilename});
+  let tokenIndex = 0;
+  // currentMapping is the output source index for the current input token being
+  // considered.
+  let currentMapping = rawMappings[0];
+  while (currentMapping === undefined && tokenIndex < rawMappings.length - 1) {
+    tokenIndex++;
+    currentMapping = rawMappings[tokenIndex];
+  }
+  let line = 0;
+  let lineStart = 0;
+  if (currentMapping !== lineStart) {
+    _genmapping.maybeAddSegment.call(void 0, map, line, 0, filePath, line, 0);
+  }
+  for (let i = 0; i < generatedCode.length; i++) {
+    if (i === currentMapping) {
+      const genColumn = currentMapping - lineStart;
+      const sourceColumn = sourceColumns[tokenIndex];
+      _genmapping.maybeAddSegment.call(void 0, map, line, genColumn, filePath, line, sourceColumn);
+      while (
+        (currentMapping === i || currentMapping === undefined) &&
+        tokenIndex < rawMappings.length - 1
+      ) {
+        tokenIndex++;
+        currentMapping = rawMappings[tokenIndex];
+      }
+    }
+    if (generatedCode.charCodeAt(i) === _charcodes.charCodes.lineFeed) {
+      line++;
+      lineStart = i + 1;
+      if (currentMapping !== lineStart) {
+        _genmapping.maybeAddSegment.call(void 0, map, line, 0, filePath, line, 0);
+      }
     }
   }
-  return {
-    version: 3,
-    file: compiledFilename || "",
-    sources: [filePath],
-    mappings,
-    names: [],
-  };
+  const {sourceRoot, sourcesContent, ...sourceMap} = _genmapping.toEncodedMap.call(void 0, map);
+  return sourceMap ;
 } var _default = computeSourceMap$1.default = computeSourceMap;
+
+/**
+ * Create an array mapping each token index to the 0-based column of the start
+ * position of the token.
+ */
+function computeSourceColumns(code, tokens) {
+  const sourceColumns = new Array(tokens.length);
+  let tokenIndex = 0;
+  let currentMapping = tokens[tokenIndex].start;
+  let lineStart = 0;
+  for (let i = 0; i < code.length; i++) {
+    if (i === currentMapping) {
+      sourceColumns[tokenIndex] = currentMapping - lineStart;
+      tokenIndex++;
+      currentMapping = tokens[tokenIndex].start;
+    }
+    if (code.charCodeAt(i) === _charcodes.charCodes.lineFeed) {
+      lineStart = i + 1;
+    }
+  }
+  return sourceColumns;
+}
 
 export { _default$1 as CJSImportProcessor, RootTransformer, _default as computeSourceMap, getSucraseContext, parse, transform, TokenType_1 as tt };

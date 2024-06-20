@@ -108,7 +108,9 @@ export default class ImportRemoverTransformer {
     };
 
     namedImports.forEach((s) => {
-      if (this.importProcessor.isTypeName(s.localName)) {
+      if (
+        this.importProcessor.shouldAutomaticallyElideImportedName(s.localName)
+      ) {
         return;
       }
 
@@ -123,7 +125,7 @@ export default class ImportRemoverTransformer {
     if (defaultNames.length || wildcardNames.length) {
       const name = defaultNames[0] || wildcardNames[0];
 
-      if (!this.importProcessor.isTypeName(name)) {
+      if (!this.importProcessor.shouldAutomaticallyElideImportedName(name)) {
         details.base = name;
         // intentionally use `var` so that conflcits with Jarle provider scope get resolved naturally
         // with the import overriding the scoped identifier

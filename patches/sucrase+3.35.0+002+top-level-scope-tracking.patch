@@ -1,19 +1,8 @@
-diff --git a/node_modules/sucrase/dist/esm/index.js b/node_modules/sucrase/dist/esm/index.js
-index c801dc0..08411f4 100644
---- a/node_modules/sucrase/dist/esm/index.js
-+++ b/node_modules/sucrase/dist/esm/index.js
-@@ -124,3 +124,6 @@ function getSucraseContext(code, options) {
-   }
-   return {tokenProcessor, scopes, nameManager, importProcessor, helperManager};
- }
-+
-+
-+export { RootTransformer, getSucraseContext }
 diff --git a/node_modules/sucrase/dist/esm/parser/traverser/statement.js b/node_modules/sucrase/dist/esm/parser/traverser/statement.js
-index 2ec57da..c6e6479 100644
+index 34a6511..4f19dcc 100644
 --- a/node_modules/sucrase/dist/esm/parser/traverser/statement.js
 +++ b/node_modules/sucrase/dist/esm/parser/traverser/statement.js
-@@ -87,7 +87,7 @@ import {
+@@ -89,7 +89,7 @@ import {
  } from "./util";
  
  export function parseTopLevel() {
@@ -22,7 +11,7 @@ index 2ec57da..c6e6479 100644
    state.scopes.push(new Scope(0, state.tokens.length, true));
    if (state.scopeDepth !== 0) {
      throw new Error(`Invalid scope depth at end of file: ${state.scopeDepth}`);
-@@ -102,7 +102,7 @@ export function parseTopLevel() {
+@@ -104,7 +104,7 @@ export function parseTopLevel() {
  // `if (foo) /blah/.exec(foo)`, where looking at the previous token
  // does not help.
  
@@ -31,7 +20,7 @@ index 2ec57da..c6e6479 100644
    if (isFlowEnabled) {
      if (flowTryParseStatement()) {
        return;
-@@ -111,10 +111,10 @@ export function parseStatement(declaration) {
+@@ -113,10 +113,10 @@ export function parseStatement(declaration) {
    if (match(tt.at)) {
      parseDecorators();
    }
@@ -44,7 +33,7 @@ index 2ec57da..c6e6479 100644
    if (isTypeScriptEnabled) {
      if (tsTryParseStatementContent()) {
        return;
-@@ -122,6 +122,7 @@ function parseStatementContent(declaration) {
+@@ -124,6 +124,7 @@ function parseStatementContent(declaration) {
    }
  
    const starttype = state.type;
@@ -52,7 +41,7 @@ index 2ec57da..c6e6479 100644
  
    // Most types of statements are recognized by the keyword they
    // start with. Many are trivial to parse, some require a bit of
-@@ -145,11 +146,13 @@ function parseStatementContent(declaration) {
+@@ -147,11 +148,13 @@ function parseStatementContent(declaration) {
        if (lookaheadType() === tt.dot) break;
        if (!declaration) unexpected();
        parseFunctionStatement();
@@ -66,7 +55,7 @@ index 2ec57da..c6e6479 100644
        return;
  
      case tt._if:
-@@ -157,6 +160,7 @@ function parseStatementContent(declaration) {
+@@ -159,9 +162,11 @@ function parseStatementContent(declaration) {
        return;
      case tt._return:
        parseReturnStatement();
@@ -74,19 +63,15 @@ index 2ec57da..c6e6479 100644
        return;
      case tt._switch:
        parseSwitchStatement();
-@@ -208,6 +212,7 @@ function parseStatementContent(declaration) {
-         if (match(tt._function) && !canInsertSemicolon()) {
-           expect(tt._function);
-           parseFunction(functionStart, true);
-+          state.tokens[startTokenIndex].isTopLevel = isTopLevel;
-           return;
-         } else {
-           state.restoreFromSnapshot(snapshot);
-@@ -232,11 +237,15 @@ function parseStatementContent(declaration) {
++      state.tokens[startTokenIndex].isTopLevel = isTopLevel;
+       return;
+     case tt._throw:
+       parseThrowStatement();
+@@ -247,11 +252,15 @@ function parseStatementContent(declaration) {
        simpleName = token.contextualKeyword;
      }
    }
-+
++  
 +  state.tokens[startTokenIndex].isTopLevel = isTopLevel;
 +
    if (simpleName == null) {
@@ -98,7 +83,7 @@ index 2ec57da..c6e6479 100644
      parseLabeledStatement();
    } else {
      // This was an identifier, so we might want to handle flow/typescript-specific cases.
-@@ -504,9 +513,9 @@ export function parseBlock(isFunctionScope = false, contextId = 0) {
+@@ -581,9 +590,9 @@ export function parseBlock(isFunctionScope = false, contextId = 0) {
    state.scopeDepth--;
  }
  
@@ -110,44 +95,11 @@ index 2ec57da..c6e6479 100644
    }
  }
  
-diff --git a/node_modules/sucrase/dist/index.js b/node_modules/sucrase/dist/index.js
-index d408a7e..d0e69bb 100644
---- a/node_modules/sucrase/dist/index.js
-+++ b/node_modules/sucrase/dist/index.js
-@@ -14,21 +14,6 @@ var _getTSImportedNames = require('./util/getTSImportedNames'); var _getTSImport
- 
- 
- 
--
--
--
--
--
--
--
--
--
--
--
--
--
--
--
-  function getVersion() {
-   /* istanbul ignore next */
-   return "3.29.0";
-@@ -124,3 +109,6 @@ function getSucraseContext(code, options) {
-   }
-   return {tokenProcessor, scopes, nameManager, importProcessor, helperManager};
- }
-+
-+exports.getSucraseContext = getSucraseContext;
-+exports.RootTransformer = _RootTransformer2.default
 diff --git a/node_modules/sucrase/dist/parser/traverser/statement.js b/node_modules/sucrase/dist/parser/traverser/statement.js
-index d2c109a..9d870fa 100644
+index 6be3391..255fbb5 100644
 --- a/node_modules/sucrase/dist/parser/traverser/statement.js
 +++ b/node_modules/sucrase/dist/parser/traverser/statement.js
-@@ -87,7 +87,7 @@ var _lval = require('./lval');
+@@ -89,7 +89,7 @@ var _lval = require('./lval');
  var _util = require('./util');
  
   function parseTopLevel() {
@@ -156,7 +108,7 @@ index d2c109a..9d870fa 100644
    _base.state.scopes.push(new (0, _state.Scope)(0, _base.state.tokens.length, true));
    if (_base.state.scopeDepth !== 0) {
      throw new Error(`Invalid scope depth at end of file: ${_base.state.scopeDepth}`);
-@@ -102,7 +102,7 @@ var _util = require('./util');
+@@ -104,7 +104,7 @@ var _util = require('./util');
  // `if (foo) /blah/.exec(foo)`, where looking at the previous token
  // does not help.
  
@@ -165,7 +117,7 @@ index d2c109a..9d870fa 100644
    if (_base.isFlowEnabled) {
      if (_flow.flowTryParseStatement.call(void 0, )) {
        return;
-@@ -111,10 +111,10 @@ var _util = require('./util');
+@@ -113,10 +113,10 @@ var _util = require('./util');
    if (_tokenizer.match.call(void 0, _types.TokenType.at)) {
      parseDecorators();
    }
@@ -178,7 +130,7 @@ index d2c109a..9d870fa 100644
    if (_base.isTypeScriptEnabled) {
      if (_typescript.tsTryParseStatementContent.call(void 0, )) {
        return;
-@@ -122,6 +122,7 @@ function parseStatementContent(declaration) {
+@@ -124,6 +124,7 @@ function parseStatementContent(declaration) {
    }
  
    const starttype = _base.state.type;
@@ -186,7 +138,7 @@ index d2c109a..9d870fa 100644
  
    // Most types of statements are recognized by the keyword they
    // start with. Many are trivial to parse, some require a bit of
-@@ -145,11 +146,13 @@ function parseStatementContent(declaration) {
+@@ -147,11 +148,13 @@ function parseStatementContent(declaration) {
        if (_tokenizer.lookaheadType.call(void 0, ) === _types.TokenType.dot) break;
        if (!declaration) _util.unexpected.call(void 0, );
        parseFunctionStatement();
@@ -200,7 +152,7 @@ index d2c109a..9d870fa 100644
        return;
  
      case _types.TokenType._if:
-@@ -157,6 +160,7 @@ function parseStatementContent(declaration) {
+@@ -159,6 +162,7 @@ function parseStatementContent(declaration) {
        return;
      case _types.TokenType._return:
        parseReturnStatement();
@@ -208,7 +160,7 @@ index d2c109a..9d870fa 100644
        return;
      case _types.TokenType._switch:
        parseSwitchStatement();
-@@ -208,6 +212,7 @@ function parseStatementContent(declaration) {
+@@ -210,6 +214,7 @@ function parseStatementContent(declaration) {
          if (_tokenizer.match.call(void 0, _types.TokenType._function) && !_util.canInsertSemicolon.call(void 0, )) {
            _util.expect.call(void 0, _types.TokenType._function);
            parseFunction(functionStart, true);
@@ -216,7 +168,7 @@ index d2c109a..9d870fa 100644
            return;
          } else {
            _base.state.restoreFromSnapshot(snapshot);
-@@ -232,11 +237,15 @@ function parseStatementContent(declaration) {
+@@ -247,11 +252,15 @@ function parseStatementContent(declaration) {
        simpleName = token.contextualKeyword;
      }
    }
@@ -232,7 +184,7 @@ index d2c109a..9d870fa 100644
      parseLabeledStatement();
    } else {
      // This was an identifier, so we might want to handle flow/typescript-specific cases.
-@@ -504,9 +513,9 @@ function parseIdentifierStatement(contextualKeyword) {
+@@ -581,9 +590,9 @@ function parseIdentifierStatement(contextualKeyword) {
    _base.state.scopeDepth--;
  } exports.parseBlock = parseBlock;
  
@@ -245,7 +197,7 @@ index d2c109a..9d870fa 100644
  } exports.parseBlockBody = parseBlockBody;
  
 diff --git a/node_modules/sucrase/dist/types/parser/tokenizer/index.d.ts b/node_modules/sucrase/dist/types/parser/tokenizer/index.d.ts
-index f93c24d..cdc591e 100644
+index 45cd799..66b2480 100644
 --- a/node_modules/sucrase/dist/types/parser/tokenizer/index.d.ts
 +++ b/node_modules/sucrase/dist/types/parser/tokenizer/index.d.ts
 @@ -51,6 +51,7 @@ export declare class Token {
