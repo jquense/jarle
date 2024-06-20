@@ -11,7 +11,7 @@ module.exports = (api) => {
           targets: { esmodules: true },
         },
       ],
-      '@babel/preset-react',
+      ['@babel/preset-react', { runtime: 'automatic' }],
       ['@babel/preset-typescript', { allowDeclareFields: true }],
     ],
     plugins: ['@babel/plugin-syntax-dynamic-import'].filter(Boolean),
