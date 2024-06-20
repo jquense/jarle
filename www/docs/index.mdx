@@ -180,8 +180,7 @@ or other bundlers.
 A full example of how to use JARLE via another JARLE editor!
 
 ```jsx live inline=false
-import theme from 'jarle/themes/oceanicNext';
-import { Provider, Editor, Error, Preview } from 'jarle';
+import { Provider, Editor, Error, Preview, themes } from 'jarle';
 
 const code = `
   <strong>Here's an editor inside an editor</strong>
@@ -190,7 +189,7 @@ const code = `
 <div>
   <h4 align="center">Yo Dawg I heard you liked editors</h4>
 
-  <Provider code={code} theme={theme} language="jsx">
+  <Provider code={code} theme={themes.oceanicNext} language="jsx">
     <Editor style={{ padding: 20 }} infoSrOnly />
     <Preview style={{ padding: 20, textAlign: 'center' }} />
     <Error />
@@ -205,8 +204,7 @@ like global CSS. If want to sandbox the result from the parent document, render
 your preview into an `<iframe>` useing a "portal".
 
 ```jsx live inline=false showImports= false
-import theme from 'jarle/themes/oceanicNext';
-import { Provider, Editor, Error, Preview } from 'jarle';
+import { Provider, Editor, Error, Preview, themes } from 'jarle';
 
 function IFrameEditor(props) {
   const [contentRef, setContentRef] = useState(null);
@@ -232,23 +230,23 @@ const code = `
   <strong>Here's an editor inside an editor inside an iframe</strong>
 `;
 
-<IFrameEditor code={code} theme={theme} language="jsx" />;
+<IFrameEditor code={code} theme={themes.oceanicNext} language="jsx" />;
 ```
 
 ### Syntax Highlighting
 
 Like React Live, JARLE uses Prism via [`prism-react-renderer`](https://github.com/FormidableLabs/prism-react-renderer)
 for syntax highlighting. To get up and running quickly JARLE also reexports
-all the packages themes from prism-react-renderer, under `jarle/themes` so you
+all the packages themes from prism-react-renderer, under `themes` so you
 don't have to explicitly add `prism-react-renderer` to your `package.json`.
 
 To use a theme import and pass it to the `Provider`:
 
 ```jsx
-import theme from 'jarle/themes/oceanicNext';
+import { themes } from 'jarle';
 
 <Provider
-  theme={theme}
+  theme={themes.oceanicNext}
   ...
 />
 ```

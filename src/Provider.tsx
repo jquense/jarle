@@ -1,6 +1,6 @@
 import useEventCallback from '@restart/hooks/useEventCallback';
 import useMounted from '@restart/hooks/useMounted';
-import { PrismTheme } from 'prism-react-renderer';
+import type { PrismTheme } from 'prism-react-renderer';
 import React, {
   ReactNode,
   useContext,

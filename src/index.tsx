@@ -1,4 +1,4 @@
-import { Prism } from 'prism-react-renderer';
+import { Prism, themes } from 'prism-react-renderer';
 
 import CodeBlock from './CodeBlock';
 import Editor from './Editor';
@@ -19,6 +19,7 @@ export {
   Provider,
   InfoMessage,
   highlight,
+  themes,
 };
 
 export type { PrismTheme, Language } from 'prism-react-renderer';

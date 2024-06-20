@@ -1,4 +1,4 @@
-import Highlight, { Language, Prism, PrismTheme } from 'prism-react-renderer';
+import { Highlight, Language, Prism, PrismTheme } from 'prism-react-renderer';
 import React from 'react';
 import LineNumber from './LineNumber';
 import { LineOutputProps } from './prism';
@@ -64,7 +64,7 @@ function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
   return (
     <Highlight
       theme={theme}
-      Prism={Prism}
+      prism={Prism}
       code={code.trim()}
       language={language}
     >

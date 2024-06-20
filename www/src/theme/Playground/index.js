@@ -24,14 +24,7 @@ function resolveImports(sources) {
       if (s === 'jarle') {
         return Jarle;
       }
-      if (s.startsWith('jarle/themes')) {
-        return import(
-          /* webpackIgnore: true */ s.replace(
-            'jarle',
-            'https://cdn.skypack.dev/prism-react-renderer'
-          )
-        );
-      }
+
       return import(/* webpackIgnore: true */ s);
     })
   );

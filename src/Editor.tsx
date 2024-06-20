@@ -1,4 +1,4 @@
-import Highlight, { Prism, PrismTheme } from 'prism-react-renderer';
+import { Highlight, Prism, type PrismTheme } from 'prism-react-renderer';
 import useMergeState from '@restart/hooks/useMergeState';
 import useStableMemo from '@restart/hooks/useStableMemo';
 import React, {
@@ -157,7 +157,7 @@ const Editor = React.forwardRef(
       (value: string) => (
         <Highlight
           theme={userTheme}
-          Prism={Prism}
+          prism={Prism}
           code={value}
           language={language as any}
         >
