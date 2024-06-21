@@ -1,9 +1,9 @@
 import { Highlight, Language, Prism, PrismTheme } from 'prism-react-renderer';
 import React from 'react';
 import LineNumber from './LineNumber.js';
-import { LineOutputProps } from './prism.js';
+import { LineOutputProps, RenderProps } from './prism.js';
 
-type MapTokens = Omit<LineOutputProps, 'props'> & {
+type MapTokens = RenderProps & {
   getLineNumbers?: (line: number) => React.ReactNode;
   errorLocation?: { line: number; col: number };
 };
@@ -27,22 +27,23 @@ export const mapTokens = ({
   getLineNumbers,
 }: MapTokens) => (
   <>
-    {tokens.map((line, i) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <div
-        {...addErrorHighlight(
-          getLineProps({ line, key: String(i) }),
-          i,
-          errorLocation
-        )}
-      >
-        {getLineNumbers?.(i + 1)}
-        {line.map((token, ii) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <span key={ii} {...getTokenProps({ token, key: String(ii) })} />
-        ))}
-      </div>
-    ))}
+    {tokens.map((line, i) => {
+      const { key = i, ...lineProps } = getLineProps({ line, key: String(i) });
+
+      return (
+        <div key={key} {...addErrorHighlight(lineProps, i, errorLocation)}>
+          {getLineNumbers?.(i + 1)}
+          {line.map((token, ii) => {
+            const { key = ii, ...props } = getTokenProps({
+              token,
+              key: String(ii),
+            });
+
+            return <span key={key} {...props} />;
+          })}
+        </div>
+      );
+    })}
   </>
 );
 

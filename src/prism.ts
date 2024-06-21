@@ -1,3 +1,5 @@
+import { CSSProperties } from 'react';
+
 export type Language =
   | 'markup'
   | 'bash'
@@ -83,9 +85,7 @@ export type PrismToken = {
   content: Array<PrismToken | string> | string;
 };
 
-export type StyleObj = {
-  [key: string]: string | number | null;
-};
+export type StyleObj = CSSProperties;
 
 export type LineInputProps = {
   key?: string;

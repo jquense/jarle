@@ -163,8 +163,6 @@ const Editor = React.forwardRef(
           {(hl) =>
             mapTokens({
               ...hl,
-              lineNumbers,
-              theme: userTheme,
               errorLocation,
               getLineNumbers: (line: number) =>
                 lineNumbers ? (
