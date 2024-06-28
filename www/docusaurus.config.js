@@ -50,12 +50,12 @@ module.exports = {
     ],
   ],
   plugins: [
-    [
-      require.resolve('./plugins/docgen'),
-      {
-        src: ['../src/**/*.tsx'],
-      },
-    ],
+    // [
+    //   require.resolve('./plugins/docgen'),
+    //   {
+    //     src: ['../src/**/*.tsx'],
+    //   },
+    // ],
     require.resolve('./plugins/resolve-react'),
   ],
 };

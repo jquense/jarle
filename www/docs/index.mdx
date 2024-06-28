@@ -3,11 +3,11 @@ id: docs
 title: JARLE
 slug: /
 ---
-
+{/* 
 import providerMeta from '@metadata/Provider';
 import editor from '@metadata/Editor';
 import error from '@metadata/Error';
-import preview from '@metadata/Preview';
+import preview from '@metadata/Preview'; */}
 import PropsList from '@theme/PropsList';
 
 Write code and see the result as you type.
@@ -287,28 +287,3 @@ read out to a Screen Reader). The visual message is enabled by default
 because not all keyboard users are screen reader users. If you want to make the
 messages "screen ready only", pass `infoSrOnly` to the `Editor`.
 
-## API
-
-### `<Provider>`
-
-<p>{React.createElement(providerMeta.description)}</p>
-
-<PropsList metadata={providerMeta} />
-
-### `<Editor>`
-
-<p>{React.createElement(editor.description)}</p>
-
-<PropsList metadata={editor} />
-
-### `<Preview>`
-
-<p>{React.createElement(preview.description)}</p>
-
-<PropsList metadata={preview} />
-
-### `<Error>`
-
-<p>{React.createElement(error.description)}</p>
-
-<PropsList metadata={error} />

@@ -62,6 +62,7 @@ function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
   const getLineNumbers = lineNumbers
     ? (num: number) => <LineNumber theme={theme}>{num}</LineNumber>
     : undefined;
+
   return (
     <Highlight
       theme={theme}
