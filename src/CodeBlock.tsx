@@ -64,12 +64,7 @@ function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
     : undefined;
 
   return (
-    <Highlight
-      theme={theme}
-      prism={Prism}
-      code={code.trim()}
-      language={language}
-    >
+    <Highlight theme={theme} prism={Prism} code={code} language={language}>
       {(hl) => (
         <pre
           className={`${props.className || ''} ${hl.className}`}
