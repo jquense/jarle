@@ -12,7 +12,7 @@ yarn babel src --out-dir cjs --delete-dir-on-start -x .ts,.tsx,.js,.mjs --env-na
 echo "replace import placeholder"
 sed -i '' 's/__IMPORT__/(s) => import(\/* webpackIgnore: true \*\/ \/\* @vite-ignore \*\/ s)/' ./{lib,cjs}/Provider.js
 
-echo "{ \"type\": \"commonjs\" }" > ./lib/package.json
+echo "{ \"type\": \"commonjs\" }" > ./cjs/package.json
 
 echo "Generate types"
 yarn tsc -p . --emitDeclarationOnly --declaration --outDir lib
