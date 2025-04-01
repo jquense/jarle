@@ -15,29 +15,29 @@
     "test": "vitest run"
   },
   "files": [
-    "esm",
+    "cjs",
     "lib"
   ],
   "type": "module",
   "exports": {
     ".": {
       "require": {
-        "types": "./lib/index.d.ts",
-        "default": "./lib/index.js"
+        "types": "./cjs/index.d.ts",
+        "default": "./cjs/index.js"
       },
       "import": {
-        "types": "./esm/index.d.ts",
-        "default": "./esm/index.js"
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
       }
     },
     "./*": {
       "require": {
-        "types": "./lib/*.d.ts",
-        "default": "./lib/*.js"
+        "types": "./cjs/*.d.ts",
+        "default": "./cjs/*.js"
       },
       "import": {
-        "types": "./esm/*.d.ts",
-        "default": "./esm/*.js"
+        "types": "./lib/*.d.ts",
+        "default": "./lib/*.js"
       }
     }
   },
@@ -56,16 +56,18 @@
     "@babel/preset-typescript": "^7.24.7",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "@types/enzyme": "^3.10.10",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.2.0",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "@types/react-is": "^19.0.0",
     "cpy": "^8.1.2",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
     "glob": "^7.2.0",
     "jsdom": "^24.1.0",
     "patch-package": "^8.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-is": "^19.1.0",
     "rollup": "^2.59.0",
     "rollup-plugin-dts": "^4.0.1",
     "sucrase": "^3.35.0",
@@ -73,17 +75,14 @@
     "vitest": "^1.6.0"
   },
   "dependencies": {
-    "@restart/hooks": "^0.4.16",
-    "@types/react": "^17.0.80",
-    "@types/react-dom": "^17.0.25",
-    "@types/react-is": "^17.0.3",
-    "prism-react-renderer": "^2.3.1",
-    "react-is": "^17.0.2",
-    "react-simple-code-editor": "^0.11.0",
+    "@restart/hooks": "^0.6.2",
+    "prism-react-renderer": "^2.4.1",
     "sourcemap-codec": "^1.4.8"
   },
   "peerDependencies": {
-    "react": ">=16.8.6",
-    "react-dom": ">=16.8.6"
-  }
+    "react": ">=18.3.1",
+    "react-dom": ">=18.3.1",
+    "react-is": ">=18.3.1"
+  },
+  "packageManager": "yarn@4.8.1+sha512.bc946f2a022d7a1a38adfc15b36a66a3807a67629789496c3714dd1703d2e6c6b1c69ff9ec3b43141ac7a1dd853b7685638eb0074300386a59c18df351ef8ff6"
 }

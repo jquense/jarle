@@ -1,13 +1,12 @@
 /* eslint-disable require-await */
 
-import { mount } from 'enzyme';
+import { fireEvent, render, act } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { act } from 'react-dom/test-utils';
 import Provider, { Props, useElement, useError } from '../src/Provider.js';
 
 describe('Provider', () => {
   async function mountProvider(props: Props<{}>) {
-    let wrapper: ReturnType<typeof mount>;
+    let wrapper: ReturnType<typeof render>;
 
     function Child() {
       const el = useElement();
@@ -16,35 +15,35 @@ describe('Provider', () => {
       return el;
     }
 
+    wrapper = render(<Provider children={<Child />} {...props} />);
+
     await act(async () => {
-      // eslint-disable-next-line react/no-children-prop
-      wrapper = mount(<Provider children={<Child />} {...props} />);
+      wrapper.rerender(<Provider children={<Child />} {...props} />);
     });
 
-    wrapper!.update();
     return wrapper!;
   }
 
   it('should render', async () => {
     const wrapper = await mountProvider({
       code: `
-        <div className="test" />
+        <div data-testid="test" />
       `,
     });
 
-    expect(wrapper.find('div.test')).toHaveLength(1);
+    expect(wrapper.getByTestId('test')).toBeDefined();
   });
 
   it('should render function component', async () => {
     const wrapper = await mountProvider({
       code: `
         function Example() {
-          return <div className="test" />
+          return <div data-testid="test" />
         }
       `,
     });
 
-    expect(wrapper.find('div.test')).toHaveLength(1);
+    expect(wrapper.getByTestId('test')).toBeDefined();
   });
 
   it('should render class component', async () => {
@@ -52,13 +51,13 @@ describe('Provider', () => {
       code: `
         class Example extends React.Component {
           render() {
-            return <div className="test" />
+            return <div data-testid="test" />
           }
         }
       `,
     });
 
-    expect(wrapper.find('div.test')).toHaveLength(1);
+    expect(wrapper.getByTestId('test')).toBeDefined();
   });
 
   it('should renderAsComponent', async () => {
@@ -67,17 +66,16 @@ describe('Provider', () => {
       code: `
         const [count, setCount] = useState(1);
 
-        <div className="test" onClick={() => setCount(2)}>{count}</div>
+        <div data-testid="test" onClick={() => setCount(2)}>{count}</div>
       `,
     });
 
-    expect(wrapper.find('StateContainer')).toHaveLength(1);
-    const div = wrapper.find('.test');
+    const div = wrapper.getByTestId('test');
 
-    expect(div).toHaveLength(1);
-    expect(div.text()).toEqual('1');
+    expect(div).toBeDefined();
+    expect(div.textContent).toEqual('1');
 
-    div.simulate('click');
-    expect(div.text()).toEqual('2');
+    fireEvent.click(div);
+    expect(div.textContent).toEqual('2');
   });
 });

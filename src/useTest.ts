@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useCommittedRef } from '@restart/hooks';
+import useCommittedRef from '@restart/hooks/useCommittedRef';
 
 /**
  * Creates a `setInterval` that is properly cleaned up when a component unmounted

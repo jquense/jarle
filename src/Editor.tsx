@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import SimpleCodeEditor from 'react-simple-code-editor';
+import SimpleCodeEditor from './SimpleEditor.js';
 
 import { mapTokens } from './CodeBlock.js';
 import InfoMessage from './InfoMessage.js';

@@ -1,4 +1,5 @@
-import { useEventCallback, useMounted } from '@restart/hooks';
+import useEventCallback from '@restart/hooks/useEventCallback';
+import useMounted from '@restart/hooks/useMounted';
 import type { PrismTheme } from 'prism-react-renderer';
 import React, {
   ReactNode,
@@ -9,6 +10,7 @@ import React, {
   isValidElement,
   createElement,
   useCallback,
+  JSX,
 } from 'react';
 import { isValidElementType } from 'react-is';
 // import { decode } from 'sourcemap-codec';
@@ -118,7 +120,7 @@ function codeToComponent<TScope extends {}>(
       );
     }
 
-    const render = (element: JSX.Element) => {
+    const render = (element: React.ReactElement) => {
       if (element === undefined) {
         reject(new SyntaxError('`render()` was called without a JSX element'));
         return;

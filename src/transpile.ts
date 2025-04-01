@@ -1,4 +1,4 @@
-import { Import, transform } from './transform/index.ts';
+import { Import, transform } from './transform/index.js';
 
 export type Options = {
   inline?: boolean;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import transpile from '../src/transpile.ts';
+import transpile from '../src/transpile.js';
 
 describe('parseImports', () => {
   it('removes imports', () => {

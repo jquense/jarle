@@ -1,6 +1,5 @@
 import { describe, it, test, expect } from 'vitest';
-import type { Options } from 'sucrase';
-import { transform } from '../src/transform/index.ts';
+import { transform } from '../src/transform/index.js';
 
 describe('general parsing smoketest', () => {
   it('parses', () => {
