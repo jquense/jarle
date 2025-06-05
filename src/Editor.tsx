@@ -70,7 +70,6 @@ export interface ControlledEditorProps extends Props {
 
   onCodeChange: (code: string) => void;
 
-  onError: (error: Error) => void;
 }
 
 /**
@@ -260,7 +259,6 @@ export default function Editor({ theme, ...props }: Props) {
     theme: contextTheme,
     language,
     onChange,
-    onError,
     error,
   } = useLiveContext();
 
@@ -278,7 +276,6 @@ export default function Editor({ theme, ...props }: Props) {
         setCode(nextCode);
         onChange(nextCode);
       }}
-      onError={onError}
       errorLocation={errorLocation}
     />
   );
