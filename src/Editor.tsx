@@ -55,57 +55,47 @@ function useInlineStyle() {
     `);
   }, []);
 }
-export interface Props {
-  className?: string;
 
-  style?: any;
+export interface ControlledEditorProps extends Props {
+  language?: string;
 
-  /** A Prism theme object, can also be specified on the Provider */
-  theme?: PrismTheme;
+  code: string;
 
-  /** Render line numbers */
-  lineNumbers?: boolean;
+  errorLocation?:
+    | {
+        line: number;
+        col: number;
+      }
+    | undefined;
 
-  /** Styles the info component so that it is not visible but still accessible by screen readers. */
-  infoSrOnly?: boolean;
+  onCodeChange: (code: string) => void;
 
-  /** The component used to render A11y messages about keyboard navigation, override to customize the styling */
-  infoComponent?: React.ComponentType<any>;
+  onError: (error: Error) => void;
 }
 
 /**
  * The Editor is the code text editor component, some props can be supplied directly
  * or take from the Provider context if available.
  */
-const Editor = React.forwardRef(
+export const ControlledEditor = React.forwardRef(
   (
     {
+      code,
       style,
       className,
       theme,
+      language,
+      onCodeChange,
+      errorLocation,
       infoComponent: Info = InfoMessage,
       lineNumbers,
       infoSrOnly = false,
-    }: Props,
+    }: ControlledEditorProps,
     ref: any
   ) => {
-    const {
-      code: contextCode,
-      theme: contextTheme,
-      language,
-      onChange,
-      error,
-    } = useLiveContext();
-    const userTheme = theme || contextTheme;
-    const [code, setCode] = useStateFromProp(contextCode);
-
     const mouseDown = useRef(false);
 
     useInlineStyle();
-
-    useLayoutEffect(() => {
-      onChange(code || '');
-    }, [code, onChange]);
 
     const [{ visible, ignoreTab, keyboardFocused }, setState] = useState({
       visible: false,
@@ -120,10 +110,10 @@ const Editor = React.forwardRef(
 
       if (ignoreTab && key !== 'Tab' && key !== 'Shift') {
         if (key === 'Enter') event.preventDefault();
-        setState(prev => ({ ...prev, ignoreTab: false }));
+        setState((prev) => ({ ...prev, ignoreTab: false }));
       }
       if (!ignoreTab && key === 'Escape') {
-        setState(prev => ({ ...prev, ignoreTab: true }));
+        setState((prev) => ({ ...prev, ignoreTab: true }));
       }
     };
 
@@ -138,7 +128,7 @@ const Editor = React.forwardRef(
 
     const handleBlur = (e: React.FocusEvent) => {
       if (e.target !== e.currentTarget) return;
-      setState(prev => ({ 
+      setState((prev) => ({
         ...prev,
         visible: false,
       }));
@@ -151,11 +141,10 @@ const Editor = React.forwardRef(
       });
     };
 
-    const errorLocation = error?.location || error?.loc;
     const highlight = useCallback(
       (value: string) => (
         <Highlight
-          theme={userTheme}
+          theme={theme}
           prism={Prism}
           code={value}
           language={language as any}
@@ -172,7 +161,7 @@ const Editor = React.forwardRef(
                       transform: 'translateX(-100%)',
                       left: 0,
                     }}
-                    theme={userTheme}
+                    theme={theme}
                   >
                     {line}
                   </LineNumber>
@@ -181,13 +170,13 @@ const Editor = React.forwardRef(
           }
         </Highlight>
       ),
-      [userTheme, lineNumbers, language, errorLocation]
+      [theme, lineNumbers, language, errorLocation]
     );
 
     const baseTheme = {
       whiteSpace: 'pre',
       fontFamily: 'monospace',
-      ...(userTheme?.plain || {}),
+      ...(theme?.plain || {}),
       ...style,
     };
 
@@ -208,7 +197,7 @@ const Editor = React.forwardRef(
             (code || '').split(/\n/g).map((_, i) => (
               <LineNumber
                 key={i}
-                theme={userTheme}
+                theme={theme}
                 className={i + 1 === errorLocation?.line && 'token-line-error'}
                 style={{ display: 'block' }}
               >
@@ -222,7 +211,7 @@ const Editor = React.forwardRef(
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           onMouseDown={handleMouseDown}
-          onValueChange={setCode}
+          onValueChange={onCodeChange}
           highlight={highlight}
           ignoreTabKey={ignoreTab}
           aria-describedby={id}
@@ -247,4 +236,50 @@ const Editor = React.forwardRef(
   }
 );
 
-export default Editor;
+export interface Props {
+  className?: string;
+
+  style?: any;
+
+  /** A Prism theme object, can also be specified on the Provider */
+  theme?: PrismTheme;
+
+  /** Render line numbers */
+  lineNumbers?: boolean;
+
+  /** Styles the info component so that it is not visible but still accessible by screen readers. */
+  infoSrOnly?: boolean;
+
+  /** The component used to render A11y messages about keyboard navigation, override to customize the styling */
+  infoComponent?: React.ComponentType<any>;
+}
+
+export default function Editor({ theme, ...props }: Props) {
+  const {
+    code: contextCode,
+    theme: contextTheme,
+    language,
+    onChange,
+    onError,
+    error,
+  } = useLiveContext();
+
+  const [code, setCode] = useStateFromProp(contextCode || '');
+
+  const errorLocation = error?.location || error?.loc;
+
+  return (
+    <ControlledEditor
+      {...props}
+      code={code}
+      language={language}
+      theme={theme || contextTheme}
+      onCodeChange={nextCode => {
+        setCode(nextCode);
+        onChange(nextCode);
+      }}
+      onError={onError}
+      errorLocation={errorLocation}
+    />
+  );
+}

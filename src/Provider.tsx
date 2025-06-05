@@ -49,7 +49,12 @@ export interface LiveContext {
   onError(error: Error): void;
 }
 
-export const Context = React.createContext<LiveContext>({} as any);
+export const Context = React.createContext<LiveContext>({
+  element: null,
+  error: null,
+  onChange: () => {},
+  onError: () => {},
+});
 
 const getRequire = (imports?: Record<string, any>) =>
   function require(request: string) {

@@ -1,7 +1,7 @@
 import { Prism, themes } from 'prism-react-renderer';
 
 import CodeBlock from './CodeBlock.js';
-import Editor from './Editor.js';
+import Editor, { ControlledEditor } from './Editor.js';
 import Error from './Error.js';
 import InfoMessage from './InfoMessage.js';
 import Preview from './Preview.js';
@@ -20,6 +20,7 @@ export {
   CodeBlock,
   Error,
   Editor,
+  ControlledEditor,
   Preview,
   Provider,
   InfoMessage,

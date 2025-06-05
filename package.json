@@ -77,7 +77,8 @@
   "dependencies": {
     "@restart/hooks": "^0.6.2",
     "prism-react-renderer": "^2.4.1",
-    "sourcemap-codec": "^1.4.8"
+    "sourcemap-codec": "^1.4.8",
+    "uncontrollable": "^9.0.0"
   },
   "peerDependencies": {
     "react": ">=18.3.1",
