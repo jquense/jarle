@@ -6,7 +6,11 @@ interface Props {
   showLastValid: boolean;
 }
 
-type State = { hasError?: boolean; element?: ReactElement | null };
+type State = {
+  hasError?: boolean;
+  element?: ReactElement | null;
+  revision: number;
+};
 
 class CodeLiveErrorBoundary extends React.Component<Props, State> {
   declare context: React.ContextType<typeof ActionContext>;
@@ -14,6 +18,7 @@ class CodeLiveErrorBoundary extends React.Component<Props, State> {
   lastGoodResult: ReactElement | null = null;
 
   pendingLastGoodResult: ReactElement | null = null;
+  errorRenderCount = 0;
   timeout: NodeJS.Timeout | null = null;
 
   constructor(props: Props) {
@@ -22,6 +27,7 @@ class CodeLiveErrorBoundary extends React.Component<Props, State> {
     this.state = {
       hasError: false,
       element: props.element,
+      revision: 0,
     };
   }
 
@@ -37,6 +43,7 @@ class CodeLiveErrorBoundary extends React.Component<Props, State> {
     return {
       hasError: false,
       element: props.element,
+      revision: state.revision + 1,
     };
   }
 
@@ -49,7 +56,11 @@ class CodeLiveErrorBoundary extends React.Component<Props, State> {
     this.pendingLastGoodResult = null;
 
     // if the lastGoodResult is crashing then don't keep reporting it.
-    if (this.state.hasError && this.lastGoodResult) {
+    if (
+      this.state.hasError &&
+      this.lastGoodResult &&
+      this.errorRenderCount > 1
+    ) {
       this.lastGoodResult = null;
       return;
     }
@@ -63,7 +74,11 @@ class CodeLiveErrorBoundary extends React.Component<Props, State> {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (prevState.revision !== this.state.revision) {
+      this.errorRenderCount = 0;
+    }
+
     if (!this.state.hasError) {
       if (this.pendingLastGoodResult) {
         this.lastGoodResult = this.pendingLastGoodResult;
@@ -73,9 +88,14 @@ class CodeLiveErrorBoundary extends React.Component<Props, State> {
 
       // sometimes cDU is called before the error is caught...
       this.timeout = setTimeout(() => {
-        if (this.state.hasError || !this.pendingLastGoodResult) return;
+        if (this.state.hasError || !this.pendingLastGoodResult) {
+          return;
+        }
+
         this.lastGoodResult = this.pendingLastGoodResult;
       }, 100);
+    } else {
+      this.errorRenderCount++;
     }
   }
 

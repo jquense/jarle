@@ -11,6 +11,7 @@ import React, {
   createElement,
   useCallback,
   JSX,
+  useDeferredValue,
 } from 'react';
 import { isValidElementType } from 'react-is';
 // import { decode } from 'sourcemap-codec';
@@ -68,6 +69,8 @@ export interface LiveContext {
   onChange(code: string): void;
   onError(error: Error): void;
 }
+
+export const CodeContext = React.createContext<string>('');
 
 export const ElementContext = React.createContext<ElementContextValue>({
   element: null,
@@ -283,6 +286,10 @@ export interface Props<TScope> {
   resolveImports?: ImportResolver;
 }
 
+export function useCode() {
+  return useContext(CodeContext);
+}
+
 export function useElement() {
   return useContext(ElementContext).element;
 }
@@ -342,7 +349,7 @@ function useCompiledCode(
   setError: any
 ) {
   const compile = useCallback(
-    (nextCode) => {
+    (nextCode: string) => {
       const isInline = !hasRenderCall(nextCode);
 
       nextCode = nextCode.replace(prettierComment, '').trim();
@@ -365,7 +372,7 @@ function useCompiledCode(
     const emptyResponse = { code: nextCode, imports: [] };
 
     if (showImports) {
-      return { code: nextCode, imports: [] };
+      return emptyResponse;
     }
 
     try {
@@ -378,7 +385,7 @@ function useCompiledCode(
       });
     } catch (error) {
       setError(error);
-      return { code: nextCode, imports: [] };
+      return emptyResponse;
     }
   }, [consumerCode, compile, setError, showImports]);
 
@@ -420,6 +427,9 @@ export default function Provider<TScope extends {} = {}>({
     setError
   );
   const initialCompiledCode = initialResult.compiledCode;
+
+  const [code, setCode] = useState<string>(initialCompiledCode);
+  const deferredCode = useDeferredValue(code);
 
   const handleChange = useEventCallback((nextCode: string) => {
     try {
@@ -469,8 +479,8 @@ export default function Provider<TScope extends {} = {}>({
   });
 
   useEffect(() => {
-    handleChange(initialCompiledCode);
-  }, [initialCompiledCode, scope, handleChange]);
+    handleChange(deferredCode);
+  }, [deferredCode, scope, handleChange]);
 
   const configContext = useMemo(
     () => ({
@@ -485,19 +495,21 @@ export default function Provider<TScope extends {} = {}>({
   const errorContextValue = useMemo(() => ({ error }), [error]);
   const actionContextValue = useMemo(
     () => ({
-      onChange: handleChange,
+      onChange: setCode,
       onError: setError,
     }),
-    [handleChange]
+    [setCode]
   );
 
   return (
     <EditorContext.Provider value={configContext}>
       <ActionContext.Provider value={actionContextValue}>
         <ErrorContext.Provider value={errorContextValue}>
-          <ElementContext.Provider value={elementContextValue}>
-            {children}
-          </ElementContext.Provider>
+          <CodeContext.Provider value={code}>
+            <ElementContext.Provider value={elementContextValue}>
+              {children}
+            </ElementContext.Provider>
+          </CodeContext.Provider>
         </ErrorContext.Provider>
       </ActionContext.Provider>
     </EditorContext.Provider>

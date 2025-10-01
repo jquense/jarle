@@ -11,7 +11,7 @@ import SimpleCodeEditor from './SimpleEditor.js';
 
 import { mapTokens } from './CodeBlock.js';
 import InfoMessage from './InfoMessage.js';
-import { useActions, useEditorConfig, useError, useLiveContext } from './Provider.js';
+import { useActions, useCode, useEditorConfig, useError, useLiveContext } from './Provider.js';
 import LineNumber from './LineNumber.js';
 
 let uid = 0;
@@ -255,13 +255,12 @@ export interface Props {
 
 export default function Editor({ theme, ...props }: Props) {
   const {
-    code: contextCode,
     theme: contextTheme,
     language,
   } = useEditorConfig();
+  const code = useCode()
   const error = useError();
-  const actions = useActions()
-  const [code, setCode] = useStateFromProp(contextCode || '');
+  const { onChange} = useActions()
 
   const errorLocation = error?.location || error?.loc;
 
@@ -271,10 +270,7 @@ export default function Editor({ theme, ...props }: Props) {
       code={code}
       language={language}
       theme={theme || contextTheme}
-      onCodeChange={nextCode => {
-        setCode(nextCode);
-        actions.onChange(nextCode);
-      }}
+      onCodeChange={onChange}
       errorLocation={errorLocation}
     />
   );

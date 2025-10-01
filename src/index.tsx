@@ -12,6 +12,7 @@ import Provider, {
   useLiveContext,
   useEditorConfig,
   useActions,
+  useCode,
 } from './Provider.js';
 import highlight from './highlight.js';
 
@@ -31,6 +32,7 @@ export {
   useActions,
   useElement,
   useError,
+  useCode,
   useEditorConfig,
   useLiveContext,
 };
