@@ -38,6 +38,26 @@ export const isTypeScriptEnabled = (language?: string) => {
   return lower === 'typescript' || lower === 'tsx' || lower === 'ts';
 };
 
+type ErrorContextValue = {
+  error: LiveError | null;
+};
+
+type ElementContextValue = {
+  element: JSX.Element | null;
+};
+
+type ActionContextValue = {
+  onChange(code: string): void;
+  onError(error: Error): void;
+};
+
+type EditorContextValue = {
+  code?: string;
+  language?: string;
+  theme?: PrismTheme;
+  disabled?: boolean;
+};
+
 export interface LiveContext {
   code?: string;
   language?: string;
@@ -49,12 +69,20 @@ export interface LiveContext {
   onError(error: Error): void;
 }
 
-export const Context = React.createContext<LiveContext>({
+export const ElementContext = React.createContext<ElementContextValue>({
   element: null,
+});
+
+export const ErrorContext = React.createContext<ErrorContextValue>({
   error: null,
+});
+
+export const ActionContext = React.createContext<ActionContextValue>({
   onChange: () => {},
   onError: () => {},
 });
+
+export const EditorContext = React.createContext<EditorContextValue>({});
 
 const getRequire = (imports?: Record<string, any>) =>
   function require(request: string) {
@@ -255,16 +283,42 @@ export interface Props<TScope> {
   resolveImports?: ImportResolver;
 }
 
-export function useLiveContext() {
-  return useContext(Context);
-}
-
 export function useElement() {
-  return useLiveContext().element;
+  return useContext(ElementContext).element;
 }
 
 export function useError() {
-  return useLiveContext().error;
+  return useContext(ErrorContext).error;
+}
+
+export function useActions() {
+  return useContext(ActionContext);
+}
+
+export function useEditorConfig() {
+  return useContext(EditorContext);
+}
+
+/** @deprecated use individual context hooks instead */
+export function useLiveContext(): LiveContext {
+  const { code, theme, language, disabled } = useContext(EditorContext);
+  const { element } = useContext(ElementContext);
+  const { error } = useContext(ErrorContext);
+  const { onChange, onError } = useContext(ActionContext);
+
+  return useMemo(
+    () => ({
+      code,
+      theme,
+      language,
+      disabled,
+      element,
+      error,
+      onChange,
+      onError,
+    }),
+    [code, theme, language, disabled, element, error, onChange, onError]
+  );
 }
 
 interface State {
@@ -418,18 +472,34 @@ export default function Provider<TScope extends {} = {}>({
     handleChange(initialCompiledCode);
   }, [initialCompiledCode, scope, handleChange]);
 
-  const context = useMemo(
+  const configContext = useMemo(
     () => ({
       theme,
-      error,
-      element,
       language,
       code: initialCompiledCode,
-      onError: setError,
-      onChange: handleChange,
     }),
-    [initialCompiledCode, element, error, handleChange, language, theme]
+    [initialCompiledCode, language, theme]
   );
 
-  return <Context.Provider value={context}>{children}</Context.Provider>;
+  const elementContextValue = useMemo(() => ({ element }), [element]);
+  const errorContextValue = useMemo(() => ({ error }), [error]);
+  const actionContextValue = useMemo(
+    () => ({
+      onChange: handleChange,
+      onError: setError,
+    }),
+    [handleChange]
+  );
+
+  return (
+    <EditorContext.Provider value={configContext}>
+      <ActionContext.Provider value={actionContextValue}>
+        <ErrorContext.Provider value={errorContextValue}>
+          <ElementContext.Provider value={elementContextValue}>
+            {children}
+          </ElementContext.Provider>
+        </ErrorContext.Provider>
+      </ActionContext.Provider>
+    </EditorContext.Provider>
+  );
 }

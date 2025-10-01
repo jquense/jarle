@@ -10,6 +10,8 @@ import Provider, {
   useElement,
   useError,
   useLiveContext,
+  useEditorConfig,
+  useActions,
 } from './Provider.js';
 import highlight from './highlight.js';
 
@@ -26,8 +28,10 @@ export {
   InfoMessage,
   highlight,
   themes,
+  useActions,
   useElement,
   useError,
+  useEditorConfig,
   useLiveContext,
 };
 

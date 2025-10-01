@@ -11,7 +11,7 @@ import SimpleCodeEditor from './SimpleEditor.js';
 
 import { mapTokens } from './CodeBlock.js';
 import InfoMessage from './InfoMessage.js';
-import { useLiveContext } from './Provider.js';
+import { useActions, useEditorConfig, useError, useLiveContext } from './Provider.js';
 import LineNumber from './LineNumber.js';
 
 let uid = 0;
@@ -258,10 +258,9 @@ export default function Editor({ theme, ...props }: Props) {
     code: contextCode,
     theme: contextTheme,
     language,
-    onChange,
-    error,
-  } = useLiveContext();
-
+  } = useEditorConfig();
+  const error = useError();
+  const actions = useActions()
   const [code, setCode] = useStateFromProp(contextCode || '');
 
   const errorLocation = error?.location || error?.loc;
@@ -274,7 +273,7 @@ export default function Editor({ theme, ...props }: Props) {
       theme={theme || contextTheme}
       onCodeChange={nextCode => {
         setCode(nextCode);
-        onChange(nextCode);
+        actions.onChange(nextCode);
       }}
       errorLocation={errorLocation}
     />

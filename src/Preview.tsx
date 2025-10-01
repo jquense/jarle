@@ -21,7 +21,6 @@ const Preview = ({
   preventLinks?: boolean;
 }) => {
   const element = useElement();
-  const error = useError();
 
   // prevent links in examples from navigating
   const handleClick = (e: any) => {
@@ -35,12 +34,23 @@ const Preview = ({
     ...props,
   };
 
-  return !showLastValid && error ? null : (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
+  const children = (
     <div className={className} onClick={handleClick} {...previewProps}>
       <ErrorBoundary element={element} showLastValid={showLastValid} />
     </div>
   );
+
+  if (!showLastValid) {
+    return <HideOnError>{children}</HideOnError>;
+  }
+
+  return children;
 };
+
+function HideOnError({ children }: { children: React.ReactNode }) {
+  const error = useError();
+
+  return error ? null : <>{children}</>;
+}
 
 export default Preview;
