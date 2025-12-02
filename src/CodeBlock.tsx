@@ -47,16 +47,24 @@ export const mapTokens = ({
   </>
 );
 
-interface Props {
+interface CodeBlockProps {
   className?: string;
   style?: any;
   theme?: PrismTheme;
   code: string;
   language: Language;
   lineNumbers?: boolean;
+  mapTokens?: (props: MapTokens) => React.ReactNode;
 }
 
-function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
+function CodeBlock({
+  code,
+  theme,
+  language,
+  lineNumbers,
+  mapTokens: consumerMapTokens = mapTokens,
+  ...props
+}: CodeBlockProps) {
   const style = typeof theme?.plain === 'object' ? theme.plain : {};
 
   const getLineNumbers = lineNumbers
@@ -70,7 +78,7 @@ function CodeBlock({ code, theme, language, lineNumbers, ...props }: Props) {
           className={`${props.className || ''} ${hl.className}`}
           style={{ ...props.style, ...style, ...hl.style }}
         >
-          <code>{mapTokens({ ...hl, getLineNumbers })}</code>
+          <code>{consumerMapTokens({ ...hl, getLineNumbers })}</code>
         </pre>
       )}
     </Highlight>

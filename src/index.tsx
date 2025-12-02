@@ -1,6 +1,10 @@
-import { Prism, themes } from 'prism-react-renderer';
+import {
+  Prism,
+  themes,
+  Highlight as PrismHighlight,
+} from 'prism-react-renderer';
 
-import CodeBlock from './CodeBlock.js';
+import CodeBlock, { mapTokens } from './CodeBlock.js';
 import Editor, { ControlledEditor } from './Editor.js';
 import Error from './Error.js';
 import InfoMessage from './InfoMessage.js';
@@ -20,7 +24,9 @@ export type ImportResolver = _ImportResolver;
 
 export {
   Prism,
+  PrismHighlight,
   CodeBlock,
+  mapTokens,
   Error,
   Editor,
   ControlledEditor,
