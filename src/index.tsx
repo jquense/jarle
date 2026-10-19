@@ -21,6 +21,8 @@ import Provider, {
 import highlight from './highlight.js';
 
 export type ImportResolver = _ImportResolver;
+export { evaluate } from './Provider.js';
+export type { Evaluation, EvaluateOptions } from './Provider.js';
 
 export {
   Prism,

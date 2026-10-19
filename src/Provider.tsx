@@ -9,13 +9,13 @@ import React, {
   useState,
   isValidElement,
   createElement,
-  useCallback,
   JSX,
   useDeferredValue,
 } from 'react';
 import { isValidElementType } from 'react-is';
 // import { decode } from 'sourcemap-codec';
 import { transform } from './transform/index.js';
+import type { Import } from './transform/index.js';
 import useUpdateImmediateEffect from '@restart/hooks/useUpdateImmediateEffect';
 
 // try and match render() calls with arguments to avoid false positives with class components
@@ -99,6 +99,8 @@ const getRequire = (imports?: Record<string, any>) =>
   };
 
 function handleError(err: any, fn: Function): LiveError {
+  if (err === null || typeof err !== 'object') return err;
+
   const fnStr = fn.toString();
   // account for the function chrome lines
   const offset = fnStr.slice(0, fnStr.indexOf('{')).split(/\n/).length;
@@ -109,9 +111,10 @@ function handleError(err: any, fn: Function): LiveError {
   } else if ('lineNumber' in err) {
     pos = { line: err.lineNumber - 1, column: err.columnNumber - 1 };
   } else {
-    const [, line, col] = err.stack?.match(
-      /at eval.+<anonymous>:(\d+):(\d+)/m
-    )!;
+    const [, line, col] =
+      (typeof err.stack === 'string'
+        ? err.stack.match(/at eval.+<anonymous>:(\d+):(\d+)/m)
+        : null) ?? [];
     pos = { line: +line - 1, column: +col - 1 };
   }
   if (!pos) return err;
@@ -135,7 +138,6 @@ interface CodeToComponentOptions<S extends {}> {
   exportToRender?: string;
   renderAsComponent?: boolean;
   preample?: string;
-  isTypeScript?: boolean;
 }
 
 function codeToComponent<TScope extends {}>(
@@ -146,7 +148,7 @@ function codeToComponent<TScope extends {}>(
     exportToRender,
     renderAsComponent = false,
   }: CodeToComponentOptions<TScope>
-): Promise<React.ReactElement> {
+): Promise<Evaluation> {
   return new Promise((resolve, reject) => {
     const isInline = !hasRenderCall(compiledCode);
 
@@ -163,7 +165,7 @@ function codeToComponent<TScope extends {}>(
         return;
       }
 
-      resolve(element);
+      resolve({ element, exports });
     };
 
     // DU NA NA NAAAH
@@ -218,13 +220,27 @@ function codeToComponent<TScope extends {}>(
       }
     }
 
-    resolve(element);
+    resolve({ element, exports });
   });
 }
 
 export type ImportResolver = (
   requests: string[]
 ) => Promise<Record<string, any> | any[]>;
+
+export interface Evaluation {
+  element: JSX.Element;
+  exports: Record<string, unknown>;
+}
+
+export interface EvaluateOptions<TScope = {}> {
+  scope?: TScope;
+  language?: string;
+  exportToRender?: string;
+  renderAsComponent?: boolean;
+  resolveImports?: ImportResolver;
+  signal?: AbortSignal;
+}
 
 export interface Props<TScope> {
   /**
@@ -343,31 +359,64 @@ function defaultResolveImports(sources) {
   return Promise.all(sources.map(__IMPORT__));
 }
 
+/** Compile and evaluate a preview once, returning its element and module exports together. */
+export function evaluate<TScope extends {} = {}>(
+  code: string,
+  options: EvaluateOptions<TScope> = {}
+): Promise<Evaluation> {
+  return evaluateCode(code, options);
+}
+
+async function evaluateCode<TScope extends {}>(
+  code: string,
+  {
+    scope,
+    language,
+    exportToRender,
+    renderAsComponent = false,
+    resolveImports = defaultResolveImports,
+    signal,
+  }: EvaluateOptions<TScope>,
+  removedImports: Import[] = []
+): Promise<Evaluation> {
+  signal?.throwIfAborted();
+  const isTypeScript = isTypeScriptEnabled(language);
+  const compiled = transform(code.replace(prettierComment, '').trim(), {
+    compiledFilename: 'compiled.js',
+    filename: 'example.js',
+    wrapLastExpression: !hasRenderCall(code),
+    syntax: isTypeScript ? 'typescript' : 'js',
+    transforms: isTypeScript
+      ? ['typescript', 'imports', 'jsx']
+      : ['imports', 'jsx'],
+  });
+  const sources = Array.from(
+    new Set([...removedImports, ...compiled.imports].map((i) => i.source))
+  );
+  const results = await resolveImports(sources);
+  signal?.throwIfAborted();
+  return codeToComponent(compiled.code, {
+    renderAsComponent,
+    exportToRender,
+    preample: removedImports
+      .map((i) => i.code)
+      .join('\n')
+      .trimStart(),
+    scope: {
+      ...scope,
+      require: getRequire(
+        Array.isArray(results) ? objectZip(sources, results) : results
+      ),
+    },
+  });
+}
+
 function useCompiledCode(
   consumerCode: string,
   showImports: boolean,
   isTypeScript: boolean,
   setError: any
 ) {
-  const compile = useCallback(
-    (nextCode: string) => {
-      const isInline = !hasRenderCall(nextCode);
-
-      nextCode = nextCode.replace(prettierComment, '').trim();
-
-      return transform(nextCode, {
-        compiledFilename: 'compiled.js',
-        filename: 'example.js',
-        wrapLastExpression: isInline,
-        syntax: isTypeScript ? 'typescript' : 'js',
-        transforms: isTypeScript
-          ? ['typescript', 'imports', 'jsx']
-          : ['imports', 'jsx'],
-      });
-    },
-    [isTypeScript]
-  );
-
   const initialResult = useMemo(() => {
     const nextCode = consumerCode.replace(prettierComment, '').trim();
     const emptyResponse = { code: nextCode, imports: [] };
@@ -388,17 +437,14 @@ function useCompiledCode(
       setError(error);
       return emptyResponse;
     }
-  }, [consumerCode, compile, setError, showImports]);
+  }, [consumerCode, isTypeScript, setError, showImports]);
 
-  return [
-    {
-      compiledCode: showImports
-        ? initialResult.code
-        : initialResult.code.trimStart(),
-      removedImports: showImports ? [] : initialResult.imports,
-    },
-    compile,
-  ] as const;
+  return {
+    compiledCode: showImports
+      ? initialResult.code
+      : initialResult.code.trimStart(),
+    removedImports: showImports ? [] : initialResult.imports,
+  };
 }
 
 /**
@@ -421,7 +467,7 @@ export default function Provider<TScope extends {} = {}>({
   const [{ element }, setState] = useState<State>({ element: null });
   const isTypeScript = isTypeScriptEnabled(language);
 
-  const [initialResult, compile] = useCompiledCode(
+  const initialResult = useCompiledCode(
     rawCode,
     showImports,
     isTypeScript,
@@ -433,50 +479,21 @@ export default function Provider<TScope extends {} = {}>({
   const deferredCode = useDeferredValue(code);
 
   const handleChange = useEventCallback((nextCode: string) => {
-    try {
-      const { code: compiledCode, imports } = compile(nextCode);
-
-      const sources = Array.from(
-        new Set(
-          [...initialResult.removedImports, ...imports].map((i) => i.source)
-        )
-      );
-
-      Promise.resolve(resolveImports(sources))
-        .then((results) =>
-          Array.isArray(results) ? objectZip(sources, results) : results
-        )
-        .then((fetchedImports) =>
-          codeToComponent(compiledCode, {
-            renderAsComponent,
-            isTypeScript,
-            exportToRender,
-            // also include the orginal imports if they were removed
-            preample: initialResult.removedImports
-              .map((i) => i.code)
-              .join('\n')
-              .trimStart(),
-            scope: {
-              ...scope,
-              require: getRequire(fetchedImports),
-            },
-          })
-        )
-        .then(
-          (element) => {
-            if (!isMounted()) return;
-
-            setState({ element });
-            setError(null);
-          },
-          (err) => {
-            if (!isMounted()) return;
-            setError(err);
-          }
-        );
-    } catch (err: any) {
-      setError(err);
-    }
+    evaluateCode(
+      nextCode,
+      { language, renderAsComponent, exportToRender, resolveImports, scope },
+      initialResult.removedImports
+    ).then(
+      ({ element }) => {
+        if (!isMounted()) return;
+        setState({ element });
+        setError(null);
+      },
+      (err) => {
+        if (!isMounted()) return;
+        setError(err);
+      }
+    );
   });
 
   useUpdateImmediateEffect(() => {
