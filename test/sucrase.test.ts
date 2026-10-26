@@ -1,7 +1,44 @@
-import { describe, it, test, expect } from 'vitest';
+import { describe, it, test, expect, vi } from 'vitest';
 import { transform } from '../src/transform/index.js';
 
 describe('general parsing smoketest', () => {
+  it('preserves modern syntax in minified code by default', () => {
+    const input =
+      'class Base{constructor(value){this.value=value}}class Derived extends Base{field=1_000;constructor(...args){if(super(...args),this.value?.enabled??false)this.field+=1}read(){try{return this.value?.count??this.field}catch{return 0}}}return new Derived({enabled:true}).read();';
+    const { code } = transform(input, {
+      syntax: 'js',
+      transforms: ['imports'],
+    });
+
+    expect(code).toBe(input);
+    expect(new Function(code)()).toBe(1001);
+  });
+
+  it('allows callers to enable ES transforms', () => {
+    const { code } = transform(
+      'class Value { count = 1_000; } return new Value()?.count ?? 0;',
+      { disableESTransforms: false, transforms: ['imports'] }
+    );
+
+    expect(code).not.toContain('?.');
+    expect(code).not.toContain('??');
+    expect(code).not.toContain('1_000');
+    expect(code).toContain('this.count = 1000');
+    expect(new Function(code)()).toBe(1000);
+  });
+
+  it.each(['none', 'imports', 'typescript'] as const)(
+    'preserves dynamic imports with %s transform',
+    (transformName) => {
+      const input = "const load = (name) => import(name); import('./foo');";
+      const result = transform(input, {
+        transforms: transformName === 'none' ? [] : [transformName],
+      });
+      expect(result.code).toBe(input);
+      expect(result.imports).toEqual([]);
+    }
+  );
+
   it('parses', () => {
     transform(
       `
@@ -54,7 +91,7 @@ describe('import rewriting', () => {
     [
       'namespace',
       'import * as Foo from "./foo";',
-      "var Foo = require('./foo');",
+      "var foo$0 = require('./foo'); var Foo = foo$0;",
       undefined,
     ],
     ['side effect', 'import "./foo";', "require('./foo');", undefined],
@@ -84,6 +121,108 @@ describe('import rewriting', () => {
     ],
   ])('compiles %s', (_, input, expected, options: any) => {
     expect(transform(input, options).code).toEqual(expected);
+  });
+
+  it.each([
+    [
+      'namespace and named imports',
+      'import * as React from "react"; import { useState } from "react";',
+      '[React, useState]',
+      'React',
+    ],
+    [
+      'bare import before bindings',
+      'import "react"; import React from "react"; import * as ReactNS from "react"; import { useState } from "react";',
+      '[React, ReactNS, useState]',
+      'React',
+    ],
+    [
+      'bare import after bindings',
+      'import React from "react"; import * as ReactNS from "react"; import { useState } from "react"; import "react";',
+      '[React, ReactNS, useState]',
+      'React',
+    ],
+    [
+      'multiple default and namespace aliases',
+      'import React from "react"; import React2 from "react"; import * as React3 from "react"; import * as React4 from "react";',
+      '[React, React2, React3, React4]',
+      'React',
+    ],
+  ])('binds %s once', (_, input, values, base) => {
+    const useState = () => {};
+    const module = { default: 'default export', useState };
+    const expected = values.includes('React2')
+      ? [module.default, module.default, module, module]
+      : values.includes('ReactNS')
+      ? [module.default, module, useState]
+      : [module, useState];
+
+    for (const removeImports of [false, true]) {
+      const { code, imports } = transform(`${input} return ${values};`, {
+        transforms: ['imports'],
+        removeImports,
+      });
+      const require = vi.fn(() => module);
+      const preamble = removeImports
+        ? imports.map((i) => i.code).join('\n')
+        : '';
+
+      expect(new Function('require', `${preamble}\n${code}`)(require)).toEqual(
+        expected
+      );
+      expect(require).toHaveBeenCalledOnce();
+      expect(require).toHaveBeenCalledWith('react');
+      expect(imports).toHaveLength(1);
+      expect(imports[0]).toMatchObject({ source: 'react', base });
+    }
+  });
+
+  it('emits one require for hundreds of imports from the same path', () => {
+    const input = Array.from(
+      { length: 500 },
+      (_, i) => `import { useState as hook${i} } from 'react';`
+    ).join('\n');
+    const { code, imports } = transform(input, { transforms: ['imports'] });
+    const useState = () => {};
+    const require = vi.fn(() => ({ useState }));
+
+    expect(
+      new Function('require', `${code}\nreturn [hook0, hook499];`)(require)
+    ).toEqual([useState, useState]);
+    expect(require).toHaveBeenCalledOnce();
+    expect(require).toHaveBeenCalledWith('react');
+    expect(code.match(/require\(/g)).toHaveLength(1);
+    expect(imports).toHaveLength(1);
+    expect(imports[0].keys).toHaveLength(500);
+  });
+
+  it('elides type-only aliases while retaining all runtime aliases', () => {
+    const { code, imports } = transform(
+      `import TypeDefault from 'module';
+       import RuntimeDefault from 'module';
+       import * as TypeNamespace from 'module';
+       import * as RuntimeNamespace from 'module';
+       import { TypeName, value } from 'module';
+       import type { ExplicitType } from 'module';
+       const typed: [TypeDefault, TypeNamespace.Type, TypeName, ExplicitType] = [];
+       return [RuntimeDefault, RuntimeNamespace, value];`,
+      { transforms: ['typescript', 'imports'] }
+    );
+    const module = { default: 'default export', value: 42 };
+    expect(new Function('require', code)(() => module)).toEqual([
+      module.default,
+      module,
+      42,
+    ]);
+    expect(code).not.toMatch(/TypeDefault|TypeNamespace|TypeName|ExplicitType/);
+    expect(imports).toEqual([
+      {
+        source: 'module',
+        base: 'RuntimeDefault',
+        keys: [{ imported: 'value', local: 'value' }],
+        code: expect.any(String),
+      },
+    ]);
   });
 
   it('removes imports', () => {

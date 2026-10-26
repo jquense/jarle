@@ -1,10 +1,5 @@
 import { SucraseContext } from 'sucrase';
-import {
-  TokenProcessor,
-  type CJSImportProcessor,
-  type RootTransformer,
-  tt,
-} from './parser.js';
+import { TokenProcessor, type CJSImportProcessor, tt } from './parser.js';
 
 export type Import = {
   code: string;
@@ -19,6 +14,7 @@ export default class ImportRemoverTransformer {
 
   imports: Import[] = [];
   private readonly removeImports: boolean;
+  private readonly processedPaths = new Set<string>();
 
   constructor(
     context: SucraseContext,
@@ -48,9 +44,9 @@ export default class ImportRemoverTransformer {
   process(): boolean {
     if (!this.tokens.matches1(tt._import)) return false;
 
-    // dynamic import
+    // Let the remaining transformers consume and preserve dynamic imports.
     if (this.tokens.matches2(tt._import, tt.parenL)) {
-      return true;
+      return false;
     }
 
     this.tokens.removeInitialToken();
@@ -60,7 +56,8 @@ export default class ImportRemoverTransformer {
 
     const path = this.tokens.stringValue();
 
-    const detail = this.buildImport(path);
+    const detail = this.processedPaths.has(path) ? null : this.buildImport(path);
+    this.processedPaths.add(path);
     this.importProcessor.claimImportCode(path);
     if (detail?.code) {
       this.imports.push(detail);
@@ -90,13 +87,11 @@ export default class ImportRemoverTransformer {
       return null;
     }
 
-    let FN = 'require';
-
     const { defaultNames, wildcardNames, namedImports, hasBareImport } =
       // @ts-ignore
       this.importProcessor.importInfoByPath.get(path);
 
-    const req = `${FN}('${path}');`;
+    const req = `require('${path}');`;
     const tmp = this.getIdentifier(path);
 
     const named = [] as string[];
@@ -122,18 +117,24 @@ export default class ImportRemoverTransformer {
       details.keys.push({ local: s.localName, imported: s.importedName });
     });
 
-    if (defaultNames.length || wildcardNames.length) {
-      const name = defaultNames[0] || wildcardNames[0];
+    const defaults = defaultNames.filter(
+      (name: string) =>
+        !this.importProcessor.shouldAutomaticallyElideImportedName(name)
+    );
+    const wildcards = wildcardNames.filter(
+      (name: string) =>
+        !this.importProcessor.shouldAutomaticallyElideImportedName(name)
+    );
 
-      if (!this.importProcessor.shouldAutomaticallyElideImportedName(name)) {
-        details.base = name;
-        // intentionally use `var` so that conflcits with Jarle provider scope get resolved naturally
-        // with the import overriding the scoped identifier
-        if (wildcardNames.length) {
-          details.code = `var ${name} = ${req}`;
-        } else {
-          details.code = `var ${tmp} = ${req} var ${name} = ${tmp}.default;`;
-        }
+    if (defaults.length || wildcards.length) {
+      details.base = defaults[0] || wildcards[0];
+      // Use var so imports can override identifiers provided by the scope.
+      details.code = `var ${tmp} = ${req}`;
+      for (const name of wildcards) {
+        details.code += ` var ${name} = ${tmp};`;
+      }
+      for (const name of defaults) {
+        details.code += ` var ${name} = ${tmp}.default;`;
       }
     }
 
@@ -143,7 +144,7 @@ export default class ImportRemoverTransformer {
       }`;
     }
 
-    if (hasBareImport) {
+    if (hasBareImport && !details.code) {
       details.code = req;
     }
 

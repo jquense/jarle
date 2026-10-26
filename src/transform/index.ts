@@ -65,6 +65,7 @@ class JarleRootTransformer extends RootTransformer {
 }
 
 export interface Options {
+  disableESTransforms?: boolean;
   removeImports?: boolean;
   wrapLastExpression?: boolean;
   syntax?: 'js' | 'typescript';
@@ -84,6 +85,7 @@ export function transform(code: string, options: Options = {}) {
   }
 
   const sucraseOptions: SucraseOptions & Options = {
+    disableESTransforms: true,
     ...options,
     transforms,
     preserveDynamicImport: true,
