@@ -1,7 +1,8 @@
 /* eslint-disable require-await */
 
 import { fireEvent, render, act } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import * as React from 'react';
 import Provider, { Props, useElement, useError } from '../src/Provider.js';
 
 describe('Provider', () => {
@@ -33,6 +34,37 @@ describe('Provider', () => {
 
     expect(wrapper.getByTestId('test')).toBeDefined();
   });
+
+  it.each([false, true])(
+    'restores merged hidden imports with component mode %s',
+    async (renderAsComponent) => {
+      const resolveImports = vi.fn(async () => [React]);
+      const body = `
+        const [count, setCount] = useCounter(0);
+        class Value { count = 1_000; }
+        const value = new Value();
+        return ReactNS.createElement('button', {
+          onClick: () => setCount(count + 1)
+        }, (value?.count ?? 0) + count);
+      `;
+      const wrapper = await mountProvider({
+        showImports: false,
+        renderAsComponent,
+        resolveImports,
+        code: `
+          import * as ReactNS from 'react';
+          import { useState as useCounter } from 'react';
+          import 'react';
+          ${renderAsComponent ? body : `function Counter() { ${body} }`}
+        `,
+      });
+
+      expect(resolveImports).toHaveBeenCalledWith(['react']);
+      expect(wrapper.getByRole('button').textContent).toBe('1000');
+      fireEvent.click(wrapper.getByRole('button'));
+      expect(wrapper.getByRole('button').textContent).toBe('1001');
+    }
+  );
 
   it('should render function component', async () => {
     const wrapper = await mountProvider({
